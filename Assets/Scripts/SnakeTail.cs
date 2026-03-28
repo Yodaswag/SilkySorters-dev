@@ -97,23 +97,11 @@ public class SnakeTail : MonoBehaviour
         tailScript.textComp.sortingOrder = tailScript.tailBG.sortingOrder + 1;
     }
 
-    public void AddLabel(string label, bool isRTL) //פונקצייה שמוסיפה לתולעת המשי שלנו תגיות בקצווֹת
-    {
-        AddTail();
-        SingleTail tailScript = snakeTail[snakeTail.Count-1]; //Is always snakeTail.count as it's called either as first or last by the GameManager (ResetPlayer)
-        tailScript.tailBG.color = new Color(1f,1f,1f,1f); //Set to "not placeholder"/full body part
-        RTLFixer.SetTextInTMP(tailScript.textComp, label, isRTL);
-        
-        // Lightly visually distinguish the labels from main text 
-        tailScript.textComp.alignment = TextAlignmentOptions.Center;
-        tailScript.textComp.fontStyle = FontStyles.Bold;
-    }
-
     public void AddAnswer(AnswerModel answer) //פונקצייה שממלאת את ה-PLACEHOLDERS של תולעת המשי שלנו בתשובות
     {
         if (answersProvided.Count >= snakeTail.Count) return;
 
-        SingleTail tailScript = snakeTail[answer.orderIndex]; //orderIndex fully maps to the desired positions and that's why we can use it
+        SingleTail tailScript = snakeTail[answer.orderIndex-1]; //orderIndex fully maps to the desired positions and that's why we can use it
         answersProvided.Add(answer);
         
         if (answer.IsValid())
@@ -134,15 +122,16 @@ public class SnakeTail : MonoBehaviour
             }
         }
         tailScript.tailBG.color = new Color(1f,1f,1f,1f); //Set to "not placeholder" or full body part
-        if (answer.orderIndex <= gameManager.currentQuestion.orderedAnswers.Count-1) // This helps avoid the end label being set as a placeholder
-            SetNextPlaceholder();
+        // if (answer.orderIndex <= gameManager.currentQuestion.orderedAnswers.Count-1) // This helps avoid the end label being set as a placeholder
+        //     SetNextPlaceholder();
+        SetNextPlaceholder();
     }
 
     public void SetNextPlaceholder()
     {
         if (answersProvided.Count < snakeTail.Count-1) //-1 because of end label
         {
-            snakeTail[answersProvided.Count+1].tailBG.color = new Color(1f,1f,1f,next_placeholder_alpha);    
+            snakeTail[answersProvided.Count].tailBG.color = new Color(1f,1f,1f,next_placeholder_alpha);    
         }
     }
     

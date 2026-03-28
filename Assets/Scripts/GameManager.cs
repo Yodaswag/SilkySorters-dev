@@ -150,18 +150,12 @@ public class GameManager : MonoBehaviour
         
         playerInstance.GetComponent<SnakeGrow>().gameManager = this;
         
-        //Create start label tail
-        snakeTail.AddLabel(currentQuestion.orderStartLabel,currentQuestion.isStartLabelRTL);
-        
         // Create placeholders for main body
-        while (snakeTail.GetLength()-2 < currentQuestion.orderedAnswers.Count) //-1 because the head is the first position
+        while (snakeTail.GetLength()-1 < currentQuestion.orderedAnswers.Count) //-1 because the head is the first position
         {
             snakeTail.AddTail();
         }
         
-        //Create end label tail
-        snakeTail.AddLabel(currentQuestion.orderEndLabel,currentQuestion.isEndLabelRTL);
-        //Create end label tail
         snakeTail.SetNextPlaceholder(); //After creating tail circles, set next placeholder
     }
 
