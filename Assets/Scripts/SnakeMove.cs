@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class SnakeMove : MonoBehaviour
@@ -15,7 +16,8 @@ public class SnakeMove : MonoBehaviour
     private Vector2 targetInput;
     private Vector2 currentInputVector;
     private Vector2 smoothInputVelocity;
-
+    
+    public GameManager gameManager;
     private void Awake()
     {
         inputActions = new InputSystem_Actions();
@@ -80,6 +82,12 @@ public class SnakeMove : MonoBehaviour
             
             // Sprite points "up" by default, so we subtract 90 degrees to align facing direction with movement vector.
             headTransform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+            
+            gameManager.staticVcam.Priority = 1;
+        }
+        else
+        {
+            gameManager.staticVcam.Priority = 3;
         }
     }
 }

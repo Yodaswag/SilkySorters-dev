@@ -3,15 +3,23 @@ using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using static DataModels; //Instead of writing DataModels.GameModel/QuestionsModel/AnswerModel, just added a single using static class line at the top of each file that needs it.
 public class GameManager : MonoBehaviour
 {
     [Header ("Player and Camera")]
-    [SerializeField] CinemachineCamera vcam; //Since the player instance gets destroyed and reinstantiated every question - the camera must be attached to follow it.
+    [SerializeField] CinemachineCamera dynamicVcam; //Since the player instance gets destroyed and reinstantiated every question - the camera must be attached to follow it.
+    public CinemachineCamera staticVcam;
     [SerializeField] GameObject silkyPlayerPrefab;
-    public GameObject playerInstance;
+    [SerializeField] private Transform positioner_PlayerSpawn;
     [SerializeField] private SnakeTail snakeTail;
+    
+    [Header ("Silky Content View")] //For the static view silkworm at the bottom left of the screen
+    public GameObject contentViewInstance;
+    [SerializeField] private Transform positioner_SilkyContentView;
+    [SerializeField] private GameObject silkyContentViewPrefab;
+    private List<GameObject> silkyInstances = new List<GameObject>();
     
     [Header ("Mulberries (Order Items)")]
     [SerializeField] GameObject orderItemPrefab;
@@ -142,21 +150,42 @@ public class GameManager : MonoBehaviour
     // Used when starting a new question. Currently the code logic is that we destroy the previous silkworm and create a new with the correct amount of placeholders rather than emptying it.
     void ResetPlayer()
     {
-        playerInstance = Instantiate(silkyPlayerPrefab);
-        snakeTail = playerInstance.GetComponent<SnakeTail>();
-        snakeTail.gameManager = this;
-        vcam.Follow = playerInstance.transform;
-        vcam.LookAt = playerInstance.transform;
-        
-        playerInstance.GetComponent<SnakeGrow>().gameManager = this;
-        
-        // Create placeholders for main body
-        while (snakeTail.GetLength()-1 < currentQuestion.orderedAnswers.Count) //-1 because the head is the first position
+        KillPlayer();
+        silkyInstances.Add(Instantiate(silkyPlayerPrefab,positioner_PlayerSpawn)); //Main player character (dynamic mode) - Set to 0
+        silkyInstances.Add(Instantiate(silkyContentViewPrefab, positioner_SilkyContentView)); //Content view character (static mode) - Set to 1
+
+        for (int i = 0; i < silkyInstances.Count; i++)
         {
-            snakeTail.AddTail();
-        }
+            //Attach Components
+            snakeTail = silkyInstances[i].GetComponent<SnakeTail>();
+            snakeTail.gameManager = this;
+            if (i == 0) //Only the main player character has SnakeMove & SnakeGrow
+            {
+                silkyInstances[i].GetComponent<SnakeMove>().gameManager = this;
+                silkyInstances[i].GetComponent<SnakeGrow>().gameManager = this;
+                
+                // Setup dynamic vcam - only for main player character
+                dynamicVcam.Follow = silkyInstances[i].transform;
+                dynamicVcam.LookAt = silkyInstances[i].transform;
+            }
+            else if (i == 1)
+            {
+                // Modify the snakeTail-defined rect width&height to adjust with the scaling of the content view silkworm
+                snakeTail.rectWidth *= positioner_SilkyContentView.localScale.x;
+                snakeTail.rectHeight *= positioner_SilkyContentView.localScale.y;
+            }
+
         
-        snakeTail.SetNextPlaceholder(); //After creating tail circles, set next placeholder
+            // Create placeholders for the body
+            while (snakeTail.GetLength()-1 < currentQuestion.orderedAnswers.Count) //-1 because the head is the first position
+            {
+                snakeTail.AddTail();
+            }
+        
+            snakeTail.SetNextPlaceholder(); //After creating tail circles, set next placeholder
+        }
+        silkyInstances[0].GetComponent<SnakeGrow>().contentViewSnakeTail = silkyInstances[1].GetComponent<SnakeTail>();
+        snakeTail = silkyInstances[0].GetComponent<SnakeTail>(); //Ensure GameManager's snakeTail is the main characters (unknown if need - precaution as of now)
     }
 
     void DestroyAllAnswers()
@@ -254,14 +283,23 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         EndQuestion();
-        if (playerInstance != null)
-        {
-            Destroy(playerInstance);
-        }
+        KillPlayer();
         ScreenStatus("|| \n עצרתם לקחת אוויר? לחצו רווח כדי להמשיך",Color.cyan);
         Time.timeScale = 0f;
     }
 
+    public void KillPlayer()
+    {
+        if (silkyInstances.Count > 0)
+        {
+            foreach (GameObject silkyInstance in silkyInstances)
+            {
+                Destroy(silkyInstance);
+            }
+            silkyInstances.Clear();  // Clear the list after all silkyInstances have been destroyed
+        }
+        Debug.Log("silky killed. silkyInstances.Count = " + silkyInstances.Count);
+    }
     private void TimeIsUp() //פונקציה שמטפלת במצב שבו נגמר הזמן
     {
         EndQuestion();
@@ -289,10 +327,7 @@ public class GameManager : MonoBehaviour
     {
         if (questionNumber < game.questionList.Count)
         {
-            if (playerInstance != null)
-            {
-                Destroy(playerInstance); //Reset the playerInstance, a new one will be created by CreateQuestion() //לשים בהערה אם רוצים שהתולעת תהיה אחת רציפה שמתלמאת ומתרוקנת 
-            }
+            KillPlayer();
             CreateQuestion(); 
             screenStatusText.gameObject.SetActive(false);
         }
@@ -320,7 +355,7 @@ public class GameManager : MonoBehaviour
                 finalScoreText.text = score.ToString(); 
             }
             ScreenStatus(screenToShow,Color.cyan);
-            Destroy(playerInstance);
+            KillPlayer();
         }
         gameWon = true;
         restartBtn.SetActive(gameWon); //Not done in update as it would be expensive

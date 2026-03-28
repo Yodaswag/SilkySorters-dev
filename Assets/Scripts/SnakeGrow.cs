@@ -3,6 +3,7 @@ using UnityEngine;
 public class SnakeGrow : MonoBehaviour
 {
     [SerializeField] private SnakeTail snakeTail;
+    public SnakeTail contentViewSnakeTail;
     [SerializeField] private ParticleSystem eatEffect;
     public GameManager gameManager;
 
@@ -34,6 +35,7 @@ public class SnakeGrow : MonoBehaviour
                     }
                 
                     snakeTail.AddAnswer(objectTouchedScript.answer);
+                    contentViewSnakeTail.AddAnswer(objectTouchedScript.answer);
                     eatEffect.Play();
                     Destroy(objectTouched);
                     

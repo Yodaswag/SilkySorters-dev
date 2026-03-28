@@ -78,7 +78,8 @@ public class SnakeTail : MonoBehaviour
     {
         // Spawn each body part directly below the previous one for the starting positions of the tails.
         Vector3 startPos = positions[positions.Count - 1];
-        startPos.y -= rectHeight;
+        // startPos.y -= rectHeight;
+        startPos.x -= rectWidth;
         
         GameObject tail = Instantiate(singleTailPrefab, startPos, Quaternion.identity, transform);
         SingleTail tailScript = tail.GetComponent<SingleTail>();
