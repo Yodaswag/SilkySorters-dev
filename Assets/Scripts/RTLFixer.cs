@@ -161,9 +161,9 @@ public class RTLFixer
     {
         if (isRtl)
         {
-            FixRtl(textMesh, input);
-            textMesh.alignment = TextAlignmentOptions.Right;
             textMesh.isRightToLeftText = true;
+            textMesh.alignment = TextAlignmentOptions.Right;
+            FixRtl(textMesh, input);
         }
         else
         {

@@ -15,9 +15,11 @@ public class OrderItem : MonoBehaviour
     public int orderIndex;
     [SerializeField] private Vector3 textBounds = new Vector3(40, 20, 1);
 
+    [SerializeField] private Animator animator;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        animator.SetBool("Static",true);
         touched = false;
         if (highlight != null ) {highlight.SetActive(touched);} //touched is false at start so set to false
     }
@@ -59,5 +61,10 @@ public class OrderItem : MonoBehaviour
     {
         touched = touchedBool;
         highlight.SetActive(touched);
+    }
+
+    public void MulberryChangeView(bool isStaticView)
+    {
+        animator.SetBool("Static",isStaticView);
     }
 }

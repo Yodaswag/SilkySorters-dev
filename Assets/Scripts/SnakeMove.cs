@@ -83,11 +83,11 @@ public class SnakeMove : MonoBehaviour
             // Sprite points "up" by default, so we subtract 90 degrees to align facing direction with movement vector.
             headTransform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
             
-            gameManager.staticVcam.Priority = 1;
+            if (gameManager != null) gameManager.ChangeView(false);
         }
         else
         {
-            gameManager.staticVcam.Priority = 3;
+            if (gameManager != null) gameManager.ChangeView(true);
         }
     }
 }

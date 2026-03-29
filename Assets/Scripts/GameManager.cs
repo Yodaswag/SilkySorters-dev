@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Cinemachine;
@@ -5,12 +6,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
-using static DataModels; //Instead of writing DataModels.GameModel/QuestionsModel/AnswerModel, just added a single using static class line at the top of each file that needs it.
+using static DataModels;
+using Random = UnityEngine.Random; //Instead of writing DataModels.GameModel/QuestionsModel/AnswerModel, just added a single using static class line at the top of each file that needs it.
 public class GameManager : MonoBehaviour
 {
+    public bool isStaticView = true;
     [Header ("Player and Camera")]
     [SerializeField] CinemachineCamera dynamicVcam; //Since the player instance gets destroyed and reinstantiated every question - the camera must be attached to follow it.
-    public CinemachineCamera staticVcam;
+    [SerializeField] CinemachineCamera staticVcam;
     [SerializeField] GameObject silkyPlayerPrefab;
     [SerializeField] private Transform positioner_PlayerSpawn;
     [SerializeField] private SnakeTail snakeTail;
@@ -23,7 +26,7 @@ public class GameManager : MonoBehaviour
     
     [Header ("Mulberries (Order Items)")]
     [SerializeField] GameObject orderItemPrefab;
-    private List<GameObject> orderItems = new List<GameObject>(); //List of game objects of mulberry answer items
+    private List<OrderItem> orderItems = new List<OrderItem>(); //List of game objects of mulberry answer items
     [SerializeField] private float minX = -16f;
     [SerializeField] private float maxX = 16f;
     [SerializeField] private float minY = -8f;
@@ -48,6 +51,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI topic; //Topic TextMeshPro UI (i.e Hebrew for 7th grade)
     [SerializeField] private Image linearProgressFill; // בשביל המילוי של מד-ההתקדמות הליניארי שלנו
     [SerializeField] private GameObject uiDuringMainGame; // Used to hide pause button, question and timer when game over
+    [SerializeField] private float padding = 0.75f;
+    
+    //Labels (Start/End)
+    [SerializeField] private GameObject labelPrefab;
+    private List<Vector3> labelPositions = new List<Vector3>();
+    private List<GameObject> labelTextObjects = new List<GameObject>();
+    [SerializeField] float labelYOffset = 1.5f;
+    
     [Header("Global Timer")]
     private float totalgameTime; //זמן כולל למשחק
     private int totalGameMistakes;
@@ -150,7 +161,7 @@ public class GameManager : MonoBehaviour
     // Used when starting a new question. Currently the code logic is that we destroy the previous silkworm and create a new with the correct amount of placeholders rather than emptying it.
     void ResetPlayer()
     {
-        KillPlayer();
+        KillCommonGameObjects();
         silkyInstances.Add(Instantiate(silkyPlayerPrefab,positioner_PlayerSpawn)); //Main player character (dynamic mode) - Set to 0
         silkyInstances.Add(Instantiate(silkyContentViewPrefab, positioner_SilkyContentView)); //Content view character (static mode) - Set to 1
 
@@ -186,13 +197,14 @@ public class GameManager : MonoBehaviour
         }
         silkyInstances[0].GetComponent<SnakeGrow>().contentViewSnakeTail = silkyInstances[1].GetComponent<SnakeTail>();
         snakeTail = silkyInstances[0].GetComponent<SnakeTail>(); //Ensure GameManager's snakeTail is the main characters (unknown if need - precaution as of now)
+        SetContentSilkyPosition();
     }
 
     void DestroyAllAnswers()
     {
-        foreach (GameObject orderItem in orderItems)
+        foreach (OrderItem orderItem in orderItems)
         {
-            Destroy(orderItem);
+            Destroy(orderItem.gameObject);
         }
         
         orderItems.Clear();
@@ -208,7 +220,7 @@ public class GameManager : MonoBehaviour
             newAnswerPrefab.name = "OrderItem_" + answerModel.orderIndex;
             OrderItem orderItemScript = newAnswerPrefab.GetComponent<OrderItem>();
             orderItemScript.SetAnswer(answerModel);
-            orderItems.Add(newAnswerPrefab); // מוסיפים לרשימת המופעים שעל המסך
+            orderItems.Add(orderItemScript); // מוסיפים לרשימת המופעים שעל המסך
         }
 
         else //אם לא מצאנו מקום תקין
@@ -283,22 +295,27 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         EndQuestion();
-        KillPlayer();
+        KillCommonGameObjects();
         ScreenStatus("|| \n עצרתם לקחת אוויר? לחצו רווח כדי להמשיך",Color.cyan);
         Time.timeScale = 0f;
     }
 
-    public void KillPlayer()
+    public void KillCommonGameObjects()
     {
-        if (silkyInstances.Count > 0)
+        KillGameObjectList(silkyInstances);
+        KillGameObjectList(labelTextObjects);
+        labelPositions.Clear();
+    }
+    public void KillGameObjectList(List<GameObject> list)
+    {
+        if (list.Count > 0)
         {
-            foreach (GameObject silkyInstance in silkyInstances)
+            foreach (GameObject gameObject in list)
             {
-                Destroy(silkyInstance);
+                Destroy(gameObject);
             }
-            silkyInstances.Clear();  // Clear the list after all silkyInstances have been destroyed
+            list.Clear();  // Clear the list after all gameObject have been destroyed
         }
-        Debug.Log("silky killed. silkyInstances.Count = " + silkyInstances.Count);
     }
     private void TimeIsUp() //פונקציה שמטפלת במצב שבו נגמר הזמן
     {
@@ -315,7 +332,6 @@ public class GameManager : MonoBehaviour
         linearProgressFill.fillAmount = questionNumber*0.999f / game.questionList.Count; // חישוב הטעינה. בכוונה יש FLOAT כדי לא לחלק int ב-int  
         //0.999f is as taught in class. Alternative way would to be to just cast to float.
     }
-    
     private void UpdateTimerUI()
     {
         if (timerText == null)
@@ -327,7 +343,7 @@ public class GameManager : MonoBehaviour
     {
         if (questionNumber < game.questionList.Count)
         {
-            KillPlayer();
+            KillCommonGameObjects();
             CreateQuestion(); 
             screenStatusText.gameObject.SetActive(false);
         }
@@ -355,11 +371,64 @@ public class GameManager : MonoBehaviour
                 finalScoreText.text = score.ToString(); 
             }
             ScreenStatus(screenToShow,Color.cyan);
-            KillPlayer();
+            KillCommonGameObjects();
         }
         gameWon = true;
         restartBtn.SetActive(gameWon); //Not done in update as it would be expensive
         uiDuringMainGame.SetActive(false);
+    }
+
+    public void ChangeView(bool shouldBeStaticView)
+    {
+        if (shouldBeStaticView != isStaticView)
+        {
+            isStaticView = shouldBeStaticView;
+            staticVcam.Priority = Convert.ToInt32(isStaticView)*2+1; //If 0 -> 1, if 1 -> 3. The dynamicVcam priority is 2.
+            foreach (OrderItem orderItem in orderItems)
+            {
+                if (orderItem != null)
+                    orderItem.MulberryChangeView(isStaticView);
+            }
+        }
+    }
+    
+    // Set position of תולעת חיווי תוכן
+    Bounds GetMaxBounds(GameObject g) { //Helper function. Source: https://gamedev.stackexchange.com/questions/86863/calculating-the-bounding-box-of-a-game-object-based-on-its-children
+        var b = new Bounds(g.transform.position, Vector3.zero);
+        for (int i = 0; i < g.transform.childCount; i++)
+        {
+            Bounds childBounds = g.transform.GetChild(i).GetComponent<Renderer>().bounds;
+            b.Encapsulate(childBounds);
+        }
+        return b;
+    }
+
+    void SetContentSilkyPosition()
+    {
+        float cameraLeftBound = dynamicVcam.gameObject.GetComponentInChildren<CinemachineConfiner2D>().BoundingShape2D.bounds.min.x;
+        float curContentSilkyLeftBound = GetMaxBounds(silkyInstances[1]).min.x;
+        Vector3 posShift = new Vector3(curContentSilkyLeftBound - cameraLeftBound - padding, 0, 0);
+        silkyInstances[1].transform.position -= posShift;
+        SetLabels(posShift);
+    }
+    
+    void SetLabels(Vector3 posShift)
+    {
+        if (labelPositions != null)
+        {
+            posShift.y -= labelYOffset;
+            List<Vector3> contentSilkyTailPositions = silkyInstances[1].GetComponent<SnakeTail>().positions;
+            Vector3 firstPos = contentSilkyTailPositions[1] - posShift;
+            Vector3 lastPos = contentSilkyTailPositions[^1] - posShift;
+            
+            labelTextObjects.Add(Instantiate(labelPrefab,firstPos,Quaternion.identity)); //Start label
+            RTLFixer.SetTextInTMP(labelTextObjects[0].GetComponentInChildren<TextMeshPro>(),currentQuestion.orderStartLabel,currentQuestion.isStartLabelRTL);
+            labelTextObjects[0].GetComponentInChildren<TextMeshPro>().alignment = TextAlignmentOptions.Center;
+            
+            labelTextObjects.Add(Instantiate(labelPrefab,lastPos,Quaternion.identity)); //End label
+            RTLFixer.SetTextInTMP(labelTextObjects[1].GetComponentInChildren<TextMeshPro>(),currentQuestion.orderEndLabel,currentQuestion.isEndLabelRTL);
+            labelTextObjects[1].GetComponentInChildren<TextMeshPro>().alignment = TextAlignmentOptions.Center;
+        }
     }
 }
 

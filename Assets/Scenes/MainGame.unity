@@ -669,8 +669,8 @@ Transform:
   m_GameObject: {fileID: 159129944}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -2.5, y: -10.5, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalPosition: {x: -29.22, y: -10.5, z: 0}
+  m_LocalScale: {x: 1.65, y: 1.65, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1000043453}
@@ -2401,6 +2401,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c4f3328dac9ca499f576bffae88930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  isStaticView: 1
   dynamicVcam: {fileID: 206042762}
   staticVcam: {fileID: 811247271}
   silkyPlayerPrefab: {fileID: 4020628798064279509, guid: 27afb70de8659544c86eb94968330c49, type: 3}
@@ -2623,6 +2624,7 @@ MonoBehaviour:
   topic: {fileID: 1116896154}
   linearProgressFill: {fileID: 1637808370}
   uiDuringMainGame: {fileID: 25568308}
+  padding: 0.75
   timerText: {fileID: 71478413}
 --- !u!1 &1030298439
 GameObject:
