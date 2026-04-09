@@ -204,7 +204,8 @@ public class GameManager : MonoBehaviour
     {
         foreach (OrderItem orderItem in orderItems)
         {
-            Destroy(orderItem.gameObject);
+            if (orderItem != null)
+                Destroy(orderItem.gameObject);
         }
         
         orderItems.Clear();
