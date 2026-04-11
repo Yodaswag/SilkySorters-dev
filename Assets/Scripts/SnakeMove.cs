@@ -1,5 +1,6 @@
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Splines;
 
 public class SnakeMove : MonoBehaviour
 {
@@ -10,12 +11,15 @@ public class SnakeMove : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Transform headTransform;
-
+    
     private InputSystem_Actions inputActions;
 
     private Vector2 targetInput;
     private Vector2 currentInputVector;
     private Vector2 smoothInputVelocity;
+    
+    private float currentSplineTime = 0f;
+    private bool comingFromRight = false;
     
     public GameManager gameManager;
     private void Awake()
@@ -43,8 +47,41 @@ public class SnakeMove : MonoBehaviour
 
     private void Update()
     {
-        // Capture input state every frame to prevent dropped inputs
-        targetInput = inputActions.Player.Move.ReadValue<Vector2>();
+        switch (gameManager.currentReflectionPhase)
+        {
+            case GameManager.ReflectionPhases.None:
+                // Capture input state every frame to prevent dropped inputs
+                targetInput = inputActions.Player.Move.ReadValue<Vector2>();
+                break;
+
+            case GameManager.ReflectionPhases.MovingToStartAnchor:
+                Vector3 targetPos = gameManager.positioner_PlayerSpawn.position;
+                Vector3 direction = (targetPos - transform.position).normalized;
+
+                comingFromRight = (transform.position.x - targetPos.x) > 0;
+                if (Vector3.Distance(transform.position, targetPos) < 0.05f)
+                {
+                    gameManager.currentReflectionPhase = GameManager.ReflectionPhases.FollowingSpline;
+                    currentSplineTime = 0f;
+                }
+                
+                // 2D Rotation for LookAt functionality
+                if (direction != Vector3.zero)
+                {
+                    float lookAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                    headTransform.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f);
+                }
+
+                transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+                gameManager.ChangeView(false); //Change to dynamic
+
+                
+                break;
+
+            case GameManager.ReflectionPhases.FollowingSpline:
+                FollowSplinePath(comingFromRight); //If coming from right, play the spline animation in reverse (counter-clockwise). If not, play it normally (clockwise).
+                break;
+        }
     }
 
     private void FixedUpdate()
@@ -60,7 +97,8 @@ public class SnakeMove : MonoBehaviour
             Time.fixedDeltaTime
         );
 
-        HandleMovement();
+        if (gameManager.currentReflectionPhase == GameManager.ReflectionPhases.None)
+            HandleMovement();
     }
 
     private void HandleMovement()
@@ -83,11 +121,47 @@ public class SnakeMove : MonoBehaviour
             // Sprite points "up" by default, so we subtract 90 degrees to align facing direction with movement vector.
             headTransform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
             
-            if (gameManager != null) gameManager.ChangeView(false);
+            if (gameManager != null) gameManager.ChangeView(false); //The bool represents shouldBeStaticView. false = change to dynamic
         }
         else
         {
-            if (gameManager != null) gameManager.ChangeView(true);
+            if (gameManager != null) gameManager.ChangeView(true); //The bool represents shouldBeStaticView. false = change to static
+        }
+    }
+    
+    private void FollowSplinePath(bool isReversed)
+    {
+        if (gameManager.reflectionSpline == null) return;
+
+        float splineLength = gameManager.reflectionSpline.CalculateLength();
+        currentSplineTime += (moveSpeed / splineLength) * Time.deltaTime;
+
+        if (currentSplineTime >= 1f)
+        {
+            currentSplineTime = 1f;
+            gameManager.currentReflectionPhase = GameManager.ReflectionPhases.Darkening;
+        }
+
+        // Convert bool to 0 (false) or 1 (true)
+        int reverseInt = System.Convert.ToInt32(isReversed);
+
+        // evalTime: 
+        // If 0 -> Mathf.Abs(0 - t) = t 
+        // If 1 -> Mathf.Abs(1 - t) = 1 - t
+        float evalTime = Mathf.Abs(reverseInt - currentSplineTime);
+        
+        transform.position = gameManager.reflectionSpline.EvaluatePosition(evalTime);
+
+        // tangentMultiplier: 
+        // If 0 -> 1 - (2 * 0) = 1 (normal direction)
+        // If 1 -> 1 - (2 * 1) = -1 (inverted direction)
+        int tangentMultiplier = 1 - (2 * reverseInt);
+        Vector3 tangent = gameManager.reflectionSpline.EvaluateTangent(evalTime) * tangentMultiplier;
+        
+        if (tangent != Vector3.zero)
+        {
+            float angle = Mathf.Atan2(tangent.y, tangent.x) * Mathf.Rad2Deg;
+            headTransform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
         }
     }
 }

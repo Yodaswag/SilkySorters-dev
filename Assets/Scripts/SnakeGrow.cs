@@ -39,8 +39,6 @@ public class SnakeGrow : MonoBehaviour
                     eatEffect.Play();
                     gameManager.AddTime();
                     
-                    Destroy(objectTouched);
-                    
                     if (answersProvided == gameManager.currentQuestion.orderedAnswers.Count)
                     {
                         gameManager.QuestionSuccess();
@@ -56,6 +54,8 @@ public class SnakeGrow : MonoBehaviour
                             }
                         }
                     }
+                    
+                    Destroy(objectTouched);
                 }
                 else
                 {

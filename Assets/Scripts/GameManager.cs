@@ -6,6 +6,7 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using UnityEngine.Splines;
 using UnityEngine.UI;
 using static DataModels;
 using Random = UnityEngine.Random; //Instead of writing DataModels.GameModel/QuestionsModel/AnswerModel, just added a single using static class line at the top of each file that needs it.
@@ -16,7 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] CinemachineCamera dynamicVcam; //Since the player instance gets destroyed and reinstantiated every question - the camera must be attached to follow it.
     [SerializeField] CinemachineCamera staticVcam;
     [SerializeField] GameObject silkyPlayerPrefab;
-    [SerializeField] private Transform positioner_PlayerSpawn;
+    public Transform positioner_PlayerSpawn;
     [SerializeField] private SnakeTail snakeTail;
     
     [Header ("Silky Content View")] //For the static view silkworm at the bottom left of the screen
@@ -31,7 +32,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject PositionerGroup_Mulberries;
     private List<Transform> mulberryPositionerList = new List<Transform>();
     
-    
     [Header("Game Controls")]
     private bool gameWon;
     private int questionNumber;  //מספר השאלה הנוכחי
@@ -40,6 +40,19 @@ public class GameManager : MonoBehaviour
     List<QuestionModel>allQuestions;  //רשימה של כל השאלות שיש
     int questionsCount; // כמה שאלות יש במשחק בכללי
     public int numPotions;
+
+    public enum ReflectionPhases
+    {
+        None,
+        MovingToStartAnchor,
+        FollowingSpline,
+        Darkening,
+        RemovingAnswers,
+        FadingToBlack,
+        WaitingForNextQuestion
+    }
+    public ReflectionPhases currentReflectionPhase = ReflectionPhases.None;
+    public SplineContainer reflectionSpline;
     
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI screenStatusText; //
@@ -208,6 +221,8 @@ public class GameManager : MonoBehaviour
                potionText.color = Color.cyan;
            }
        }
+
+       currentReflectionPhase = ReflectionPhases.None;
     }
 
     // Used when starting a new question. Currently, the code logic is that we destroy the previous silkworm and create a new with the correct amount of placeholders rather than emptying it.
@@ -334,6 +349,7 @@ public class GameManager : MonoBehaviour
         isTimerRunning = false;
         totalgameTime += game.timePerQuestion+awardedTimeThisQuestion-currentGameTime; //חקן היה על השאלה מחברים את הזמן המוקצה לכל שאלה עם הזמן שהתקבל בשאלה ומחסירים את הזמן שנותר כדי לקבל את סה"כ הזמן שהש
         DestroyAllAnswers(); //Should happen before the option is given to press space to continue
+        currentReflectionPhase = ReflectionPhases.MovingToStartAnchor;
     }
     
     //פונקציה שמטפלת בסיום שאלה בהצלחה
