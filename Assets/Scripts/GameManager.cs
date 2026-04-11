@@ -29,16 +29,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject orderItemPrefab;
     private List<OrderItem> orderItems = new List<OrderItem>(); //List of game objects of mulberry answer items
     [SerializeField] private GameObject PositionerGroup_Mulberries;
-    private List<Transform> mulberryPositonerList = new List<Transform>();
+    private List<Transform> mulberryPositionerList = new List<Transform>();
     
     
     [Header("Game Controls")]
     private bool gameWon;
     private int questionNumber;  //מספר השאלה הנוכחי
     public QuestionModel currentQuestion; // השאלה שעכשיו עונים עליה. //Used by SnakeGrow and SnakeTail and thus public 
-    [SerializeField] GameModel game; 
+    public GameModel game; 
     List<QuestionModel>allQuestions;  //רשימה של כל השאלות שיש
     int questionsCount; // כמה שאלות יש במשחק בכללי
+    public int numPotions;
     
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI screenStatusText; //
@@ -46,12 +47,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject restartBtn; //Only appears after game won
     [SerializeField] TextMeshProUGUI questionText; 
     [SerializeField] TextMeshProUGUI progress; //Progress TextMeshPro UI (i.e 0/5 questions)
-    [SerializeField] TextMeshProUGUI topic; //Topic TextMeshPro UI (i.e Hebrew for 7th grade)
+    [SerializeField] TextMeshProUGUI topic; //Topic TextMeshPro UI (i.e. Hebrew for 7th grade)
     [SerializeField] private Image linearProgressFill; // בשביל המילוי של מד-ההתקדמות הליניארי שלנו
     [SerializeField] private GameObject uiDuringMainGame; // Used to hide pause button, question and timer when game over
     [SerializeField] private float padding = 0.75f;
+    [SerializeField] private TextMeshProUGUI potionText; //מציג מספר שיקויים בUI כטקסט
+    [SerializeField] private GameObject potionParentObject;
     
-    //Labels (Start/End)
+    [Header("UI - Labels")]
     [SerializeField] private GameObject labelPrefab;
     private List<Vector3> labelPositions = new List<Vector3>();
     private List<GameObject> labelTextObjects = new List<GameObject>();
@@ -62,11 +65,12 @@ public class GameManager : MonoBehaviour
     private int totalGameMistakes;
     [SerializeField] private TextMeshProUGUI timerText; //טקסט UI שמציג זמן
     private float currentGameTime;// הזמן שנותר בפועל
+    private float awardedTimePerAnswer = 5f; //Should be 0 or 5. TODO: Consider changing to bool (talk with Oren)
+    private float awardedTimeThisQuestion;
     private bool isTimerRunning; //משתנה בוליאני שנועד לבדוק אם הטיימר רץ
     private float score; // משתנה גלובלי שיכיל את הציון למשחק
     void Start()
     {
-        Debug.Log("doing start stuff");
         uiDuringMainGame.SetActive(true);
         gameWon = false;
         Time.timeScale = 1f;
@@ -76,7 +80,7 @@ public class GameManager : MonoBehaviour
         //Initialize mulberry positioner list
         foreach (Transform child in PositionerGroup_Mulberries.transform) 
         {
-            mulberryPositonerList.Add(child);
+            mulberryPositionerList.Add(child);
         }
         
         GetGame();
@@ -139,33 +143,74 @@ public class GameManager : MonoBehaviour
         {
             finalScoreText.gameObject.SetActive(false); // מסתירים את הציון בתחילת המשחק
         }
-        CreateQuestion();
+
+        if (game.hasPotions)
+        {
+            potionParentObject.SetActive(true);
+        }
+        else
+        {
+            potionParentObject.SetActive(false);
+        }
+        
         topic.text = game.gameName;
+
+        CreateQuestion();
     }
     // פונקציה ליצירת שאלות
     //אם אנחנו רוצים לשנות את הלוגיקה כך שתכלול שאלות אקראיות - יש לחסום את המתודה מלקבל פרמטרים ואז לייצר מספר אקראי בתוכה. נצטרך גם ליישם את RemoveQuestion בשביל השאלות שהשחקן הצליח בהן
     void CreateQuestion() //If we wanted to change up the logic to include random questions we would make this method accept no parameters and then generate the random number in it, we'd also need to implement RemoveQuestion for questions the player succeeded on
-    {
-        //הגרלת שאלה אקראית מתוך השאלות שנותרו
-        int randomQuestionNumber = Random.Range(0, allQuestions.Count);
-        currentQuestion = allQuestions[randomQuestionNumber]; // השאלה הראשונה-אקראית
-        
-        // currentQuestion = allQuestions[questionIndex]; // השאלה הראשונה 
+    { 
+       //הגרלת שאלה אקראית מתוך השאלות שנותרו
+       int randomQuestionNumber = Random.Range(0, allQuestions.Count); 
+       currentQuestion = allQuestions[randomQuestionNumber]; // השאלה הראשונה-אקראית
        RTLFixer.FixRtl(questionText, currentQuestion.questionContent); //Send the TMPro (question text) and the content to fixed to the RTLFixer
+       
        currentGameTime = game.timePerQuestion;
        UpdateTimerUI(); //קריאה לפונקציה שמעדכנת את הזמן
        isTimerRunning = true;
+       awardedTimeThisQuestion = 0;
+       
+       
        currentQuestion.attempts++; //בשליפת שאלה, נוסיף ניסיון מענה
        ResetPlayer(); //לשים בהערה אם רוצים שהתולעת תהיה אחת רציפה שמתמלאת ומתרוקנת 
        
-       List<Transform> dupMulberries = new List<Transform>(mulberryPositonerList);
-       foreach (AnswerModel answer in currentQuestion.orderedAnswers) // Create all mulberries after 
+       List<Transform> dupMulberries = new List<Transform>(mulberryPositionerList); //Needs to be initialized once per question, therefore is passed as parameter to CreateAnswer()
+       foreach (AnswerModel answer in currentQuestion.orderedAnswers) // Create all mulberries
        {
            CreateAnswer(answer,dupMulberries);  
        }
+       
+       //Initialize Potions
+       numPotions = 0;
+       if (game.hasPotions)
+       {
+           if (game.awardPotionInds != null && game.awardPotionInds.Count > 0)
+           {
+               foreach (int potionInd in game.awardPotionInds)
+               {
+                   if (potionInd == 0)
+                   {
+                       numPotions++; // If the game model has potions that are awarded at 0, add them when creating the questions
+                   }
+               }
+           }
+           
+           potionText.text = numPotions.ToString();
+           
+           // Initialize potion color - red indicates 0 potions/sudden death
+           if (numPotions == 0)
+           {
+               potionText.color = Color.red;
+           }
+           else
+           {
+               potionText.color = Color.cyan;
+           }
+       }
     }
 
-    // Used when starting a new question. Currently the code logic is that we destroy the previous silkworm and create a new with the correct amount of placeholders rather than emptying it.
+    // Used when starting a new question. Currently, the code logic is that we destroy the previous silkworm and create a new with the correct amount of placeholders rather than emptying it.
     void ResetPlayer()
     {
         KillCommonGameObjects();
@@ -203,7 +248,7 @@ public class GameManager : MonoBehaviour
             snakeTail.SetNextPlaceholder(); //After creating tail circles, set next placeholder
         }
         silkyInstances[0].GetComponent<SnakeGrow>().contentViewSnakeTail = silkyInstances[1].GetComponent<SnakeTail>();
-        snakeTail = silkyInstances[0].GetComponent<SnakeTail>(); //Ensure GameManager's snakeTail is the main characters (unknown if need - precaution as of now)
+        snakeTail = silkyInstances[0].GetComponent<SnakeTail>(); //Ensure GameManager's snakeTail is the main characters (unknown if needed - precaution as of now)
         SetContentSilkyPosition();
     }
     
@@ -227,6 +272,41 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void UsePotion()
+    {
+        // TODO: Add sound effect for failure/mistake
+        if (numPotions > 0)
+        {
+            numPotions--;
+            potionText.text = numPotions.ToString();
+            if (numPotions == 0)
+            {
+                potionText.color = Color.red;
+            }
+            // TODO: Add swirly eyes animation
+            // TODO: Add brief game pause where the player can't move and the character sprites transparency goes up and down
+        }
+        else
+        {
+            QuestionFailed();
+        }
+    }
+    
+    public void AddPotion(int potionsToReceive)
+    {
+        numPotions += potionsToReceive;
+        potionText.text = numPotions.ToString();
+        potionText.color = Color.cyan;
+        //TODO: Add animation effect for potion received
+    }
+    
+    public void AddTime()
+    {
+        currentGameTime += awardedTimePerAnswer;
+        awardedTimeThisQuestion += awardedTimePerAnswer;
+        //TODO: Add animation effect for time received
+    }
+    
     void DestroyAllAnswers()
     {
         foreach (OrderItem orderItem in orderItems)
@@ -238,7 +318,6 @@ public class GameManager : MonoBehaviour
         orderItems.Clear();
     }
     
-
     private void ScreenStatus(string screenToShow, Color screenColor) //פונקציה שתפקידה לעדכן את הסטטוס של המסך בסיוּם שאלה (בין שמדובר באכילת תות שגוי, בהצלחה או כאשר נגמר הזמן)
     {
         if (screenStatusText != null)
@@ -253,7 +332,7 @@ public class GameManager : MonoBehaviour
     private void EndQuestion()
     {
         isTimerRunning = false;
-        totalgameTime += game.timePerQuestion-currentGameTime;
+        totalgameTime += game.timePerQuestion+awardedTimeThisQuestion-currentGameTime; //חקן היה על השאלה מחברים את הזמן המוקצה לכל שאלה עם הזמן שהתקבל בשאלה ומחסירים את הזמן שנותר כדי לקבל את סה"כ הזמן שהש
         DestroyAllAnswers(); //Should happen before the option is given to press space to continue
     }
     
@@ -273,7 +352,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void QuestionFailed() //פונקציה שמטפלת בסיוּם שאלה באי-הצלחה כאשר השחקן אכל תות לא לפי הסדר הנכון
+    private void QuestionFailed() //פונקציה שמטפלת בסיוּם שאלה באי-הצלחה כאשר השחקן אכל תות לא לפי הסדר הנכון
     {
         EndQuestion();
         totalGameMistakes++;
@@ -288,13 +367,13 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
     }
 
-    public void KillCommonGameObjects()
+    private void KillCommonGameObjects()
     {
         KillGameObjectList(silkyInstances);
         KillGameObjectList(labelTextObjects);
         labelPositions.Clear();
     }
-    public void KillGameObjectList(List<GameObject> list)
+    private void KillGameObjectList(List<GameObject> list)
     {
         if (list.Count > 0)
         {

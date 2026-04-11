@@ -38,5 +38,7 @@ public class DataModels
         public string gameName;
         public float timePerQuestion;
         public List<QuestionModel> questionList;
+        public bool hasPotions;
+        public List<int> awardPotionInds;
     }
 }

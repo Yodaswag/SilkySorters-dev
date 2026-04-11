@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Linq;
 public class SnakeGrow : MonoBehaviour
 {
     [SerializeField] private SnakeTail snakeTail;
@@ -37,16 +37,29 @@ public class SnakeGrow : MonoBehaviour
                     snakeTail.AddAnswer(objectTouchedScript.answer);
                     contentViewSnakeTail.AddAnswer(objectTouchedScript.answer);
                     eatEffect.Play();
+                    gameManager.AddTime();
+                    
                     Destroy(objectTouched);
                     
                     if (answersProvided == gameManager.currentQuestion.orderedAnswers.Count)
                     {
                         gameManager.QuestionSuccess();
                     }
+                    else // Give potions. Only relevant if the question wasn't completed.
+                    {
+                        if (gameManager.game.hasPotions)
+                        {
+                            int potionsToRecieve = gameManager.game.awardPotionInds.Count(x => x == objectTouchedScript.answer.orderIndex);
+                            if (potionsToRecieve > 0)
+                            {
+                                gameManager.AddPotion(potionsToRecieve);
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    gameManager.QuestionFailed();
+                    gameManager.UsePotion();
                 }
             }
         }
@@ -81,7 +94,4 @@ public class SnakeGrow : MonoBehaviour
             objectTouched = null;
         }
     }
-    
-    
-    
 }
