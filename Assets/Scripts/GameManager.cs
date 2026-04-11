@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -27,12 +28,9 @@ public class GameManager : MonoBehaviour
     [Header ("Mulberries (Order Items)")]
     [SerializeField] GameObject orderItemPrefab;
     private List<OrderItem> orderItems = new List<OrderItem>(); //List of game objects of mulberry answer items
-    [SerializeField] private float minX = -16f;
-    [SerializeField] private float maxX = 16f;
-    [SerializeField] private float minY = -8f;
-    [SerializeField] private float maxY = 8f;
-    [SerializeField] private float spawnCheckRadius = 5f;
-    [SerializeField] private LayerMask foreground; //Used to not mix collision check with OverlapCircle on spawn with the LeafBG. Note: LeafBG must have a background for cinemachine camera clamping.
+    [SerializeField] private GameObject PositionerGroup_Mulberries;
+    private List<Transform> mulberryPositonerList = new List<Transform>();
+    
     
     [Header("Game Controls")]
     private bool gameWon;
@@ -68,12 +66,19 @@ public class GameManager : MonoBehaviour
     private float score; // משתנה גלובלי שיכיל את הציון למשחק
     void Start()
     {
+        Debug.Log("doing start stuff");
         uiDuringMainGame.SetActive(true);
         gameWon = false;
         Time.timeScale = 1f;
         restartBtn.SetActive(false);
         screenStatusText.gameObject.SetActive(false);
-
+        
+        //Initialize mulberry positioner list
+        foreach (Transform child in PositionerGroup_Mulberries.transform) 
+        {
+            mulberryPositonerList.Add(child);
+        }
+        
         GetGame();
     }
 
@@ -152,9 +157,11 @@ public class GameManager : MonoBehaviour
        isTimerRunning = true;
        currentQuestion.attempts++; //בשליפת שאלה, נוסיף ניסיון מענה
        ResetPlayer(); //לשים בהערה אם רוצים שהתולעת תהיה אחת רציפה שמתמלאת ומתרוקנת 
+       
+       List<Transform> dupMulberries = new List<Transform>(mulberryPositonerList);
        foreach (AnswerModel answer in currentQuestion.orderedAnswers) // Create all mulberries after 
        {
-           CreateAnswer(answer);  
+           CreateAnswer(answer,dupMulberries);  
        }
     }
 
@@ -199,6 +206,26 @@ public class GameManager : MonoBehaviour
         snakeTail = silkyInstances[0].GetComponent<SnakeTail>(); //Ensure GameManager's snakeTail is the main characters (unknown if need - precaution as of now)
         SetContentSilkyPosition();
     }
+    
+    
+    // ליצור מסיח על המסך
+    void CreateAnswer(AnswerModel answerModel,List<Transform> dupMulberries)
+    {
+        if (dupMulberries.Count > 0)
+        {
+            int randPos = Random.Range(0, dupMulberries.Count);
+            GameObject newAnswerPrefab = Instantiate(orderItemPrefab, dupMulberries[randPos]); // יוצר מופע של הפריפאב
+            newAnswerPrefab.name = "OrderItem_" + answerModel.orderIndex;
+            OrderItem orderItemScript = newAnswerPrefab.GetComponent<OrderItem>();
+            orderItemScript.SetAnswer(answerModel);
+            orderItems.Add(orderItemScript); // מוסיפים לרשימת המופעים שעל המסך
+            dupMulberries.RemoveAt(randPos);
+        }
+        else
+        {
+            Debug.Log("Not enough positioners for the amount of order items");
+        }
+    }
 
     void DestroyAllAnswers()
     {
@@ -211,46 +238,6 @@ public class GameManager : MonoBehaviour
         orderItems.Clear();
     }
     
-    // ליצור מסיח על המסך
-    void CreateAnswer(AnswerModel answerModel)
-    {
-        Vector2 spawnPos = FindEmptyPosition();
-        if (spawnPos != Vector2.zero) // אם מצאנו מקום תקין
-        {
-            GameObject newAnswerPrefab = Instantiate(orderItemPrefab, spawnPos, Quaternion.identity); // יוצר מופע של הפריפאב
-            newAnswerPrefab.name = "OrderItem_" + answerModel.orderIndex;
-            OrderItem orderItemScript = newAnswerPrefab.GetComponent<OrderItem>();
-            orderItemScript.SetAnswer(answerModel);
-            orderItems.Add(orderItemScript); // מוסיפים לרשימת המופעים שעל המסך
-        }
-
-        else //אם לא מצאנו מקום תקין
-        {
-            CreateAnswer(answerModel); //רקורסיה ללמצוא מקום חדש
-        }
-    }
-
-    Vector2 FindEmptyPosition()
-    {
-        int maxAttempts = 50;
-        for (int i = 0; i < maxAttempts; i++)
-        {
-            // הגרלת מיקום
-            float x = Random.Range(minX, maxX);
-            float y = Random.Range(minY, maxY);
-            Vector2 potentialPos = new Vector2(x, y);
-
-            //   האם המיקום הזה פנוי
-            // הפקודה הזו בודקת אם יש Collider כלשהו ברדיוס שהגדרנו
-            Collider2D hit = Physics2D.OverlapCircle(potentialPos, spawnCheckRadius,foreground); // We had to define a collider to LeafBG for cinemachine clamping and confinement, therefore we always have at least one collision per position and we need an array.
-            if (hit == null) // By necessity, if the collision array has more than 1 collider2d, it's either the player character or another item
-            {
-                return potentialPos;
-            }
-        }
-
-        return Vector2.zero;
-    }
 
     private void ScreenStatus(string screenToShow, Color screenColor) //פונקציה שתפקידה לעדכן את הסטטוס של המסך בסיוּם שאלה (בין שמדובר באכילת תות שגוי, בהצלחה או כאשר נגמר הזמן)
     {
