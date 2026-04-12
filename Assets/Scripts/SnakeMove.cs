@@ -19,6 +19,7 @@ public class SnakeMove : MonoBehaviour
     private Vector2 smoothInputVelocity;
     
     private float currentSplineTime = 0f;
+    private float animationTime = 0f;
     private bool comingFromRight = false;
     
     public GameManager gameManager;
@@ -55,7 +56,7 @@ public class SnakeMove : MonoBehaviour
                 break;
 
             case GameManager.ReflectionPhases.MovingToStartAnchor:
-                Vector3 targetPos = gameManager.positioner_PlayerSpawn.position;
+                Vector3 targetPos = gameManager.reflectionSpline.transform.position;
                 Vector3 direction = (targetPos - transform.position).normalized;
 
                 comingFromRight = (transform.position.x - targetPos.x) > 0;
@@ -74,12 +75,25 @@ public class SnakeMove : MonoBehaviour
 
                 transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
                 gameManager.ChangeView(false); //Change to dynamic
-
-                
                 break;
 
             case GameManager.ReflectionPhases.FollowingSpline:
                 FollowSplinePath(comingFromRight); //If coming from right, play the spline animation in reverse (counter-clockwise). If not, play it normally (clockwise).
+                break;
+            
+            case GameManager.ReflectionPhases.Darkening:
+                gameManager.currentReflectionPhase = GameManager.ReflectionPhases.FadingToBlack;
+                animationTime = 0f;
+                break;
+            
+            case GameManager.ReflectionPhases.FadingToBlack:
+                // Return dynamic camera offset to be centered on the player
+                // TODO: Consider creating a seperate vcam for the reflection phase rather than moving the target offset manually with lerp.
+                Vector3 startOffset = new Vector3(3f, 0f, 0f);
+                Vector3 endOffset = Vector3.zero;
+                
+                gameManager.dynamicVcamComposer.TargetOffset = Vector3.Lerp(startOffset, endOffset, animationTime);
+                animationTime += Time.deltaTime;
                 break;
         }
     }
@@ -148,7 +162,7 @@ public class SnakeMove : MonoBehaviour
         // evalTime: 
         // If 0 -> Mathf.Abs(0 - t) = t 
         // If 1 -> Mathf.Abs(1 - t) = 1 - t
-        float evalTime = Mathf.Abs(reverseInt - currentSplineTime);
+        float evalTime = Mathf.Abs(reverseInt - currentSplineTime); //Note: The animation is a circle. The point is equal to the first point, allowing the last knot to be subtituted with the first knot.
         
         transform.position = gameManager.reflectionSpline.EvaluatePosition(evalTime);
 
@@ -162,6 +176,14 @@ public class SnakeMove : MonoBehaviour
         {
             float angle = Mathf.Atan2(tangent.y, tangent.x) * Mathf.Rad2Deg;
             headTransform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+        }
+        
+        if (gameManager.dynamicVcamComposer != null)
+        {
+            Vector3 startOffset = Vector3.zero;
+            Vector3 endOffset = new Vector3(3f, 0f, 0f);
+    
+            gameManager.dynamicVcamComposer.TargetOffset = Vector3.Lerp(startOffset, endOffset, currentSplineTime);
         }
     }
 }

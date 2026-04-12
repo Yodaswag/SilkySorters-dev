@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public bool isStaticView = true;
     [Header ("Player and Camera")]
     [SerializeField] CinemachineCamera dynamicVcam; //Since the player instance gets destroyed and reinstantiated every question - the camera must be attached to follow it.
+    public CinemachinePositionComposer dynamicVcamComposer;
     [SerializeField] CinemachineCamera staticVcam;
     [SerializeField] GameObject silkyPlayerPrefab;
     public Transform positioner_PlayerSpawn;
@@ -95,6 +96,8 @@ public class GameManager : MonoBehaviour
         {
             mulberryPositionerList.Add(child);
         }
+        
+        dynamicVcamComposer = dynamicVcam.GetComponent<CinemachinePositionComposer>();
         
         GetGame();
     }
