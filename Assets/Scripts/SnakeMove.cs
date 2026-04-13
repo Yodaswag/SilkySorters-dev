@@ -23,31 +23,48 @@ public class SnakeMove : MonoBehaviour
     private bool comingFromRight = false;
     
     public GameManager gameManager;
-    private void Awake()
-    {
-        inputActions = new InputSystem_Actions();
-    }
 
-    private void OnEnable()
+    private void EnsureInitialized()
     {
-        inputActions.Player.Enable();
-    }
+        if (inputActions == null)
+        {
+            inputActions = new InputSystem_Actions();
+        }
 
-    private void OnDisable()
-    {
-        inputActions.Player.Disable();
-    }
-
-    private void Start()
-    {
         if (headTransform == null)
         {
             headTransform = transform;
         }
     }
 
+    private void Awake()
+    {
+        EnsureInitialized();
+    }
+
+    private void OnEnable()
+    {
+        EnsureInitialized();
+        inputActions.Player.Enable();
+    }
+    
+    private void OnDisable()
+    {
+        if (inputActions != null)
+        {
+            inputActions.Player.Disable();
+        }
+    }
+
     private void Update()
     {
+        EnsureInitialized();
+
+        if (gameManager == null)
+        {
+            return; //Don't perform any part of the update function until ResetPlayer has set gameManager for this instance
+        }
+        
         // TODO: Consider moving to seperate script ReflectionController.cs
         // TODO: Add behaviour for the rest of reflection phases
         switch (gameManager.currentReflectionPhase)
@@ -118,6 +135,13 @@ public class SnakeMove : MonoBehaviour
 
     private void FixedUpdate()
     {
+        EnsureInitialized();
+
+        if (gameManager == null)
+        {
+            return;
+        }
+        
         // Smooth and apply movement in FixedUpdate to sync with the physics engine 
         // Passing Time.fixedDeltaTime explicitly prevents SmoothDamp from defaulting to Time.deltaTime
         currentInputVector = Vector2.SmoothDamp(
@@ -130,7 +154,7 @@ public class SnakeMove : MonoBehaviour
         );
 
         if (gameManager.currentReflectionPhase == GameManager.ReflectionPhases.None)
-            HandleMovement();
+            HandleMovement(); 
     }
 
     private void HandleMovement()

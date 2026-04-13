@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SnakeTail snakeTail;
     
     [Header ("Silky Content View")] //For the static view silkworm at the bottom left of the screen
-    public GameObject contentViewInstance;
     [SerializeField] private Transform positioner_SilkyContentView;
     [SerializeField] private GameObject silkyContentViewPrefab;
     private List<GameObject> silkyInstances = new List<GameObject>();
@@ -258,7 +257,7 @@ public class GameManager : MonoBehaviour
 
         
             // Create placeholders for the body
-            while (snakeTail.GetLength()-1 < currentQuestion.orderedAnswers.Count) //-1 because the head is the first position
+            while (snakeTail.GetLength()-1 < currentQuestion.orderedAnswers.Count) //minus 1 because the head is the first position
             {
                 snakeTail.AddTail();
             }
@@ -383,7 +382,7 @@ public class GameManager : MonoBehaviour
         EndQuestion();
         KillCommonGameObjects();
         ScreenStatus("|| \n עצרתם לקחת אוויר? לחצו רווח כדי להמשיך",Color.cyan);
-        // Time.timeScale = 0f; // Consider adding a continous coiling (השתבללות) animation that gives a "loading" gif vibe
+        // Time.timeScale = 0f; // Consider adding a continuous coiling (השתבללות) animation (move along circle spline) that gives a "loading" gif vibe
     }
 
     private void KillCommonGameObjects()
@@ -491,6 +490,7 @@ public class GameManager : MonoBehaviour
 
     void SetContentSilkyPosition()
     {
+        // fixes x position of silky content view so that the leftmost tail is aligned with the edge of the camera view/edge of the map
         float cameraLeftBound = dynamicVcam.gameObject.GetComponentInChildren<CinemachineConfiner2D>().BoundingShape2D.bounds.min.x;
         float curContentSilkyLeftBound = GetMaxBounds(silkyInstances[1]).min.x;
         Vector3 posShift = new Vector3(curContentSilkyLeftBound - cameraLeftBound - padding, 0, 0);

@@ -21,7 +21,7 @@ public class SnakeGrow : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return)) //TODO: Add 3 second decision countdown before switching to static view
         {
             if (objectTouchedScript != null)
             {
