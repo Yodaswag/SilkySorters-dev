@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         MovingToStartAnchor,
         FollowingSpline,
         Darkening,
-        RemovingAnswers,
+        RemovingAnswersFromBody,
         FadingToBlack,
         WaitingForNextQuestion
     }
@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
             {
                 RestartGame();
             }
-            else if (Input.GetKeyDown(KeyCode.Space) && !gameWon)
+            else if (Input.GetKeyDown(KeyCode.Space) && !gameWon && currentReflectionPhase == ReflectionPhases.WaitingForNextQuestion) // TODO: Add better reflection logic into the if
             {
                 NextQuestion();
                 Time.timeScale = 1f;
@@ -383,7 +383,7 @@ public class GameManager : MonoBehaviour
         EndQuestion();
         KillCommonGameObjects();
         ScreenStatus("|| \n עצרתם לקחת אוויר? לחצו רווח כדי להמשיך",Color.cyan);
-        Time.timeScale = 0f;
+        // Time.timeScale = 0f; // Consider adding a continous coiling (השתבללות) animation that gives a "loading" gif vibe
     }
 
     private void KillCommonGameObjects()

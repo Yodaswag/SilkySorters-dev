@@ -48,6 +48,8 @@ public class SnakeMove : MonoBehaviour
 
     private void Update()
     {
+        // TODO: Consider moving to seperate script ReflectionController.cs
+        // TODO: Add behaviour for the rest of reflection phases
         switch (gameManager.currentReflectionPhase)
         {
             case GameManager.ReflectionPhases.None:
@@ -77,23 +79,39 @@ public class SnakeMove : MonoBehaviour
                 gameManager.ChangeView(false); //Change to dynamic
                 break;
 
-            case GameManager.ReflectionPhases.FollowingSpline:
+            case GameManager.ReflectionPhases.FollowingSpline: //Coiling animation השתבללות
                 FollowSplinePath(comingFromRight); //If coming from right, play the spline animation in reverse (counter-clockwise). If not, play it normally (clockwise).
                 break;
             
-            case GameManager.ReflectionPhases.Darkening:
-                gameManager.currentReflectionPhase = GameManager.ReflectionPhases.FadingToBlack;
+            case GameManager.ReflectionPhases.Darkening: //stub - Darkening will likely happen continously during MovingTowardsAnchor and FollowingSplie
                 animationTime = 0f;
+                gameManager.currentReflectionPhase = GameManager.ReflectionPhases.RemovingAnswersFromBody;
                 break;
             
-            case GameManager.ReflectionPhases.FadingToBlack:
+            case GameManager.ReflectionPhases.RemovingAnswersFromBody: //stub
+                gameManager.currentReflectionPhase = GameManager.ReflectionPhases.FadingToBlack;
+                break;
+            
+            case GameManager.ReflectionPhases.FadingToBlack: //stub
                 // Return dynamic camera offset to be centered on the player
                 // TODO: Consider creating a seperate vcam for the reflection phase rather than moving the target offset manually with lerp.
-                Vector3 startOffset = new Vector3(3f, 0f, 0f);
-                Vector3 endOffset = Vector3.zero;
+
+                if (gameManager.dynamicVcamComposer.TargetOffset != Vector3.zero)
+                {
+                    Vector3 startOffset = new Vector3(3f, 0f, 0f);
+                    Vector3 endOffset = Vector3.zero;
                 
-                gameManager.dynamicVcamComposer.TargetOffset = Vector3.Lerp(startOffset, endOffset, animationTime);
-                animationTime += Time.deltaTime;
+                    gameManager.dynamicVcamComposer.TargetOffset = Vector3.Lerp(startOffset, endOffset, animationTime);
+                    animationTime += Time.deltaTime;
+                }
+                else
+                {
+                    gameManager.currentReflectionPhase = GameManager.ReflectionPhases.WaitingForNextQuestion;
+                }
+
+                break;
+            
+            case GameManager.ReflectionPhases.WaitingForNextQuestion: //stub
                 break;
         }
     }
