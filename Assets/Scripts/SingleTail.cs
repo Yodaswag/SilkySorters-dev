@@ -16,7 +16,7 @@ public class SingleTail : MonoBehaviour
         myIndex = index;
     }
 
-    void Update()
+    void LateUpdate()
     {
         // Safety check
         if (manager == null || manager.positions.Count <= myIndex + 1) return;

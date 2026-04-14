@@ -116,7 +116,7 @@ public class SnakeTail : MonoBehaviour
             }
             else
             {
-                RTLFixer.SetTextInTMP(tailScript.textComp, answer.textContent,answer.isRTL);
+                RTLFixer.SetTextInTMP(tailScript.textComp, answer.textContent);
                 tailScript.textComp.sortingOrder = tailScript.tailBG.sortingOrder + 1;
                 tailScript.textComp.gameObject.SetActive(true);
                 if(tailScript.imageComp) tailScript.imageComp.gameObject.SetActive(false);

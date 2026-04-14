@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   snakeTail: {fileID: 7086550600753638191}
+  contentViewSnakeTail: {fileID: 0}
   eatEffect: {fileID: 5654971220177568092}
   gameManager: {fileID: 0}
   eatSound: {fileID: 8300000, guid: 1d67bde85949391499c81fa95a4d6b8f, type: 3}
@@ -164,6 +165,7 @@ MonoBehaviour:
   boostMultiplier: 2
   smoothTime: 0.1
   headTransform: {fileID: 2051373687120418180}
+  gameManager: {fileID: 0}
 --- !u!114 &7086550600753638191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,10 +244,10 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!82 &8846140376787266350
 AudioSource:
   m_ObjectHideFlags: 0

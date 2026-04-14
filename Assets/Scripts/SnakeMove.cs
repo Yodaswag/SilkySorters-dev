@@ -11,6 +11,7 @@ public class SnakeMove : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Transform headTransform;
+    [SerializeField] private Rigidbody2D rb;
     
     private InputSystem_Actions inputActions;
 
@@ -35,6 +36,11 @@ public class SnakeMove : MonoBehaviour
         {
             headTransform = transform;
         }
+
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
     }
 
     private void Awake()
@@ -53,6 +59,23 @@ public class SnakeMove : MonoBehaviour
         if (inputActions != null)
         {
             inputActions.Player.Disable();
+        }
+    }
+
+    private Vector2 GetRootPosition()
+    {
+        return rb != null ? rb.position : (Vector2)transform.position;
+    }
+
+    private void MoveRoot(Vector2 nextPosition)
+    {
+        if (rb != null)
+        {
+            rb.MovePosition(nextPosition);
+        }
+        else
+        {
+            transform.position = nextPosition;
         }
     }
 
@@ -168,9 +191,8 @@ public class SnakeMove : MonoBehaviour
 
         if (currentInputVector.sqrMagnitude > 0.001f)
         {
-            Vector3 movement = new Vector3(currentInputVector.x, currentInputVector.y, 0f);
-
-            transform.Translate(movement * (currentSpeed * Time.fixedDeltaTime), Space.World);
+            Vector2 movement = currentInputVector * (currentSpeed * Time.fixedDeltaTime);
+            rb.MovePosition(rb.position + movement);
 
             float angle = Mathf.Atan2(currentInputVector.y, currentInputVector.x) * Mathf.Rad2Deg;
             

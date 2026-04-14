@@ -157,9 +157,10 @@ public class RTLFixer
             textMesh.text = processed;
     }
 
-    public static void SetTextInTMP<T>(T textMesh, string input, bool isRtl) where T : TMP_Text // Written by SilkySorters team
+    public static void SetTextInTMP<T>(T textMesh, string input) where T : TMP_Text // Written by SilkySorters team
     {
-        if (isRtl)
+        bool hasRtl = HasRtlChars(input);
+        if (hasRtl)
         {
             textMesh.isRightToLeftText = true;
             textMesh.alignment = TextAlignmentOptions.Right;

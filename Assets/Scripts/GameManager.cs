@@ -179,7 +179,8 @@ public class GameManager : MonoBehaviour
        //הגרלת שאלה אקראית מתוך השאלות שנותרו
        int randomQuestionNumber = Random.Range(0, allQuestions.Count); 
        currentQuestion = allQuestions[randomQuestionNumber]; // השאלה הראשונה-אקראית
-       RTLFixer.FixRtl(questionText, currentQuestion.questionContent); //Send the TMPro (question text) and the content to fixed to the RTLFixer
+       RTLFixer.SetTextInTMP(questionText, currentQuestion.questionContent); //Send the TMPro (question text) and the content to fixed to the RTLFixer
+       questionText.alignment = TextAlignmentOptions.Center;
        
        currentGameTime = game.timePerQuestion;
        UpdateTimerUI(); //קריאה לפונקציה שמעדכנת את הזמן
@@ -228,7 +229,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Used when starting a new question. Currently, the code logic is that we destroy the previous silkworm and create a new with the correct amount of placeholders rather than emptying it.
-    void ResetPlayer()
+    void ResetPlayer() // TODO: Consider not killing & instatiating the main player character, allowing easier and better continuity after coiling, etc...
     {
         KillCommonGameObjects();
         silkyInstances.Add(Instantiate(silkyPlayerPrefab,positioner_PlayerSpawn)); //Main player character (dynamic mode) - Set to 0
@@ -380,7 +381,7 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         EndQuestion();
-        KillCommonGameObjects();
+        // KillCommonGameObjects();
         ScreenStatus("|| \n עצרתם לקחת אוויר? לחצו רווח כדי להמשיך",Color.cyan);
         // Time.timeScale = 0f; // Consider adding a continuous coiling (השתבללות) animation (move along circle spline) that gives a "loading" gif vibe
     }
@@ -453,7 +454,8 @@ public class GameManager : MonoBehaviour
             if (finalScoreText != null)
             {
                 finalScoreText.gameObject.SetActive(true);
-                finalScoreText.text = score.ToString(); 
+                float roundedScore = Mathf.Round(score);
+                finalScoreText.text = roundedScore.ToString(); 
             }
             ScreenStatus(screenToShow,Color.cyan);
             KillCommonGameObjects();
@@ -508,11 +510,11 @@ public class GameManager : MonoBehaviour
             Vector3 lastPos = contentSilkyTailPositions[^1] - posShift;
             
             labelTextObjects.Add(Instantiate(labelPrefab,firstPos,Quaternion.identity)); //Start label
-            RTLFixer.SetTextInTMP(labelTextObjects[0].GetComponentInChildren<TextMeshPro>(),currentQuestion.orderStartLabel,currentQuestion.isStartLabelRTL);
+            RTLFixer.SetTextInTMP(labelTextObjects[0].GetComponentInChildren<TextMeshPro>(),currentQuestion.orderStartLabel);
             labelTextObjects[0].GetComponentInChildren<TextMeshPro>().alignment = TextAlignmentOptions.Center;
             
             labelTextObjects.Add(Instantiate(labelPrefab,lastPos,Quaternion.identity)); //End label
-            RTLFixer.SetTextInTMP(labelTextObjects[1].GetComponentInChildren<TextMeshPro>(),currentQuestion.orderEndLabel,currentQuestion.isEndLabelRTL);
+            RTLFixer.SetTextInTMP(labelTextObjects[1].GetComponentInChildren<TextMeshPro>(),currentQuestion.orderEndLabel);
             labelTextObjects[1].GetComponentInChildren<TextMeshPro>().alignment = TextAlignmentOptions.Center;
         }
     }

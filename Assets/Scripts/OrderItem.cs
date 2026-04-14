@@ -38,7 +38,7 @@ public class OrderItem : MonoBehaviour
                 //תתאים את הטקסט
                 // מקבלת טקסטמשפרו-מיקום של הטקסט, לשים שֵם
                 // תזין במקום של הטקסט את התוכן-משתמש בסרוויס שמתאים עברית אנגלית
-                RTLFixer.SetTextInTMP(answerText, answerModel.textContent,answerModel.isRTL);
+                RTLFixer.SetTextInTMP(answerText, answerModel.textContent);
                 answerText.sortingOrder = (answerModel.orderIndex-1)*2+6; //+6 and times 2 to be different from each text component of the body parts
                 answerText.enabled = true;
                 answerImage.enabled = false;
