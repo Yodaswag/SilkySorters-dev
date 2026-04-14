@@ -5,6 +5,8 @@ public class SnakeGrow : MonoBehaviour
     [SerializeField] private SnakeTail snakeTail;
     public SnakeTail contentViewSnakeTail;
     [SerializeField] private ParticleSystem eatEffect;
+    [SerializeField] private FloatingWorldText floatingWorldText;
+    [SerializeField] private Transform anchor;
     public GameManager gameManager;
 
     [SerializeField] private AudioClip eatSound;
@@ -37,14 +39,15 @@ public class SnakeGrow : MonoBehaviour
                     snakeTail.AddAnswer(objectTouchedScript.answer);
                     contentViewSnakeTail.AddAnswer(objectTouchedScript.answer);
                     eatEffect.Play();
-                    gameManager.AddTime();
+                    
                     
                     if (answersProvided == gameManager.currentQuestion.orderedAnswers.Count)
                     {
                         gameManager.QuestionSuccess();
                     }
-                    else // Give potions. Only relevant if the question wasn't completed.
+                    else // Give potions and bonus time. Only relevant if the question wasn't completed.
                     {
+                        gameManager.AddTime();
                         if (gameManager.game.hasPotions)
                         {
                             int potionsToRecieve = gameManager.game.awardPotionInds.Count(x => x == objectTouchedScript.answer.orderIndex);
@@ -94,4 +97,25 @@ public class SnakeGrow : MonoBehaviour
             objectTouched = null;
         }
     }
+
+    public void ShowFloatingWorldText(string message, Color color)
+    {
+        Vector3 baseOffset = Vector3.zero;
+
+        if (message == "+5s")
+            baseOffset = new Vector3(-0.2f, 0.15f, 0f);
+        else if (message == "+Potion")
+            baseOffset = new Vector3(0.2f, 0.07f, 0f);
+
+        Vector3 randomOffset = new Vector3(
+            Random.Range(-0.08f, 0.08f),
+            Random.Range(-0.03f, 0.06f),
+            0f
+        );
+
+        FloatingWorldText instance = Instantiate(floatingWorldText, anchor);
+        instance.transform.localPosition = baseOffset + randomOffset;
+        instance.Initialize(message, color, gameManager.transform);
+    }
+
 }

@@ -2993,9 +2993,7 @@ MonoBehaviour:
   currentQuestion:
     questionContent: 
     orderStartLabel: 
-    isStartLabelRTL: 0
     orderEndLabel: 
-    isEndLabelRTL: 0
     orderedAnswers: []
     attempts: 0
   game:
@@ -3004,188 +3002,150 @@ MonoBehaviour:
     questionList:
     - questionContent: "\u05D0\u05DE\u05E6\u05E2\u05D9 \u05EA\u05E7\u05E9\u05D5\u05E8\u05EA"
       orderStartLabel: "\u05DE\u05D5\u05E7\u05D3\u05DD"
-      isStartLabelRTL: 1
       orderEndLabel: Recent
-      isEndLabelRTL: 0
       orderedAnswers:
       - textContent: 
         imageContent: {fileID: -1902982327901493675, guid: abbaba1e427b088498f4fb80e67f7338, type: 3}
         orderIndex: 1
         isImage: 1
-        isRTL: 0
       - textContent: "\u05D8\u05DC\u05D2\u05E8\u05E3"
         imageContent: {fileID: 0}
         orderIndex: 2
         isImage: 0
-        isRTL: 1
       - textContent: "\u05D8\u05DC\u05E4\u05D5\u05DF"
         imageContent: {fileID: 0}
         orderIndex: 3
         isImage: 0
-        isRTL: 1
       - textContent: Mail
         imageContent: {fileID: 0}
         orderIndex: 4
         isImage: 0
-        isRTL: 0
       - textContent: Smartphone
         imageContent: {fileID: 0}
         orderIndex: 5
         isImage: 0
-        isRTL: 0
       - textContent: WhatsApp
         imageContent: {fileID: 0}
         orderIndex: 6
         isImage: 0
-        isRTL: 0
       - textContent: ZOOM
         imageContent: {fileID: 0}
         orderIndex: 7
         isImage: 0
-        isRTL: 0
       attempts: 0
     - questionContent: "\u05D4\u05D9\u05E1\u05D8\u05D5\u05E8\u05D9\u05D4 \u05DC\u05DB\u05D9\u05EA\u05D4
         \u05D4"
       orderStartLabel: Early
-      isStartLabelRTL: 0
       orderEndLabel: "\u05DE\u05D0\u05D5\u05D7\u05E8"
-      isEndLabelRTL: 1
       orderedAnswers:
       - textContent: "\u05D4\u05E8\u05E6\u05DC \u05DE\u05E7\u05D9\u05DD \u05D0\u05EA
           \u05D4\u05EA\u05E0\u05D5\u05E2\u05D4 \u05D4\u05E6\u05D9\u05D5\u05E0\u05D9\u05EA"
         imageContent: {fileID: 0}
         orderIndex: 1
         isImage: 0
-        isRTL: 1
       - textContent: "\u05E4\u05E8\u05E1\u05D5\u05DD \u05D4\u05E6\u05D4\u05E8\u05EA
           \u05D1\u05DC\u05E4\u05D5\u05E8 \u05D4\u05D4\u05D9\u05E1\u05D8\u05D5\u05E8\u05D9\u05EA"
         imageContent: {fileID: 0}
         orderIndex: 2
         isImage: 0
-        isRTL: 1
       - textContent: "\u05EA\u05E7\u05D5\u05E4\u05EA \u05D4\u05DE\u05E0\u05D3\u05D8
           \u05D4\u05D1\u05E8\u05D9\u05D8\u05D9 \u05D1\u05D0\u05E8\u05E5 \u05D9\u05E9\u05E8\u05D0\u05DC"
         imageContent: {fileID: 0}
         orderIndex: 3
         isImage: 0
-        isRTL: 1
       - textContent: 
         imageContent: {fileID: -1025365946052663531, guid: 9964de07ec9efd443b4f867d8c887b0f, type: 3}
         orderIndex: 4
         isImage: 1
-        isRTL: 0
       - textContent: "\u05D4\u05E1\u05DB\u05DD \u05D4\u05E9\u05DC\u05D5\u05DD \u05D1\u05D9\u05DF
           \u05D9\u05E9\u05E8\u05D0\u05DC \u05DC\u05DE\u05E6\u05E8\u05D9\u05DD"
         imageContent: {fileID: 0}
         orderIndex: 5
         isImage: 0
-        isRTL: 1
       - textContent: "\u05E4\u05E8\u05E1 \u05E0\u05D5\u05D1\u05DC \u05E8\u05D0\u05E9\u05D5\u05DF
           \u05DC\u05D9\u05E9\u05E8\u05D0\u05DC\u05D9 \u05D1\u05DB\u05D9\u05DE\u05D9\u05D4"
         imageContent: {fileID: 0}
         orderIndex: 6
         isImage: 0
-        isRTL: 1
       - textContent: 
         imageContent: {fileID: 7691294901476699688, guid: 76c2658fc521fb649bd30bea5a6478a4, type: 3}
         orderIndex: 7
         isImage: 1
-        isRTL: 0
       - textContent: "#\u05D7\u05D2\u05D9\u05D2\u05D5\u05EA \u05E9\u05E0\u05EA \u05D4-100
           \u05DC\u05DE\u05D3\u05D9\u05E0\u05EA \u05D9\u05E9\u05E8\u05D0\u05DC!"
         imageContent: {fileID: 0}
         orderIndex: 8
         isImage: 0
-        isRTL: 1
       attempts: 0
     - questionContent: "\u05D0\u05DB\u05DC\u05D5 \u05D0\u05EA \u05D4\u05EA\u05D5\u05EA\u05D9\u05DD
         \u05DC\u05E4\u05D9 \u05E1\u05D3\u05E8 \u05D4\u05DE\u05E1\u05E4\u05E8\u05D9\u05DD
         \u05DE\u05D4\u05E7\u05D8\u05DF \u05DC\u05D2\u05D3\u05D5\u05DC"
       orderStartLabel: "(0) \u05D4\u05EA\u05D7\u05DC\u05D4"
-      isStartLabelRTL: 1
       orderEndLabel: "\u05E1\u05D5\u05E3 (\u05D4\u05DB\u05D9 \u05D2\u05D3\u05D5\u05DC)"
-      isEndLabelRTL: 1
       orderedAnswers:
       - textContent: 1
         imageContent: {fileID: 0}
         orderIndex: 1
         isImage: 0
-        isRTL: 0
       - textContent: 22
         imageContent: {fileID: 0}
         orderIndex: 2
         isImage: 0
-        isRTL: 0
       - textContent: 37
         imageContent: {fileID: 0}
         orderIndex: 3
         isImage: 0
-        isRTL: 0
       - textContent: 129
         imageContent: {fileID: 0}
         orderIndex: 4
         isImage: 0
-        isRTL: 0
       - textContent: 131
         imageContent: {fileID: 0}
         orderIndex: 5
         isImage: 0
-        isRTL: 0
       attempts: 0
     - questionContent: "\u05D0\u05D5\u05EA\u05D9\u05D5\u05EA \u05DC\u05E4\u05D9 \u05D4\u05E1\u05D3\u05E8"
       orderStartLabel: "\u05D4\u05D0\u05D5\u05EA \u05D4\u05E8\u05D0\u05E9\u05D5\u05E0\u05D4"
-      isStartLabelRTL: 1
       orderEndLabel: "\u05D4\u05D0\u05D5\u05EA \u05D4\u05D0\u05D7\u05E8\u05D5\u05E0\u05D4"
-      isEndLabelRTL: 1
       orderedAnswers:
       - textContent: "\u05D0"
         imageContent: {fileID: 0}
         orderIndex: 1
         isImage: 0
-        isRTL: 0
       - textContent: "\u05D1"
         imageContent: {fileID: 0}
         orderIndex: 2
         isImage: 0
-        isRTL: 0
       - textContent: "\u05D2"
         imageContent: {fileID: 0}
         orderIndex: 3
         isImage: 0
-        isRTL: 0
       - textContent: "\u05D3"
         imageContent: {fileID: 0}
         orderIndex: 4
         isImage: 0
-        isRTL: 1
       attempts: 0
     - questionContent: "\u05E2\u05D1\u05E8\u05D9\u05EA \u05DC\u05DB\u05D9\u05EA\u05D4
         \u05D6 \u05DC\u05E4\u05D9 \u05E0\u05D5\u05E9\u05D0-\u05E0\u05E9\u05D5\u05D0-\u05DE\u05E9\u05DC\u05D9\u05DE\u05D9\u05DD"
       orderStartLabel: "\u05EA\u05D7\u05D9\u05DC\u05EA \u05DE\u05E9\u05E4\u05D8"
-      isStartLabelRTL: 1
       orderEndLabel: "\u05E1\u05D5\u05E3 \u05DE\u05E9\u05E4\u05D8"
-      isEndLabelRTL: 1
       orderedAnswers:
       - textContent: "\u05D4"
         imageContent: {fileID: 0}
         orderIndex: 1
         isImage: 0
-        isRTL: 1
       - textContent: 
         imageContent: {fileID: 2344264231129395918, guid: dca26a93df2ca7d44af2c8316f017af1, type: 3}
         orderIndex: 2
         isImage: 1
-        isRTL: 0
       - textContent: "\u05D0\u05DB\u05DC"
         imageContent: {fileID: 0}
         orderIndex: 3
         isImage: 0
-        isRTL: 1
       - textContent: 
         imageContent: {fileID: -7832214784768987486, guid: 4f14ad04c5a23bb439549a86e2f1dd94, type: 3}
         orderIndex: 4
         isImage: 1
-        isRTL: 0
       attempts: 0
     hasPotions: 1
     awardPotionInds: 020000000300000005000000

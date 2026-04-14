@@ -301,6 +301,7 @@ public class GameManager : MonoBehaviour
             {
                 potionText.color = Color.red;
             }
+            silkyInstances[0].GetComponent<SnakeGrow>().ShowFloatingWorldText("-Potion", Color.red);
             // TODO: Add swirly eyes animation
             // TODO: Add brief game pause where the player can't move and the character sprites transparency goes up and down
         }
@@ -315,6 +316,7 @@ public class GameManager : MonoBehaviour
         numPotions += potionsToReceive;
         potionText.text = numPotions.ToString();
         potionText.color = Color.cyan;
+        silkyInstances[0].GetComponent<SnakeGrow>().ShowFloatingWorldText("+Potion", Color.cyan);
         //TODO: Add animation effect for potion received
     }
     
@@ -322,6 +324,7 @@ public class GameManager : MonoBehaviour
     {
         currentGameTime += awardedTimePerAnswer;
         awardedTimeThisQuestion += awardedTimePerAnswer;
+        silkyInstances[0].GetComponent<SnakeGrow>().ShowFloatingWorldText("+5s", Color.yellow);
         //TODO: Add animation effect for time received
     }
     
