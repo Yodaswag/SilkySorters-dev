@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6513142040460982844}
+  - component: {fileID: 424282485761989770}
   - component: {fileID: 3308286265787212468}
   - component: {fileID: 7057107837034867873}
   m_Layer: 6
@@ -37,6 +38,21 @@ Transform:
   - {fileID: 2934323604860339540}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &424282485761989770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 43380941326840865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b726ff3bf902ffb4794fcb446706f7d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ImageScript
+  spriteRenderer: {fileID: 2757307847294483598}
+  spriteMask: {fileID: 0}
+  zoomScale: 1.5
 --- !u!114 &3308286265787212468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54,7 +70,6 @@ MonoBehaviour:
     imageContent: {fileID: 0}
     orderIndex: 0
     isImage: 0
-    isRTL: 0
   answerImage: {fileID: 2757307847294483598}
   answerText: {fileID: 3610255756921006413}
   textMesh: {fileID: 2083090932824452405}
@@ -64,6 +79,7 @@ MonoBehaviour:
   orderIndex: 0
   textBounds: {x: 40, y: 20, z: 1}
   animator: {fileID: 7057107837034867873}
+  imageScript: {fileID: 424282485761989770}
 --- !u!95 &7057107837034867873
 Animator:
   serializedVersion: 7
@@ -112,8 +128,8 @@ Transform:
   m_GameObject: {fileID: 204899459367067107}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.027700014, y: 0.026299998, z: 0}
-  m_LocalScale: {x: 0.058262046, y: 0.058262046, z: 1.165241}
+  m_LocalPosition: {x: 0.0261, y: 0.032, z: 0}
+  m_LocalScale: {x: 0.685478, y: 0.48726845, z: 2.5115428}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6513142040460982844}
@@ -167,15 +183,15 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 3
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 7482667652216324306, guid: 7f612eb92cedf48a8a81adcea48405d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 9.38743, y: 5.12}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
 --- !u!1 &5700993831312353596
 GameObject:

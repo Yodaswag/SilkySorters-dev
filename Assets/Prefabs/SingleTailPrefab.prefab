@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1205424254245570988}
   - component: {fileID: 4177610929366771167}
   - component: {fileID: 8195056570130257648}
+  - component: {fileID: 565762260345349367}
   m_Layer: 0
   m_Name: SingleTailPrefab
   m_TagString: Untagged
@@ -107,8 +108,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SingleTail
   imageComp: {fileID: 3431738905889390180}
+  imageScript: {fileID: 565762260345349367}
   tailBG: {fileID: 4177610929366771167}
   textComp: {fileID: 436871854256884358}
+--- !u!114 &565762260345349367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560774391510365248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b726ff3bf902ffb4794fcb446706f7d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ImageScript
+  spriteRenderer: {fileID: 3431738905889390180}
+  spriteMask: {fileID: 0}
+  zoomScale: 1.5
 --- !u!1 &4419137320846150973
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,8 +152,8 @@ Transform:
   m_GameObject: {fileID: 4419137320846150973}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.004, y: 0.015, z: 0}
-  m_LocalScale: {x: 0.12601943, y: 0.14370862, z: 0.07972805}
+  m_LocalPosition: {x: -0.0033, y: -0.0211, z: 0}
+  m_LocalScale: {x: 1.5501157, y: 1.0215402, z: 0.20948872}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1205424254245570988}
@@ -190,15 +207,15 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 6
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 7482667652216324306, guid: 7f612eb92cedf48a8a81adcea48405d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 11.264916, y: 6.144}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
 --- !u!1 &5542334659762500623
 GameObject:

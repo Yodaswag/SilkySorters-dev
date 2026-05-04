@@ -12,8 +12,10 @@ using static DataModels;
 using Random = UnityEngine.Random; //Instead of writing DataModels.GameModel/QuestionsModel/AnswerModel, just added a single using static class line at the top of each file that needs it.
 public class GameManager : MonoBehaviour
 {
-    public bool isStaticView = true;
+    [SerializeField] GlobalSceneManager globalSceneManager;
+    
     [Header ("Player and Camera")]
+    public bool isStaticView = true;
     [SerializeField] CinemachineCamera dynamicVcam; //Since the player instance gets destroyed and reinstantiated every question - the camera must be attached to follow it.
     public CinemachinePositionComposer dynamicVcamComposer;
     [SerializeField] CinemachineCamera staticVcam;
@@ -74,7 +76,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] float labelYOffset = 1.5f;
     
     [Header("Global Timer")]
-    private float totalgameTime; //זמן כולל למשחק
+    private float totalGameTime; //זמן כולל למשחק
     private int totalGameMistakes;
     [SerializeField] private TextMeshProUGUI timerText; //טקסט UI שמציג זמן
     private float currentGameTime;// הזמן שנותר בפועל
@@ -143,7 +145,7 @@ public class GameManager : MonoBehaviour
     }
     void GetGame()
     { 
-        totalgameTime = 0f;
+        totalGameTime = 0f;
         
         questionNumber = 0; // לא עניתי עדיין
         UpdateProgressBar(); //מאתחל את מד-ההתקדמות
@@ -353,7 +355,9 @@ public class GameManager : MonoBehaviour
     private void EndQuestion()
     {
         isTimerRunning = false;
-        totalgameTime += game.timePerQuestion+awardedTimeThisQuestion-currentGameTime; //חקן היה על השאלה מחברים את הזמן המוקצה לכל שאלה עם הזמן שהתקבל בשאלה ומחסירים את הזמן שנותר כדי לקבל את סה"כ הזמן שהש
+        totalGameTime += game.timePerQuestion+awardedTimeThisQuestion-currentGameTime; //חקן היה על השאלה מחברים את הזמן המוקצה לכל שאלה עם הזמן שהתקבל בשאלה ומחסירים את הזמן שנותר כדי לקבל את סה"כ הזמן שהש
+        if (questionNumber >= game.questionList.Count) WinConditionReached();
+
         DestroyAllAnswers(); //Should happen before the option is given to press space to continue
         currentReflectionPhase = ReflectionPhases.MovingToStartAnchor;
     }
@@ -361,17 +365,14 @@ public class GameManager : MonoBehaviour
     //פונקציה שמטפלת בסיום שאלה בהצלחה
     public void QuestionSuccess() //TODO: Consider making single function with bool input success/fail
     {
-        EndQuestion();
         questionNumber++;
       //מסירים את שאלה מן המאגר רק לאחר שהשחקן ענה נכון
         allQuestions.Remove(currentQuestion);
         score += 100f / (currentQuestion.attempts * game.questionList.Count); //נוסחה לחישוב הציון. אצל נטע כתוב totalQuestions במקום game.questionList.Count 
         UpdateProgressBar(); //מטעינים את מד-ההתקדמות
-        if (questionNumber >= game.questionList.Count) WinConditionReached();
-        else
-        {
-            ScreenStatus("כל הכבוד! הצלחת את השאלה במלואה! \n לחצו רווח כדי להמשיך לשאלה הבאה",Color.cyan);
-        }
+        EndQuestion();
+        
+        ScreenStatus("כל הכבוד! הצלחת את השאלה במלואה! \n לחצו רווח כדי להמשיך לשאלה הבאה",Color.cyan);
     }
 
     private void QuestionFailed() //פונקציה שמטפלת בסיוּם שאלה באי-הצלחה כאשר השחקן אכל תות לא לפי הסדר הנכון
@@ -430,42 +431,39 @@ public class GameManager : MonoBehaviour
     }
     private void NextQuestion()
     {
-        if (questionNumber < game.questionList.Count)
-        {
-            KillCommonGameObjects();
-            CreateQuestion(); 
-            screenStatusText.gameObject.SetActive(false);
-        }
-        else
-        {
-            WinConditionReached();
-        }
+        KillCommonGameObjects();
+        CreateQuestion(); 
+        screenStatusText.gameObject.SetActive(false);
     }
 
     private void WinConditionReached()
     {
-        isTimerRunning = false;
-        if (screenStatusText != null) 
-        {
-            //הגדרת סטרינג עבור סקרין טו שואו
-            string screenToShow = "ניצחתם! \n" +
-                                  "לחצו R או על הכפתור כדי להתחיל מחדש \n" +
-                                  "ציון סופי: " + "      "+ " נקודות \n" +
-                                  "זמן כולל: " + Mathf.Floor(totalgameTime) + " שניות | כמות טעויות: " +
-                                  totalGameMistakes; 
-            // מדליקים את תיבת הציון ומכניסים אליה את המספר
-            if (finalScoreText != null)
-            {
-                finalScoreText.gameObject.SetActive(true);
-                float roundedScore = Mathf.Round(score);
-                finalScoreText.text = roundedScore.ToString(); 
-            }
-            ScreenStatus(screenToShow,Color.cyan);
-            KillCommonGameObjects();
-        }
-        gameWon = true;
-        restartBtn.SetActive(gameWon); //Not done in update as it would be expensive
-        uiDuringMainGame.SetActive(false);
+        // isTimerRunning = false;
+        // if (screenStatusText != null) 
+        // {
+        //     //הגדרת סטרינג עבור סקרין טו שואו
+        //     string screenToShow = "ניצחתם! \n" +
+        //                           "לחצו R או על הכפתור כדי להתחיל מחדש \n" +
+        //                           "ציון סופי: " + "      "+ " נקודות \n" +
+        //                           "זמן כולל: " + Mathf.Floor(totalGameTime) + " שניות | כמות טעויות: " +
+        //                           totalGameMistakes; 
+        //     // מדליקים את תיבת הציון ומכניסים אליה את המספר
+        //     if (finalScoreText != null)
+        //     {
+        //         finalScoreText.gameObject.SetActive(true);
+        //         float roundedScore = Mathf.Round(score);
+        //         finalScoreText.text = roundedScore.ToString(); 
+        //     }
+        //     ScreenStatus(screenToShow,Color.cyan);
+        //     KillCommonGameObjects();
+        // }
+        // gameWon = true;
+        // restartBtn.SetActive(gameWon); //Not done in update as it would be expensive
+        // uiDuringMainGame.SetActive(false);
+        
+        //TODO: Remove above code (it's redundant)
+        globalSceneManager.ShowFinalScreen(Convert.ToInt16(score),Convert.ToInt16(totalGameTime));
+        
     }
 
     public void ChangeView(bool shouldBeStaticView)

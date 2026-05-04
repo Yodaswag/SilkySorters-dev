@@ -63,6 +63,7 @@ public class SnakeGrow : MonoBehaviour
                 else
                 {
                     gameManager.UsePotion();
+                    objectTouchedScript.PlayErrorAnimation();
                 }
             }
         }

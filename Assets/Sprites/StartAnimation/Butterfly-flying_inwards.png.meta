@@ -1,0 +1,968 @@
+fileFormatVersion: 2
+guid: d0b67e2d5f293844a893f5e1d3a0e26a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8046850696829018547
+    second: Butterfly-flying_inwards_0
+  - first:
+      213: -7384530550321063887
+    second: Butterfly-flying_inwards_1
+  - first:
+      213: 7743248275147832662
+    second: Butterfly-flying_inwards_2
+  - first:
+      213: 1840119363009370878
+    second: Butterfly-flying_inwards_3
+  - first:
+      213: 446472993863577342
+    second: Butterfly-flying_inwards_4
+  - first:
+      213: -1770647570075459134
+    second: Butterfly-flying_inwards_5
+  - first:
+      213: -7937871298171966858
+    second: Butterfly-flying_inwards_6
+  - first:
+      213: -4018834719262371947
+    second: Butterfly-flying_inwards_7
+  - first:
+      213: 1111305167539932744
+    second: Butterfly-flying_inwards_8
+  - first:
+      213: 2063976543491057363
+    second: Butterfly-flying_inwards_9
+  - first:
+      213: -7130004865069033345
+    second: Butterfly-flying_inwards_10
+  - first:
+      213: -7791900947204229425
+    second: Butterfly-flying_inwards_11
+  - first:
+      213: -5255287815129867224
+    second: Butterfly-flying_inwards_12
+  - first:
+      213: -2357876256685894059
+    second: Butterfly-flying_inwards_13
+  - first:
+      213: 6211964668181941657
+    second: Butterfly-flying_inwards_14
+  - first:
+      213: 3695534123413295981
+    second: Butterfly-flying_inwards_15
+  - first:
+      213: -10097974134790493
+    second: Butterfly-flying_inwards_16
+  - first:
+      213: -5547103352795815427
+    second: Butterfly-flying_inwards_17
+  - first:
+      213: -4552320195144715984
+    second: Butterfly-flying_inwards_18
+  - first:
+      213: 4567991271651053448
+    second: Butterfly-flying_inwards_19
+  - first:
+      213: -268227845294443239
+    second: Butterfly-flying_inwards_20
+  - first:
+      213: -5368905158754094898
+    second: Butterfly-flying_inwards_21
+  - first:
+      213: -4842359604556752585
+    second: Butterfly-flying_inwards_22
+  - first:
+      213: 8383966099005647855
+    second: Butterfly-flying_inwards_23
+  - first:
+      213: 1453911213192423434
+    second: Butterfly-flying_inwards_24
+  - first:
+      213: 3952175494501635187
+    second: Butterfly-flying_inwards_25
+  - first:
+      213: 6222893135131833672
+    second: Butterfly-flying_inwards_26
+  - first:
+      213: 4381909059834033110
+    second: Butterfly-flying_inwards_27
+  - first:
+      213: 480311218335544182
+    second: Butterfly-flying_inwards_28
+  - first:
+      213: -3794063622577092041
+    second: Butterfly-flying_inwards_29
+  - first:
+      213: -2781854683457316887
+    second: Butterfly-flying_inwards_30
+  - first:
+      213: 2848231217512904382
+    second: Butterfly-flying_inwards_31
+  - first:
+      213: 1655677529662438410
+    second: Butterfly-flying_inwards_32
+  - first:
+      213: 3284739429175703734
+    second: Butterfly-flying_inwards_33
+  - first:
+      213: -2540532332426008606
+    second: Butterfly-flying_inwards_34
+  - first:
+      213: -3136756036407146640
+    second: Butterfly-flying_inwards_35
+  - first:
+      213: -522998816031421337
+    second: Butterfly-flying_inwards_36
+  - first:
+      213: -1502309350537759248
+    second: Butterfly-flying_inwards_37
+  - first:
+      213: 5209902596061526005
+    second: Butterfly-flying_inwards_38
+  - first:
+      213: -156432733467886234
+    second: Butterfly-flying_inwards_39
+  - first:
+      213: 195875067244739091
+    second: Butterfly-flying_inwards_40
+  - first:
+      213: 1919600421306842974
+    second: Butterfly-flying_inwards_41
+  - first:
+      213: 3111156378559880654
+    second: Butterfly-flying_inwards_42
+  - first:
+      213: -8083292398494313924
+    second: Butterfly-flying_inwards_43
+  - first:
+      213: -8910638865479657673
+    second: Butterfly-flying_inwards_44
+  - first:
+      213: -5420353332936288556
+    second: Butterfly-flying_inwards_45
+  - first:
+      213: -2801312130798214002
+    second: Butterfly-flying_inwards_46
+  - first:
+      213: 2466214473571609417
+    second: Butterfly-flying_inwards_47
+  - first:
+      213: 7460553120674306095
+    second: Butterfly-flying_inwards_48
+  - first:
+      213: -421926257597761422
+    second: Butterfly-flying_inwards_49
+  - first:
+      213: 8419111237460741583
+    second: Butterfly-flying_inwards_50
+  - first:
+      213: -2003973512325959370
+    second: Butterfly-flying_inwards_51
+  - first:
+      213: -7952224680853439722
+    second: Butterfly-flying_inwards_52
+  - first:
+      213: -6879109606144311529
+    second: Butterfly-flying_inwards_53
+  - first:
+      213: 7287421315218896099
+    second: Butterfly-flying_inwards_54
+  - first:
+      213: -5926851534900480113
+    second: Butterfly-flying_inwards_55
+  - first:
+      213: -4776570870329573147
+    second: Butterfly-flying_inwards_56
+  - first:
+      213: -9019645961770794508
+    second: Butterfly-flying_inwards_57
+  - first:
+      213: -7517387609252483847
+    second: Butterfly-flying_inwards_58
+  - first:
+      213: 6115285012169088373
+    second: Butterfly-flying_inwards_59
+  - first:
+      213: 4754509579273281395
+    second: Butterfly-flying_inwards_60
+  - first:
+      213: -3770544823149993184
+    second: Butterfly-flying_inwards_61
+  - first:
+      213: 7740514427822074592
+    second: Butterfly-flying_inwards_62
+  - first:
+      213: 2199515546183229610
+    second: Butterfly-flying_inwards_63
+  - first:
+      213: -7919571098062368706
+    second: Butterfly-flying_inwards_64
+  - first:
+      213: 7929173689994168838
+    second: Butterfly-flying_inwards_65
+  - first:
+      213: -3628375630420148166
+    second: Butterfly-flying_inwards_66
+  - first:
+      213: -2616608959408265372
+    second: Butterfly-flying_inwards_67
+  - first:
+      213: -2537734981661172117
+    second: Butterfly-flying_inwards_68
+  - first:
+      213: -5188062616426051643
+    second: Butterfly-flying_inwards_69
+  - first:
+      213: 6438238970268611484
+    second: Butterfly-flying_inwards_70
+  - first:
+      213: 8641809082882945621
+    second: Butterfly-flying_inwards_71
+  - first:
+      213: 7591668059881349022
+    second: Butterfly-flying_inwards_72
+  - first:
+      213: -8478063689648164825
+    second: Butterfly-flying_inwards_73
+  - first:
+      213: -798406273317689751
+    second: Butterfly-flying_inwards_74
+  - first:
+      213: -8408911174363501493
+    second: Butterfly-flying_inwards_75
+  - first:
+      213: 7820898035879354692
+    second: Butterfly-flying_inwards_76
+  - first:
+      213: -2872500039253549651
+    second: Butterfly-flying_inwards_77
+  - first:
+      213: -734424815213785365
+    second: Butterfly-flying_inwards_78
+  - first:
+      213: -9218434379898397713
+    second: Butterfly-flying_inwards_79
+  - first:
+      213: -4163039211896130609
+    second: Butterfly-flying_inwards_80
+  - first:
+      213: -2014451672676407060
+    second: Butterfly-flying_inwards_81
+  - first:
+      213: -7204694428769650431
+    second: Butterfly-flying_inwards_82
+  - first:
+      213: -7281443054226317265
+    second: Butterfly-flying_inwards_83
+  - first:
+      213: -3730611196684006674
+    second: Butterfly-flying_inwards_84
+  - first:
+      213: 1175973550612318648
+    second: Butterfly-flying_inwards_85
+  - first:
+      213: 6475036566265244544
+    second: Butterfly-flying_inwards_86
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4ed6eedce7d35090800000000000000
+      internalID: -8046850696829018547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_1
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 138d713e690e48990800000000000000
+      internalID: -7384530550321063887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65db7dfd74b857b60800000000000000
+      internalID: 7743248275147832662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_3
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efadd70bfca698910800000000000000
+      internalID: 1840119363009370878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_4
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efe2b0982d0323600800000000000000
+      internalID: 446472993863577342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 768
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c16e339a656d67e0800000000000000
+      internalID: -1770647570075459134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_6
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 768
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67ae0b76c1407d190800000000000000
+      internalID: -7937871298171966858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_7
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 768
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59f0c539d1b3a38c0800000000000000
+      internalID: -4018834719262371947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_8
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 768
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84e064479262c6f00800000000000000
+      internalID: 1111305167539932744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_9
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 768
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d6e58b1bb7b4ac10800000000000000
+      internalID: 2063976543491057363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 512
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f78d0c20a522d0d90800000000000000
+      internalID: -7130004865069033345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_11
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 512
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc6bcdc2f5b9dd390800000000000000
+      internalID: -7791900947204229425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_12
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 512
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82cdeba63977117b0800000000000000
+      internalID: -5255287815129867224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_13
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 512
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 556d8ef7904274fd0800000000000000
+      internalID: -2357876256685894059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_14
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 512
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99d034c04f4553650800000000000000
+      internalID: 6211964668181941657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d63526994bc294330800000000000000
+      internalID: 3695534123413295981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_16
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 256
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a6aebe22ff1cdff0800000000000000
+      internalID: -10097974134790493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_17
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 256
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df12a34f3eab403b0800000000000000
+      internalID: -5547103352795815427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_18
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 256
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 031ff88d6e8e2d0c0800000000000000
+      internalID: -4552320195144715984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_19
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 256
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88f88dbfbd3c46f30800000000000000
+      internalID: 4567991271651053448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9153b522230174cf0800000000000000
+      internalID: -268227845294443239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_21
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec033bb2431dd75b0800000000000000
+      internalID: -5368905158754094898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_22
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73991b7789b7cccb0800000000000000
+      internalID: -4842359604556752585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_23
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: feb26243fb4d95470800000000000000
+      internalID: 8383966099005647855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Butterfly-flying_inwards_24
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a08aa459b845d2410800000000000000
+      internalID: 1453911213192423434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 7676b6ca9bd2aa5478a60a622f26f007
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":5.0,"y":5.0},"gridSpriteSize":{"x":256.0,"y":256.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Butterfly-flying_inwards_0: -8046850696829018547
+      Butterfly-flying_inwards_1: -7384530550321063887
+      Butterfly-flying_inwards_10: -7130004865069033345
+      Butterfly-flying_inwards_11: -7791900947204229425
+      Butterfly-flying_inwards_12: -5255287815129867224
+      Butterfly-flying_inwards_13: -2357876256685894059
+      Butterfly-flying_inwards_14: 6211964668181941657
+      Butterfly-flying_inwards_15: 3695534123413295981
+      Butterfly-flying_inwards_16: -10097974134790493
+      Butterfly-flying_inwards_17: -5547103352795815427
+      Butterfly-flying_inwards_18: -4552320195144715984
+      Butterfly-flying_inwards_19: 4567991271651053448
+      Butterfly-flying_inwards_2: 7743248275147832662
+      Butterfly-flying_inwards_20: -268227845294443239
+      Butterfly-flying_inwards_21: -5368905158754094898
+      Butterfly-flying_inwards_22: -4842359604556752585
+      Butterfly-flying_inwards_23: 8383966099005647855
+      Butterfly-flying_inwards_24: 1453911213192423434
+      Butterfly-flying_inwards_3: 1840119363009370878
+      Butterfly-flying_inwards_4: 446472993863577342
+      Butterfly-flying_inwards_5: -1770647570075459134
+      Butterfly-flying_inwards_6: -7937871298171966858
+      Butterfly-flying_inwards_7: -4018834719262371947
+      Butterfly-flying_inwards_8: 1111305167539932744
+      Butterfly-flying_inwards_9: 2063976543491057363
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

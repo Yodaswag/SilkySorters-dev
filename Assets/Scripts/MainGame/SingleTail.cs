@@ -4,6 +4,7 @@ using UnityEngine;
 public class SingleTail : MonoBehaviour
 {
     public SpriteRenderer imageComp; //Image Component for answers with images
+    public ImageScript imageScript;
     public SpriteRenderer tailBG;
     public TextMeshPro textComp; //Text Component for answers with text
     

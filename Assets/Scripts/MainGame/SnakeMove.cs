@@ -6,6 +6,7 @@ public class SnakeMove : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] private float moveSpeed = 3f;
+    [SerializeField] private float animationMoveSpeed = 10f;
     [SerializeField] private float boostMultiplier = 2f;
     [SerializeField] private float smoothTime = 0.1f;
 
@@ -115,7 +116,7 @@ public class SnakeMove : MonoBehaviour
                     headTransform.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f);
                 }
 
-                transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, targetPos, animationMoveSpeed * Time.deltaTime);
                 gameManager.ChangeView(false); //Change to dynamic
                 break;
 
@@ -212,7 +213,7 @@ public class SnakeMove : MonoBehaviour
         if (gameManager.reflectionSpline == null) return;
 
         float splineLength = gameManager.reflectionSpline.CalculateLength();
-        currentSplineTime += (moveSpeed / splineLength) * Time.deltaTime;
+        currentSplineTime += (animationMoveSpeed / splineLength) * Time.deltaTime;
 
         if (currentSplineTime >= 1f)
         {

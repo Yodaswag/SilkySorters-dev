@@ -2939,6 +2939,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1000043453}
   - component: {fileID: 1000043454}
+  - component: {fileID: 1000043455}
   m_Layer: 0
   m_Name: Stage
   m_TagString: Untagged
@@ -2979,6 +2980,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4c4f3328dac9ca499f576bffae88930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  globalSceneManager: {fileID: 1000043455}
   isStaticView: 1
   dynamicVcam: {fileID: 206042762}
   dynamicVcamComposer: {fileID: 0}
@@ -3148,7 +3150,7 @@ MonoBehaviour:
         isImage: 1
       attempts: 0
     hasPotions: 1
-    awardPotionInds: 020000000300000005000000
+    awardPotionInds: 00000000020000000300000005000000
   numPotions: 0
   currentReflectionPhase: 0
   reflectionSpline: {fileID: 5882195}
@@ -3166,6 +3168,20 @@ MonoBehaviour:
   labelPrefab: {fileID: 1913112200006630520, guid: 3283fff7b5dca404faab3a60bae1c88b, type: 3}
   labelYOffset: 1.5
   timerText: {fileID: 71478413}
+--- !u!114 &1000043455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000043452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d906890412a30f94dbc7ca938b7db004, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlobalSceneManager
+  scoreText: {fileID: 0}
+  timeText: {fileID: 0}
 --- !u!1 &1030298439
 GameObject:
   m_ObjectHideFlags: 0

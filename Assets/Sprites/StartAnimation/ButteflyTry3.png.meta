@@ -1,0 +1,908 @@
+fileFormatVersion: 2
+guid: 09d3001c03abc5b49b69edfc0da44691
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2319934702024705589
+    second: ButteflyTry3_0
+  - first:
+      213: -3591817945405815028
+    second: ButteflyTry3_1
+  - first:
+      213: -5824119845290802638
+    second: ButteflyTry3_2
+  - first:
+      213: 6153926395890917341
+    second: ButteflyTry3_3
+  - first:
+      213: 3048208745617783363
+    second: ButteflyTry3_4
+  - first:
+      213: -4644565059171912342
+    second: ButteflyTry3_5
+  - first:
+      213: 7196112434217670801
+    second: ButteflyTry3_6
+  - first:
+      213: 7363135676949638318
+    second: ButteflyTry3_7
+  - first:
+      213: -8047461999458962609
+    second: ButteflyTry3_8
+  - first:
+      213: -7390686743989139363
+    second: ButteflyTry3_9
+  - first:
+      213: -6770596207073371508
+    second: ButteflyTry3_10
+  - first:
+      213: 6366624633916008069
+    second: ButteflyTry3_11
+  - first:
+      213: -8131155598065497552
+    second: ButteflyTry3_12
+  - first:
+      213: 5414456395847855899
+    second: ButteflyTry3_13
+  - first:
+      213: 6499544075120109228
+    second: ButteflyTry3_14
+  - first:
+      213: 8114661211244208167
+    second: ButteflyTry3_15
+  - first:
+      213: -2439393366694172602
+    second: ButteflyTry3_16
+  - first:
+      213: -6918888968264311904
+    second: ButteflyTry3_17
+  - first:
+      213: 6757338939073185933
+    second: ButteflyTry3_18
+  - first:
+      213: -4625819502927406774
+    second: ButteflyTry3_19
+  - first:
+      213: -7515661923683401564
+    second: ButteflyTry3_20
+  - first:
+      213: 9141348001423524051
+    second: ButteflyTry3_21
+  - first:
+      213: 1639783547589466328
+    second: ButteflyTry3_22
+  - first:
+      213: 1037835045051693683
+    second: ButteflyTry3_23
+  - first:
+      213: -6036189434925672384
+    second: ButteflyTry3_24
+  - first:
+      213: 746140209955309256
+    second: ButteflyTry3_25
+  - first:
+      213: 6862492471099860777
+    second: ButteflyTry3_26
+  - first:
+      213: 5635959683652006087
+    second: ButteflyTry3_27
+  - first:
+      213: -7232302118799743846
+    second: ButteflyTry3_28
+  - first:
+      213: -5365546782363374958
+    second: ButteflyTry3_29
+  - first:
+      213: 8324920641075575621
+    second: ButteflyTry3_30
+  - first:
+      213: -1029333488394481752
+    second: ButteflyTry3_31
+  - first:
+      213: 7261219503159461742
+    second: ButteflyTry3_32
+  - first:
+      213: 7970612254642061814
+    second: ButteflyTry3_33
+  - first:
+      213: -8577798406102413512
+    second: ButteflyTry3_34
+  - first:
+      213: -999389166205843185
+    second: ButteflyTry3_35
+  - first:
+      213: -2189318406439743639
+    second: ButteflyTry3_36
+  - first:
+      213: 2267861172743168465
+    second: ButteflyTry3_37
+  - first:
+      213: 8027422930989947935
+    second: ButteflyTry3_38
+  - first:
+      213: 6118285636719310744
+    second: ButteflyTry3_39
+  - first:
+      213: 3132995646594970420
+    second: ButteflyTry3_40
+  - first:
+      213: 5812743652778081176
+    second: ButteflyTry3_41
+  - first:
+      213: 4445558620497347892
+    second: ButteflyTry3_42
+  - first:
+      213: -1104508197774153051
+    second: ButteflyTry3_43
+  - first:
+      213: 5774208040168544112
+    second: ButteflyTry3_44
+  - first:
+      213: 4567578097090969050
+    second: ButteflyTry3_45
+  - first:
+      213: -1250244963074644052
+    second: ButteflyTry3_46
+  - first:
+      213: 8917892958878148072
+    second: ButteflyTry3_47
+  - first:
+      213: -6875924413129106247
+    second: ButteflyTry3_48
+  - first:
+      213: 4808357035008100132
+    second: ButteflyTry3_49
+  - first:
+      213: -875360739122330072
+    second: ButteflyTry3_50
+  - first:
+      213: 7991864539200220947
+    second: ButteflyTry3_51
+  - first:
+      213: -5025719906289753936
+    second: ButteflyTry3_52
+  - first:
+      213: 1832482946303157785
+    second: ButteflyTry3_53
+  - first:
+      213: 5488157741390488958
+    second: ButteflyTry3_54
+  - first:
+      213: -4153493672453079917
+    second: ButteflyTry3_55
+  - first:
+      213: 207837460724099327
+    second: ButteflyTry3_56
+  - first:
+      213: 6111106867419567242
+    second: ButteflyTry3_57
+  - first:
+      213: -6625482830071840668
+    second: ButteflyTry3_58
+  - first:
+      213: -7825563308394432218
+    second: ButteflyTry3_59
+  - first:
+      213: 958943759803064255
+    second: ButteflyTry3_60
+  - first:
+      213: 196955269917060368
+    second: ButteflyTry3_61
+  - first:
+      213: 668346414025328155
+    second: ButteflyTry3_62
+  - first:
+      213: -7933094487092971672
+    second: ButteflyTry3_63
+  - first:
+      213: 2794003686202297883
+    second: ButteflyTry3_64
+  - first:
+      213: 4512064593772794853
+    second: ButteflyTry3_65
+  - first:
+      213: 8848308334963896316
+    second: ButteflyTry3_66
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: ButteflyTry3_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1144
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc937b71eafedcfd0800000000000000
+      internalID: -2319934702024705589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_1
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 1144
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c078632eb9c472ec0800000000000000
+      internalID: -3591817945405815028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_2
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 1144
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2328324bbd19c2fa0800000000000000
+      internalID: -5824119845290802638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_3
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 1144
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddf5af0c373276550800000000000000
+      internalID: 6153926395890917341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_4
+      rect:
+        serializedVersion: 2
+        x: 1448
+        y: 1144
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34a79cb34b96d4a20800000000000000
+      internalID: 3048208745617783363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 858
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a65fdd7cfa03b8fb0800000000000000
+      internalID: -4644565059171912342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_6
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 858
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 198d05dd12abdd360800000000000000
+      internalID: 7196112434217670801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_7
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 858
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eaca699f2ec1f2660800000000000000
+      internalID: 7363135676949638318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_8
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 858
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f433bc2e2fba15090800000000000000
+      internalID: -8047461999458962609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_9
+      rect:
+        serializedVersion: 2
+        x: 1448
+        y: 858
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d58c65a50910f6990800000000000000
+      internalID: -7390686743989139363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 572
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8ad8cf2f920a02a0800000000000000
+      internalID: -6770596207073371508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_11
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 572
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 586a0da6f5bca5850800000000000000
+      internalID: 6366624633916008069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_12
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 572
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03a80e37015582f80800000000000000
+      internalID: -8131155598065497552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_13
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 572
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1f6a5ea763042b40800000000000000
+      internalID: 5414456395847855899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_14
+      rect:
+        serializedVersion: 2
+        x: 1448
+        y: 572
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca6678776e4033a50800000000000000
+      internalID: 6499544075120109228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 286
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7202ad8d0611d9070800000000000000
+      internalID: 8114661211244208167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_16
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 286
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 648efbe48a8852ed0800000000000000
+      internalID: -2439393366694172602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_17
+      rect:
+        serializedVersion: 2
+        x: 724
+        y: 286
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ab9c36242b2bff90800000000000000
+      internalID: -6918888968264311904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_18
+      rect:
+        serializedVersion: 2
+        x: 1086
+        y: 286
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d884f5296f3e6cd50800000000000000
+      internalID: 6757338939073185933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_19
+      rect:
+        serializedVersion: 2
+        x: 1448
+        y: 286
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4910f4bba9cdcfb0800000000000000
+      internalID: -4625819502927406774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a00ce2dc4103b790800000000000000
+      internalID: -7515661923683401564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_21
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 0
+        width: 362
+        height: 286
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d0831903979cde70800000000000000
+      internalID: 9141348001423524051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_22
+      rect:
+        serializedVersion: 2
+        x: 777
+        y: 0
+        width: 250
+        height: 185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d89996d27ea1c610800000000000000
+      internalID: 1639783547589466328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_23
+      rect:
+        serializedVersion: 2
+        x: 1149
+        y: 0
+        width: 220
+        height: 180
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37af1cb8971276e00800000000000000
+      internalID: 1037835045051693683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButteflyTry3_24
+      rect:
+        serializedVersion: 2
+        x: 1528
+        y: 5
+        width: 190
+        height: 190
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0481a46a0b52b3ca0800000000000000
+      internalID: -6036189434925672384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 2fa1ca97057761042a11d5271d6d8387
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":5.0,"y":5.0},"gridSpriteSize":{"x":362.0,"y":286.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      ButteflyTry3_0: -2319934702024705589
+      ButteflyTry3_1: -3591817945405815028
+      ButteflyTry3_10: -6770596207073371508
+      ButteflyTry3_11: 6366624633916008069
+      ButteflyTry3_12: -8131155598065497552
+      ButteflyTry3_13: 5414456395847855899
+      ButteflyTry3_14: 6499544075120109228
+      ButteflyTry3_15: 8114661211244208167
+      ButteflyTry3_16: -2439393366694172602
+      ButteflyTry3_17: -6918888968264311904
+      ButteflyTry3_18: 6757338939073185933
+      ButteflyTry3_19: -4625819502927406774
+      ButteflyTry3_2: -5824119845290802638
+      ButteflyTry3_20: -7515661923683401564
+      ButteflyTry3_21: 9141348001423524051
+      ButteflyTry3_22: 1639783547589466328
+      ButteflyTry3_23: 1037835045051693683
+      ButteflyTry3_24: -6036189434925672384
+      ButteflyTry3_3: 6153926395890917341
+      ButteflyTry3_4: 3048208745617783363
+      ButteflyTry3_5: -4644565059171912342
+      ButteflyTry3_6: 7196112434217670801
+      ButteflyTry3_7: 7363135676949638318
+      ButteflyTry3_8: -8047461999458962609
+      ButteflyTry3_9: -7390686743989139363
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

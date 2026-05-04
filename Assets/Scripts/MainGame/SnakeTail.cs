@@ -96,6 +96,8 @@ public class SnakeTail : MonoBehaviour
         tailScript.tailBG.color = new Color(1f, 1f, 1f, placeholder_alpha);
         tailScript.tailBG.sortingOrder = (snakeTail.Count-1)*2 + 5;
         tailScript.textComp.sortingOrder = tailScript.tailBG.sortingOrder + 1;
+        
+        tailScript.imageScript.HideImage();
     }
 
     public void AddAnswer(AnswerModel answer) //פונקצייה שממלאת את ה-PLACEHOLDERS של תולעת המשי שלנו בתשובות
@@ -109,9 +111,9 @@ public class SnakeTail : MonoBehaviour
         {
             if (answer.isImage) 
             {
-                tailScript.imageComp.sprite = answer.imageContent; 
-                tailScript.imageComp.sortingOrder = tailScript.tailBG.sortingOrder + 1;
                 tailScript.imageComp.gameObject.SetActive(true);
+                tailScript.imageScript.SetImage_KeepRatio(answer.imageContent);
+                tailScript.imageComp.sortingOrder = tailScript.tailBG.sortingOrder + 1;
                 if(tailScript.textComp) tailScript.textComp.gameObject.SetActive(false);
             }
             else

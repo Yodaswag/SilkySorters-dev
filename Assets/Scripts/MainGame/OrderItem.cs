@@ -16,6 +16,8 @@ public class OrderItem : MonoBehaviour
     [SerializeField] private Vector3 textBounds = new Vector3(40, 20, 1);
 
     [SerializeField] private Animator animator;
+    public ImageScript imageScript;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,7 +31,7 @@ public class OrderItem : MonoBehaviour
         if (answerModel.IsValid()) {
             if (answerModel.imageContent != null) //יש תמונה
             {
-                answerImage.sprite = answerModel.imageContent;
+                imageScript.SetImage_KeepRatio(answerModel.imageContent);
                 answerImage.enabled = true;
                 answerText.enabled = false;
             }
@@ -41,7 +43,9 @@ public class OrderItem : MonoBehaviour
                 RTLFixer.SetTextInTMP(answerText, answerModel.textContent);
                 answerText.sortingOrder = (answerModel.orderIndex-1)*2+6; //+6 and times 2 to be different from each text component of the body parts
                 answerText.enabled = true;
+                
                 answerImage.enabled = false;
+                imageScript.HideImage();
                 
                 // המצלמה חתכה טקסט כשהמרכז שלו יצא מגבולותיה אז החלטנו להגדיר את הבאונדס של הטקסט פעם אחת בקוד כדי לסדר את זה. הפונקציה הבאה מגדירה מחדש באונדס.
                 textMesh.bounds = new Bounds(Vector3.zero, textBounds); // Defining new bounds as functions such as Expand and SetMinMax didn't work
@@ -66,5 +70,10 @@ public class OrderItem : MonoBehaviour
     public void MulberryChangeView(bool isStaticView)
     {
         animator.SetBool("Static",isStaticView);
+    }
+
+    public void PlayErrorAnimation()
+    {
+        Debug.Log("PlayErrorAnimation");
     }
 }
