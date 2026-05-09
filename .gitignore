@@ -257,3 +257,10 @@ Temporary Items
 
 # Logs
 .log
+
+# Local tooling noise
+.plastic/
+ignore.conf
+[Aa]ssets/[Pp]lugins/[Rr]oslyn/
+[Aa]ssets/[Pp]lugins/[Rr]oslyn.meta
+[Aa]ssets/[Pp]lugins.meta

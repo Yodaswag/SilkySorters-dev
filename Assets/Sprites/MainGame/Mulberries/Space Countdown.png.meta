@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6516440e209cbfa4a916c06befac75ed
+guid: 02b051f9afcad484788d4bf45ec4d292
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8824565824898284421
-    second: "\u05EA\u05D5\u05EA + \u05E2\u05DC\u05D4 + \u05DE\u05DC\u05D1\u05DF \u05DC\u05D1\u05DF_0"
+      213: -5184164675071950053
+    second: Space Countdown_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,43 +109,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Mulberry
+      name: Space Countdown_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 416
-        height: 247
+        y: 622
+        width: 369
+        height: 207
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +128,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 58b3d1afcd7277a70800000000000000
-      internalID: 8824565824898284421
+      spriteID: b134535e1b52e08b0800000000000000
+      internalID: -5184164675071950053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Countdown_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 415
+        width: 369
+        height: 207
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6aaf5f44729d834d83fe5c727f26308
+      internalID: -1302838180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Countdown_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 208
+        width: 369
+        height: 207
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b066e5dddc36de44ae24be4612d02f0
+      internalID: -64344594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Countdown_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1
+        width: 369
+        height: 207
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8db97851058c6843a8db8fa94685255
+      internalID: -1469088168
       vertices: []
       indices: 
       edges: []
@@ -164,7 +204,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 8b8caf9f117c2964ca9047b765d10bd8
+    spriteID: 1dc6ccc015f9bc24f909a4a82ccac972
     internalID: 0
     vertices: []
     indices: 
@@ -172,9 +212,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":4.0},"gridSpriteSize":{"x":369.0,"y":207.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Mulberry: 8824565824898284421
+      Space Countdown_0: -5184164675071950053
+      Space Countdown_1: -1302838180
+      Space Countdown_2: -64344594
+      Space Countdown_3: -1469088168
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

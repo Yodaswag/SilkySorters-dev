@@ -1220,7 +1220,7 @@ SpriteRenderer:
   m_Size: {x: 4.16, y: 2.47}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!1 &216631507
 GameObject:
@@ -1448,7 +1448,7 @@ SpriteRenderer:
   m_Size: {x: 4.16, y: 2.47}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!1 &252886769
 GameObject:
@@ -2375,7 +2375,7 @@ SpriteRenderer:
   m_Size: {x: 4.16, y: 2.47}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!1 &735072098
 GameObject:
@@ -2927,7 +2927,7 @@ SpriteRenderer:
   m_Size: {x: 4.16, y: 2.47}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!1 &1000043452
 GameObject:
@@ -3167,6 +3167,8 @@ MonoBehaviour:
   potionParentObject: {fileID: 2098531945}
   labelPrefab: {fileID: 1913112200006630520, guid: 3283fff7b5dca404faab3a60bae1c88b, type: 3}
   labelYOffset: 1.5
+  isCountdownActive: 0
+  feedbackDelay: 0.5
   timerText: {fileID: 71478413}
 --- !u!114 &1000043455
 MonoBehaviour:
@@ -3963,7 +3965,7 @@ SpriteRenderer:
   m_Size: {x: 4.16, y: 2.47}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!1 &1308600959
 GameObject:
@@ -4054,7 +4056,7 @@ SpriteRenderer:
   m_Size: {x: 4.16, y: 2.47}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!1 &1377872606
 GameObject:
@@ -4332,7 +4334,7 @@ SpriteRenderer:
   m_Size: {x: 4.16, y: 2.47}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!224 &1566502645
 RectTransform:
@@ -4658,7 +4660,7 @@ SpriteRenderer:
   m_Size: {x: 4.16, y: 2.47}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!1 &1708663436
 GameObject:
