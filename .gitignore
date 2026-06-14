@@ -264,3 +264,8 @@ ignore.conf
 [Aa]ssets/[Pp]lugins/[Rr]oslyn/
 [Aa]ssets/[Pp]lugins/[Rr]oslyn.meta
 [Aa]ssets/[Pp]lugins.meta
+
+# Recovery
+[Aa]ssets/_Recovery/
+[Aa]ssets/_Recovery.meta
+
