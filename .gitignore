@@ -269,5 +269,12 @@ ignore.conf
 [Aa]ssets/_Recovery/
 [Aa]ssets/_Recovery.meta
 
+# Dev-only: local server auto-launcher — never ship (not in .unitypackage, not in project .zip)
+[Aa]ssets/_DevOnly/
+[Aa]ssets/_DevOnly.meta
+
+# Claude Code project instructions — local only, keep off main/GitHub
+/CLAUDE.md
+
 /ZipsFromColleague
 
