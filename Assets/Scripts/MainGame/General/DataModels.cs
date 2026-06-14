@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class DataModels
 {
+    public static GameModel Game;
+    public static int score;
+
     //מחלקת תשובה
     //ניתן להציג באינספקטור
     [System.Serializable] public class AnswerModel

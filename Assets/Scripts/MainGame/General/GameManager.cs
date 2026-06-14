@@ -114,6 +114,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         EnsureInitialized();
+        game = GlobalSceneManager.Game;
     }
     
     void Start()

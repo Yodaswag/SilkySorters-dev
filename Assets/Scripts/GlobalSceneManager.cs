@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;using UnityEngine.SocialPlatforms.Impl;
 public class GlobalSceneManager : MonoBehaviour
 {
     public static int score = 100;
+    public static DataModels.GameModel Game;
     public static int time = 180; //seconds
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] TextMeshProUGUI timeText;
