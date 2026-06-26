@@ -206,7 +206,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1041613542}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -289,6 +289,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1323898425}
   - component: {fileID: 1323898426}
+  - component: {fileID: 1323898427}
   m_Layer: 0
   m_Name: GuidingButterfly
   m_TagString: Untagged
@@ -304,10 +305,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1323898424}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.97, y: 1.14, z: 0}
-  m_LocalScale: {x: 1.6784517, y: 1.613842, z: 2.0003}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.678452, y: 1.613842, z: 2.0003}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1450025937}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -370,6 +371,28 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!95 &1323898427
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1323898424}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8451f0f146b01ff4197e556d822949b6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1370451460
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,6 +551,10 @@ PlayableDirector:
   m_SceneBindings:
   - key: {fileID: 764129957301933208, guid: 77210367448d7a2459282a588ef99e08, type: 2}
     value: {fileID: 1041613547}
+  - key: {fileID: -7059162845077493886, guid: 77210367448d7a2459282a588ef99e08, type: 2}
+    value: {fileID: 1323898427}
+  - key: {fileID: -7638848965479904608, guid: 77210367448d7a2459282a588ef99e08, type: 2}
+    value: {fileID: 1323898427}
   m_ExposedReferences:
     m_References: []
 --- !u!1 &1849225106
