@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -23,6 +24,7 @@ public class SnakeMove : MonoBehaviour
     private float currentSplineTime = 0f;
     private float animationTime = 0f;
     private bool comingFromRight = false;
+    private bool isDraining = false;
     
     public GameManager gameManager;
 
@@ -95,7 +97,11 @@ public class SnakeMove : MonoBehaviour
         {
             case GameManager.ReflectionPhases.None:
                 // Capture input state every frame to prevent dropped inputs
-                targetInput = inputActions.Player.Move.ReadValue<Vector2>();
+                targetInput = gameManager.controlsEnabled ? inputActions.Player.Move.ReadValue<Vector2>() : Vector2.zero;
+                
+                // movement key dismisses the image popup
+                if (targetInput.sqrMagnitude > 0.001f)
+                    gameManager.HideImagePopup();   // no-op if popup already hidden
                 break;
 
             case GameManager.ReflectionPhases.MovingToStartAnchor:
@@ -122,34 +128,21 @@ public class SnakeMove : MonoBehaviour
 
             case GameManager.ReflectionPhases.FollowingSpline: //Coiling animation השתבללות
                 FollowSplinePath(comingFromRight); //If coming from right, play the spline animation in reverse (counter-clockwise). If not, play it normally (clockwise).
+                gameManager.SetNightfall(currentSplineTime); //Background dims in lockstep with the coil
+                // SetGlow(currentSplineTime);                  //Moonlight glow rises with the coil
                 break;
             
-            case GameManager.ReflectionPhases.Darkening: //stub - Darkening will likely happen continously during MovingTowardsAnchor and FollowingSplie
+            case GameManager.ReflectionPhases.Darkening: //stub - Darkening will likely happen continously during MovingTowardsAnchor and FollowingSpline
                 animationTime = 0f;
                 gameManager.currentReflectionPhase = GameManager.ReflectionPhases.RemovingAnswersFromBody;
                 break;
             
-            case GameManager.ReflectionPhases.RemovingAnswersFromBody: //stub
-                gameManager.currentReflectionPhase = GameManager.ReflectionPhases.FadingToBlack;
-                break;
-            
-            case GameManager.ReflectionPhases.FadingToBlack: //stub
-                // Return dynamic camera offset to be centered on the player
-                // TODO: Consider creating a seperate vcam for the reflection phase rather than moving the target offset manually with lerp.
-
-                if (gameManager.dynamicVcamComposer.TargetOffset != Vector3.zero)
+            case GameManager.ReflectionPhases.RemovingAnswersFromBody:
+                if (!isDraining)
                 {
-                    Vector3 startOffset = new Vector3(3f, 0f, 0f);
-                    Vector3 endOffset = Vector3.zero;
-                
-                    gameManager.dynamicVcamComposer.TargetOffset = Vector3.Lerp(startOffset, endOffset, animationTime);
-                    animationTime += Time.deltaTime;
+                    isDraining = true;
+                    StartCoroutine(RunBodyDrain());
                 }
-                else
-                {
-                    gameManager.currentReflectionPhase = GameManager.ReflectionPhases.WaitingForNextQuestion;
-                }
-
                 break;
             
             case GameManager.ReflectionPhases.WaitingForNextQuestion: //stub
@@ -177,7 +170,7 @@ public class SnakeMove : MonoBehaviour
             Time.fixedDeltaTime
         );
 
-        if (gameManager.currentReflectionPhase == GameManager.ReflectionPhases.None)
+        if (gameManager.currentReflectionPhase == GameManager.ReflectionPhases.None && gameManager.controlsEnabled)
             HandleMovement(); 
     }
 
@@ -208,6 +201,14 @@ public class SnakeMove : MonoBehaviour
         }
     }
     
+    private IEnumerator RunBodyDrain()
+    {
+        yield return StartCoroutine(gameManager.DrainBodyIntoProgress());
+        isDraining = false;
+        gameManager.currentReflectionPhase = GameManager.ReflectionPhases.WaitingForNextQuestion;
+        gameManager.RevealScreenStatus();
+    }
+
     private void FollowSplinePath(bool isReversed)
     {
         if (gameManager.reflectionSpline == null) return;

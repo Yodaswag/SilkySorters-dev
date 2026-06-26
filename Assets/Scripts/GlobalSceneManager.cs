@@ -34,7 +34,7 @@ public class GlobalSceneManager : MonoBehaviour
             if (scoreText != null && timeText != null)
             {
                 scoreText.text = score.ToString();
-                RTLFixer.SetTextInTMP(timeText,time + " שניות"); //TODO: Format time as mm:ss instead of total seconds
+                RTLFixer.SetTextInTMP(timeText, $"{time / 60:00}:{time % 60:00} דקות");
             }
         }
     }

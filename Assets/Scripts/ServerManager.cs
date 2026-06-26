@@ -21,12 +21,12 @@ public class ServerManager : MonoBehaviour
     }
 
     // הפונקציה עודכנה כדי להשתמש ב-RTLFixer עבור הודעות השגיאה בעברית
-    private void ShowError(string message)
+    private void ShowError(string uiMessage, string logMessage)
     {
-        Debug.LogError(message);
+        Debug.LogError("ServerManager: " + logMessage); // English only — keep Hebrew out of the Console
         if (errorText != null) 
         {
-            RTLFixer.SetTextInTMP(errorText, message);
+            RTLFixer.SetTextInTMP(errorText, uiMessage);
             errorText.alignment = TextAlignmentOptions.Center; // מומלץ ליישור טקסט בעברית
         }
     }
@@ -38,7 +38,7 @@ public class ServerManager : MonoBehaviour
         // ולידציה: מניעת שליחת בקשה אם הקוד ריק או מכיל רק רווחים
         if (string.IsNullOrWhiteSpace(code))
         {
-            ShowError("אנא הזינו קוד משחק.");
+            ShowError("אנא הזינו קוד משחק.", "empty game code submitted");
             return;
         }
 
@@ -75,7 +75,7 @@ public class ServerManager : MonoBehaviour
         // מקרה קצה: השרת החזיר דף HTML (כמו 404) או טקסט שאינו ג'ייסון
         if (!jsonString.TrimStart().StartsWith("{"))
         {
-            ShowError("שגיאה: קוד המשחק אינו תקין או שלא נמצא משחק.");
+            ShowError("שגיאה: קוד המשחק אינו תקין או שלא נמצא משחק.", "response was not JSON (game not found / invalid code)");
             return null;
         }
         
@@ -84,14 +84,14 @@ public class ServerManager : MonoBehaviour
         // מקרה קצה: המשחק לא פורסם
         if (!serverGame.isPublish)
         {
-            ShowError("המשחק עדיין לא פורסם.");
+            ShowError("המשחק עדיין לא פורסם.", "game found but not published");
             return null;
         }
 
         // מקרה קצה: המשחק נטען אבל אין בו שאלות
         if (serverGame.questions == null || serverGame.questions.Count == 0)
         {
-            ShowError("שגיאה: למשחק זה אין שאלות.");
+            ShowError("שגיאה: למשחק זה אין שאלות.", "game has no questions");
             return null;
         }
 
@@ -112,6 +112,13 @@ public class ServerManager : MonoBehaviour
         {
             return http.downloadHandler.text;
         }
+        else if (http.result == UnityWebRequest.Result.ConnectionError)
+        {
+            // לא הצלחנו אפילו להגיע לשרת — השרת כבוי / לא זמין / עדיין לא קיים
+            ShowError("לא ניתן להתחבר לשרת. ודאו שהשרת פעיל ונסו שוב.",
+                      "connection error - server unreachable/offline at " + url);
+            return null;
+        }
         else
         {
             string errorMessage = http.downloadHandler.text;
@@ -119,7 +126,7 @@ public class ServerManager : MonoBehaviour
             {
                 errorMessage = "שגיאת שרת או שהקוד אינו קיים.";
             }
-            ShowError(errorMessage);
+            ShowError(errorMessage, "server returned HTTP " + http.responseCode);
             return null;
         }
     }
@@ -174,7 +181,7 @@ public class ServerManager : MonoBehaviour
         // מקרה קצה: שאלה בלי פריטים
         if (serverQuestion.items == null || serverQuestion.items.Count == 0)
         {
-            ShowError("שגיאה: ישנה שאלה ללא פריטים.");
+            ShowError("שגיאה: ישנה שאלה ללא פריטים.", "a question has no items");
             return null;
         }
 
@@ -192,7 +199,7 @@ public class ServerManager : MonoBehaviour
             int currentIndex = serverQuestion.items[i].orderIndex;
             if (usedIndices.Contains(currentIndex))
             {
-                ShowError("שגיאה: קיימת כפילות במיקומי הפריטים בשאלה.");
+                ShowError("שגיאה: קיימת כפילות במיקומי הפריטים בשאלה.", "duplicate item order index in a question");
                 return null;
             }
             usedIndices.Add(currentIndex);
@@ -221,7 +228,7 @@ public class ServerManager : MonoBehaviour
             // מקרה קצה: תמונה לא קיימת בשרת
             if (answerModel.imageContent == null)
             {
-                ShowError($"שגיאה: התמונה עבור פריט לא נמצאה בשרת.");
+                ShowError("שגיאה: התמונה עבור פריט לא נמצאה בשרת.", "item image not found on server");
                 return null;
             }
             

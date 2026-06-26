@@ -138,6 +138,37 @@ public class SnakeTail : MonoBehaviour
         }
     }
     
+    public void AddWrongAnswer(AnswerModel answer)
+    {
+        int slotIndex = answersProvided.Count;
+        if (slotIndex >= snakeTail.Count) return;
+
+        SingleTail tailScript = snakeTail[slotIndex];
+
+        if (answer.IsValid())
+        {
+            if (answer.isImage)
+            {
+                tailScript.imageComp.gameObject.SetActive(true);
+                tailScript.imageScript.SetImage_KeepRatio(answer.imageContent);
+                tailScript.imageComp.sortingOrder = tailScript.tailBG.sortingOrder + 1;
+                if (tailScript.textComp) tailScript.textComp.gameObject.SetActive(false);
+            }
+            else
+            {
+                RTLFixer.SetTextInTMP(tailScript.textComp, answer.textContent);
+                tailScript.textComp.color = Color.red;
+                tailScript.textComp.sortingOrder = tailScript.tailBG.sortingOrder + 1;
+                tailScript.textComp.gameObject.SetActive(true);
+                if (tailScript.imageComp) tailScript.imageComp.gameObject.SetActive(false);
+            }
+        }
+
+        tailScript.tailBG.color = new Color(1f, 1f, 1f, 1f);
+    }
+
     public List<AnswerModel> GetAnswersProvided() => answersProvided;
     public int GetLength() => positions.Count;
+    public int GetSegmentCount() => snakeTail.Count;
+    public SingleTail GetSegment(int index) => snakeTail[index];
 }

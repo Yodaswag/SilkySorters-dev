@@ -1,15 +1,17 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.Splines;
 using UnityEngine.UI;
-using static DataModels;
-using Random = UnityEngine.Random; //Instead of writing DataModels.GameModel/QuestionsModel/AnswerModel, just added a single using static class line at the top of each file that needs it.
+using static DataModels; //Instead of writing DataModels.GameModel/QuestionsModel/AnswerModel, just added a single using static class line at the top of each file that needs it.
+using Random = UnityEngine.Random; 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GlobalSceneManager globalSceneManager;
@@ -50,10 +52,12 @@ public class GameManager : MonoBehaviour
         FollowingSpline,
         Darkening,
         RemovingAnswersFromBody,
-        FadingToBlack,
         WaitingForNextQuestion
     }
     public ReflectionPhases currentReflectionPhase = ReflectionPhases.None;
+
+    public enum QuestionOutcome { Success, WrongAnswer, Timeout, Pause }
+    private QuestionOutcome lastOutcome;
     public SplineContainer reflectionSpline;
     
     [Header("UI")]
@@ -61,12 +65,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI finalScoreText; // תיבה נפרדת רק לציון הסופי
     [SerializeField] private GameObject restartBtn; //Only appears after game won
     [SerializeField] TextMeshProUGUI questionText; 
-    [SerializeField] TextMeshProUGUI progress; //Progress TextMeshPro UI (i.e 0/5 questions)
     [SerializeField] TextMeshProUGUI topic; //Topic TextMeshPro UI (i.e. Hebrew for 7th grade)
     [SerializeField] private Image linearProgressFill; // בשביל המילוי של מד-ההתקדמות הליניארי שלנו
     [SerializeField] private GameObject uiDuringMainGame; // Used to hide pause button, question and timer when game over
     [SerializeField] private float padding = 0.75f;
     [SerializeField] private TextMeshProUGUI potionText; //מציג מספר שיקויים בUI כטקסט
+    [SerializeField] private Image potionImage;
+    [SerializeField] private Sprite potionNormal;
+    [SerializeField] private Sprite potionYellow;
+    [SerializeField] private Sprite potionRed;
     [SerializeField] private GameObject potionParentObject;
     
     [Header("UI - Labels")]
@@ -77,6 +84,8 @@ public class GameManager : MonoBehaviour
     
     [Header("Global Timer")]
     public bool isCountdownActive;
+    public bool controlsEnabled = false;
+
     public float feedbackDelay = 0.5f;
     private float totalGameTime; //זמן כולל למשחק
     private int totalGameMistakes;
@@ -86,6 +95,41 @@ public class GameManager : MonoBehaviour
     private float awardedTimeThisQuestion;
     private bool isTimerRunning; //משתנה בוליאני שנועד לבדוק אם הטיימר רץ
     private float score; // משתנה גלובלי שיכיל את הציון למשחק
+    
+    [Header("Reflection Nightfall")]
+    [SerializeField] private SpriteRenderer nightOverlay;
+    [SerializeField] private float nightMaxAlpha = 0.6f;
+
+    [Header("Reflection - Body Drain")]
+    [SerializeField] private float highlightStepDelay = 0.2f;      // delay between each segment turning green (Pass 1)
+    [SerializeField] private float redFlashDuration = 0.4f;         // how long wrong/timeout red flash holds
+    [SerializeField] private float timeoutRestoreStepDelay = 0.1f;  // delay between each unfilled segment restoring (timeout only)
+    [SerializeField] private float prePass2Delay = 0.3f;            // pause after Pass 1 finishes, before Pass 2 starts
+    [SerializeField] private float drainStepDelay = 0.1f;           // gap between consecutive segment launches (success)
+    [SerializeField] private float failureFadeDuration = 0.3f;      // duration of the batch fade on failure/timeout
+    [SerializeField] private Transform progressBarWorldAnchor;       // empty GO placed in scene at the progress bar's world position
+
+    [Header("Reflection - Drain Arc")]
+    [Tooltip("Constant flight speed in world units/sec")]
+    [SerializeField] private float arcSpeed = 10f;
+    [Tooltip("Bow height in world units at mid-flight. 0 = straight line.")]
+    [SerializeField] private float arcBulge = 0.8f;
+    [Tooltip("Bow direction in degrees, measured from the flight direction.")]
+    [SerializeField] private float arcBulgeAngle = 90f;
+
+    [Header("Question Start Transition")]
+    [SerializeField] private RawImage worldFadeOverlay; //Canvas black overlay over the camera view, sorted above all world content; takes the world night->day while being behind the question and in front of the rest of the UI
+    [SerializeField] private float startTransitionFadeDuration = 0.45f;
+    [SerializeField] private RectTransform questionGroup;        //The "Question" parent (Question BG + QuestionText) — moved/scaled as one
+    [SerializeField] private RectTransform questionIntroAnchor;  //Editor-placed sibling (same anchors as questionGroup) at the centered intro spot
+    [SerializeField] private float questionIntroScale = 2f;      //How much bigger the question is at the intro pose vs its home pose
+    [SerializeField] private float questionIntroMoveDuration = 0.6f;
+    private Vector2 questionHomeAnchoredPos; //Authored top pose, captured at Start (anchoredPosition is camera-independent)
+    private Vector3 questionHomeScale;
+    
+    [Header("Image Popup")]
+    [SerializeField] GameObject imagePopupGroup;   // the canvas popup parent
+    [SerializeField] Image popupImage;
     
     private InputSystem_Actions inputActions;
 
@@ -114,7 +158,8 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         EnsureInitialized();
-        game = GlobalSceneManager.Game;
+        if (GlobalSceneManager.Game != null)
+            game = GlobalSceneManager.Game;
     }
     
     void Start()
@@ -132,7 +177,10 @@ public class GameManager : MonoBehaviour
         }
         
         dynamicVcamComposer = dynamicVcam.GetComponent<CinemachinePositionComposer>();
-        
+
+        questionHomeAnchoredPos = questionGroup.anchoredPosition; //Capture the authored top pose before any transition moves it
+        questionHomeScale = questionGroup.localScale;
+
         GetGame();
     }
 
@@ -159,19 +207,34 @@ public class GameManager : MonoBehaviour
         // ריסטארט רק אם המשחק נגמר (כדי שלא יעשו ריסטארט בטעות באמצע משחק) או אם נגמר הזמן.
         if (screenStatusText != null && screenStatusText.gameObject.activeSelf)
         {
-            if (Input.GetKeyDown(KeyCode.R) && (gameWon))
+            if (Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame && (gameWon))
             {
                 RestartGame();
             }
-            else if (inputActions.Player.Interact.WasPressedThisFrame() && !gameWon && currentReflectionPhase == ReflectionPhases.WaitingForNextQuestion) // TODO: Add better reflection logic into the if
+            else if (inputActions.Player.Interact.WasPressedThisFrame())
             {
-                NextQuestion();
-                Time.timeScale = 1f;
+                ContinueToNextQuestion();
             }
 
         }
     }
 
+    public void ContinueToNextQuestion()
+    {
+        if (gameWon) return;
+        if (currentReflectionPhase != ReflectionPhases.WaitingForNextQuestion) return;
+        if (screenStatusText == null || !screenStatusText.gameObject.activeSelf) return;
+
+        if (questionNumber >= game.questionList.Count) // last question done
+        {
+            WinConditionReached();
+            return;
+        }
+        
+        NextQuestion();
+        Time.timeScale = 1f;
+    }
+    
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -206,6 +269,7 @@ public class GameManager : MonoBehaviour
         topic.text = game.gameName;
 
         CreateQuestion();
+        StartCoroutine(PresentFirstQuestion());
     }
     // פונקציה ליצירת שאלות
     //אם אנחנו רוצים לשנות את הלוגיקה כך שתכלול שאלות אקראיות - יש לחסום את המתודה מלקבל פרמטרים ואז לייצר מספר אקראי בתוכה. נצטרך גם ליישם את RemoveQuestion בשביל השאלות שהשחקן הצליח בהן
@@ -219,8 +283,7 @@ public class GameManager : MonoBehaviour
        
        currentGameTime = game.timePerQuestion;
        UpdateTimerUI(); //קריאה לפונקציה שמעדכנת את הזמן
-       isTimerRunning = true;
-       awardedTimeThisQuestion = 0;
+       awardedTimeThisQuestion = 0; //Timer is started by the presenter coroutines, only after the question's reveal finishes
        
        
        currentQuestion.attempts++; //בשליפת שאלה, נוסיף ניסיון מענה
@@ -253,10 +316,12 @@ public class GameManager : MonoBehaviour
            if (numPotions == 0)
            {
                potionText.color = Color.red;
+               potionImage.sprite = potionRed;
            }
            else
            {
-               potionText.color = Color.cyan;
+               potionText.color = Color.black;
+               potionImage.sprite = potionNormal;
            }
        }
 
@@ -292,19 +357,18 @@ public class GameManager : MonoBehaviour
             }
 
         
-            // Create placeholders for the body
+            // Create placeholders for the body - relevant to both
             while (snakeTail.GetLength()-1 < currentQuestion.orderedAnswers.Count) //minus 1 because the head is the first position
             {
                 snakeTail.AddTail();
             }
         
-            snakeTail.SetNextPlaceholder(); //After creating tail circles, set next placeholder
+            snakeTail.SetNextPlaceholder(); //After creating tail circles, set next placeholder - relevant to both
         }
         silkyInstances[0].GetComponent<SnakeGrow>().contentViewSnakeTail = silkyInstances[1].GetComponent<SnakeTail>();
         snakeTail = silkyInstances[0].GetComponent<SnakeTail>(); //Ensure GameManager's snakeTail is the main characters (unknown if needed - precaution as of now)
         SetContentSilkyPosition();
     }
-    
     
     // ליצור מסיח על המסך
     void CreateAnswer(AnswerModel answerModel, List<Transform> dupMulberries)
@@ -329,9 +393,8 @@ public class GameManager : MonoBehaviour
             Debug.Log("Not enough positioners for the amount of order items");
         }
     }
-
-
-    public void UsePotion()
+    
+    public void UsePotion(AnswerModel wrongAnswer = null)
     {
         // TODO: Add sound effect for failure/mistake
         if (numPotions > 0)
@@ -341,6 +404,7 @@ public class GameManager : MonoBehaviour
             if (numPotions == 0)
             {
                 potionText.color = Color.red;
+                potionImage.sprite = potionRed;
             }
             silkyInstances[0].GetComponent<SnakeGrow>().ShowFloatingWorldText("-Potion", Color.red);
             // TODO: Add swirly eyes animation
@@ -348,7 +412,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            QuestionFailed();
+            QuestionFailed(wrongAnswer);
         }
     }
     
@@ -356,9 +420,9 @@ public class GameManager : MonoBehaviour
     {
         numPotions += potionsToReceive;
         potionText.text = numPotions.ToString();
-        potionText.color = Color.cyan;
-        silkyInstances[0].GetComponent<SnakeGrow>().ShowFloatingWorldText("+Potion", Color.cyan);
-        //TODO: Add animation effect for potion received
+        potionText.color = Color.black;
+        potionImage.sprite = potionNormal;
+        silkyInstances[0].GetComponent<SnakeGrow>().ShowFloatingWorldText("+Potion", Color.black);
     }
     
     public void AddTime()
@@ -369,7 +433,7 @@ public class GameManager : MonoBehaviour
         //TODO: Add animation effect for time received
     }
     
-    void DestroyAllAnswers()
+    void DestroyAllAnswers() // Destroy all mulberries on the screen.
     {
         foreach (OrderItem orderItem in orderItems)
         {
@@ -380,13 +444,57 @@ public class GameManager : MonoBehaviour
         orderItems.Clear();
     }
     
+    public void ShowImagePopup(Sprite sprite)
+    {
+        if (sprite == null) return;
+        popupImage.sprite = sprite;
+        popupImage.preserveAspect = true;
+        imagePopupGroup.SetActive(true);
+    }
+
+    
+    public void HideImagePopup()
+    {
+        if (imagePopupGroup.activeSelf)
+            imagePopupGroup.SetActive(false);
+    }
+    
+    
+    //For Darkening
+    public void SetNightfall(float t) //t: 0 = day, 1 = night. Driven by SnakeMove during the coil.
+    {
+        if (nightOverlay == null) return;
+        Color c = nightOverlay.color;
+        c.a = Mathf.Lerp(0f, nightMaxAlpha, Mathf.Clamp01(t));
+        nightOverlay.color = c;
+    }
+    
     private void ScreenStatus(string screenToShow, Color screenColor) //פונקציה שתפקידה לעדכן את הסטטוס של המסך בסיוּם שאלה (בין שמדובר באכילת תות שגוי, בהצלחה או כאשר נגמר הזמן)
     {
         if (screenStatusText != null)
         {
             screenStatusText.gameObject.SetActive(true);
             screenStatusText.text = screenToShow;
-            screenStatusText.color = screenColor;
+            // screenStatusText.color = screenColor;
+        }
+    }
+
+    public void RevealScreenStatus() //Called from SnakeMove when reflection reaches WaitingForNextQuestion
+    {
+        switch (lastOutcome)
+        {
+            case QuestionOutcome.Success:
+                ScreenStatus("כל הכבוד! הצלחת את השאלה במלואה! \n לחצו רווח כדי להמשיך לשאלה הבאה", Color.cyan);
+                break;
+            case QuestionOutcome.WrongAnswer:
+                ScreenStatus("אכלתם תות לא נכון \n לחצו על רווח כדי להמשיך ולנסות שוב", Color.red);
+                break;
+            case QuestionOutcome.Timeout:
+                ScreenStatus("נגמר לכם הזמן! \n לחצו על רווח כדי להמשיך ולנסות שוב", Color.red);
+                break;
+            case QuestionOutcome.Pause:
+                ScreenStatus("|| \n עצרתם לקחת אוויר? לחצו רווח כדי להמשיך", Color.cyan);
+                break;
         }
     }
     
@@ -395,7 +503,6 @@ public class GameManager : MonoBehaviour
     {
         isTimerRunning = false;
         totalGameTime += game.timePerQuestion+awardedTimeThisQuestion-currentGameTime; //חקן היה על השאלה מחברים את הזמן המוקצה לכל שאלה עם הזמן שהתקבל בשאלה ומחסירים את הזמן שנותר כדי לקבל את סה"כ הזמן שהש
-        if (questionNumber >= game.questionList.Count) WinConditionReached();
 
         DestroyAllAnswers(); //Should happen before the option is given to press space to continue
         currentReflectionPhase = ReflectionPhases.MovingToStartAnchor;
@@ -407,25 +514,28 @@ public class GameManager : MonoBehaviour
         questionNumber++;
       //מסירים את שאלה מן המאגר רק לאחר שהשחקן ענה נכון
         allQuestions.Remove(currentQuestion);
-        score += 100f / (currentQuestion.attempts * game.questionList.Count); //נוסחה לחישוב הציון. אצל נטע כתוב totalQuestions במקום game.questionList.Count 
-        UpdateProgressBar(); //מטעינים את מד-ההתקדמות
+        score += 100f / (currentQuestion.attempts * game.questionList.Count); //נוסחה לחישוב הציון. אצל נטע כתוב totalQuestions במקום game.questionList.Count
+        lastOutcome = QuestionOutcome.Success;
         EndQuestion();
-        
-        ScreenStatus("כל הכבוד! הצלחת את השאלה במלואה! \n לחצו רווח כדי להמשיך לשאלה הבאה",Color.cyan);
     }
 
-    private void QuestionFailed() //פונקציה שמטפלת בסיוּם שאלה באי-הצלחה כאשר השחקן אכל תות לא לפי הסדר הנכון
+    private void QuestionFailed(AnswerModel wrongAnswer = null) //פונקציה שמטפלת בסיוּם שאלה באי-הצלחה כאשר השחקן אכל תות לא לפי הסדר הנכון
     {
-        EndQuestion();
+        if (wrongAnswer != null)
+        {
+            snakeTail.AddWrongAnswer(wrongAnswer);
+            if (silkyInstances.Count > 1)
+                silkyInstances[1].GetComponent<SnakeTail>().AddWrongAnswer(wrongAnswer);
+        }
         totalGameMistakes++;
-        ScreenStatus("אכלתם תות לא נכון \n לחצו על רווח כדי להמשיך ולנסות שוב",Color.red);
+        lastOutcome = QuestionOutcome.WrongAnswer;
+        EndQuestion();
     }
-    
+
     public void Pause()
     {
+        lastOutcome = QuestionOutcome.Pause;
         EndQuestion();
-        // KillCommonGameObjects();
-        ScreenStatus("|| \n עצרתם לקחת אוויר? לחצו רווח כדי להמשיך",Color.cyan);
         // Time.timeScale = 0f; // Consider adding a continuous coiling (השתבללות) animation (move along circle spline) that gives a "loading" gif vibe
     }
 
@@ -448,12 +558,11 @@ public class GameManager : MonoBehaviour
     }
     private void TimeIsUp() //פונקציה שמטפלת במצב שבו נגמר הזמן
     {
+        lastOutcome = QuestionOutcome.Timeout;
         EndQuestion();
-        ScreenStatus("נגמר לכם הזמן! \n לחצו על רווח כדי להמשיך ולנסות שוב", Color.red);
     }
     private void UpdateProgressBar() //פונקציה שאחראית על עדכון מד-ההתקדמות
     {
-        progress.text = questionNumber + "/" + game.questionList.Count;
         if (linearProgressFill == null)  // בדיקת תקינות
         {
             return;
@@ -466,43 +575,228 @@ public class GameManager : MonoBehaviour
         if (timerText == null)
             return;
         int seconds = Mathf.CeilToInt(currentGameTime); //מעגל כלפי מעלה כדי להצג שניות שלמות
-        timerText.text = seconds.ToString(); 
+        timerText.text = TimeSpan.FromSeconds(seconds).ToString(@"mm\:ss");
+
+        if (seconds < 10)
+        {
+            timerText.color = Color.darkRed;   
+        }
+        else
+        {
+            timerText.color = Color.black;
+        }
     }
     private void NextQuestion()
     {
+        StartCoroutine(StartQuestionTransition());
+    }
+
+    private IEnumerator StartQuestionTransition()
+    {
+        controlsEnabled = false;
+        yield return FadeWorld(0f, 1f, startTransitionFadeDuration); //Take the world to full night
+
+        // --- under full dark: camera cut + content swap are hidden ---
+        ChangeView(true);                                   //Switch to static framing (cut hidden by the dark)
+        dynamicVcamComposer.TargetOffset = Vector3.zero;    //Recenter the dynamic cam on the new worm, invisibly
         KillCommonGameObjects();
-        CreateQuestion(); 
+        CreateQuestion();
         screenStatusText.gameObject.SetActive(false);
+        SetNightfall(0f);
+        SetQuestionIntroPose();
+        yield return FadeWorld(1f, 0f, startTransitionFadeDuration); //Back to day, static framing, big centered question
+        yield return AnimateQuestionToHome();
+
+        foreach (OrderItem orderItem in orderItems)
+        {
+            if (orderItem != null)
+                orderItem.RevealMulberry();
+        }
+
+        controlsEnabled = true;
+        isTimerRunning = true; //Start the clock only once the question has settled at the top
+    }
+
+    private void SetQuestionIntroPose() //Snap the whole Question group to the large, centered intro pose
+    {
+        questionGroup.anchoredPosition = questionIntroAnchor.anchoredPosition;
+        questionGroup.localScale = questionHomeScale * questionIntroScale;
+    }
+
+    private IEnumerator AnimateQuestionToHome()
+    {
+        Vector2 startPos = questionGroup.anchoredPosition;
+        Vector3 startScale = questionGroup.localScale;
+        float t = 0f;
+        while (t < questionIntroMoveDuration)
+        {
+            t += Time.deltaTime;
+            float k = t / questionIntroMoveDuration;
+            questionGroup.anchoredPosition = Vector2.Lerp(startPos, questionHomeAnchoredPos, k);
+            questionGroup.localScale = Vector3.Lerp(startScale, questionHomeScale, k);
+            yield return null;
+        }
+        questionGroup.anchoredPosition = questionHomeAnchoredPos;
+        questionGroup.localScale = questionHomeScale;
+    }
+
+    private IEnumerator PresentFirstQuestion() //First question gets the same reveal, starting from black
+    {
+        controlsEnabled = false;
+        if (worldFadeOverlay != null)
+        {
+            Color c = worldFadeOverlay.color; c.a = 1f; worldFadeOverlay.color = c;
+        }
+        SetQuestionIntroPose();
+        yield return FadeWorld(1f, 0f, startTransitionFadeDuration);
+        yield return AnimateQuestionToHome();
+
+        foreach (OrderItem orderItem in orderItems)
+        {
+            if (orderItem != null)
+                orderItem.RevealMulberry();
+        }
+
+        controlsEnabled = true;
+        isTimerRunning = true; //Start the clock only once the question has settled at the top
+    }
+
+    private IEnumerator FadeWorld(float from, float to, float duration)
+    {
+        if (worldFadeOverlay == null) yield break;
+        Color c = worldFadeOverlay.color;
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            c.a = Mathf.Lerp(from, to, t / duration);
+            worldFadeOverlay.color = c;
+            yield return null;
+        }
+        c.a = to;
+        worldFadeOverlay.color = c;
+    }
+
+    public IEnumerator DrainBodyIntoProgress()
+    {
+        int correctCount = snakeTail.GetAnswersProvided().Count;
+        bool hasWrongAnswer = lastOutcome == QuestionOutcome.WrongAnswer;
+        bool isTimeout     = lastOutcome == QuestionOutcome.Timeout;
+        int totalSegments  = snakeTail.GetSegmentCount();
+        int totalFilled    = correctCount + (hasWrongAnswer ? 1 : 0);
+
+        if (totalSegments == 0) yield break;
+        if (totalFilled == 0 && !isTimeout) yield break;
+
+        // ── PASS 1: Green highlight sweep (head → tail) ──────────────────────
+        for (int i = 0; i < correctCount; i++)
+        {
+            snakeTail.GetSegment(i).ShowCorrect();
+            yield return new WaitForSeconds(highlightStepDelay);
+        }
+
+        // Wrong answer: flash the wrong segment red and hold
+        if (hasWrongAnswer)
+        {
+            snakeTail.GetSegment(correctCount).ShowError();
+            yield return new WaitForSeconds(redFlashDuration);
+        }
+
+        // Timeout: flash ALL unfilled segments red simultaneously, hold, then restore one by one (tail → head)
+        if (isTimeout)
+        {
+            for (int i = correctCount; i < totalSegments; i++)
+                snakeTail.GetSegment(i).ShowError();
+
+            yield return new WaitForSeconds(redFlashDuration);
+
+            for (int i = totalSegments - 1; i >= correctCount; i--)
+            {
+                snakeTail.GetSegment(i).ShowEmpty();
+                yield return new WaitForSeconds(timeoutRestoreStepDelay);
+            }
+        }
+
+        yield return new WaitForSeconds(prePass2Delay);
+
+        // ── PASS 2: Outcome-specific removal ─────────────────────────────────
+        if (lastOutcome == QuestionOutcome.Success)
+        {
+            float targetFill = questionNumber * 0.999f / game.questionList.Count;
+            float startFill  = linearProgressFill != null ? linearProgressFill.fillAmount : 0f;
+            float progressPerSegment = correctCount > 0 ? (targetFill - startFill) / correctCount : 0f;
+
+            Vector3 coilCenter = GetCoilCenter();
+            Vector3 anchorPos  = progressBarWorldAnchor != null ? progressBarWorldAnchor.position : coilCenter + Vector3.down * 3f;
+
+            for (int i = correctCount - 1; i >= 0; i--)
+            {
+                yield return StartCoroutine(snakeTail.GetSegment(i)
+                    .LaunchToProgressBar(anchorPos, arcSpeed, arcBulge, arcBulgeAngle));
+
+                if (linearProgressFill != null)
+                    linearProgressFill.fillAmount += progressPerSegment;
+
+                if (i > 0)
+                    yield return new WaitForSeconds(drainStepDelay);
+            }
+        }
+        else if (lastOutcome == QuestionOutcome.WrongAnswer || lastOutcome == QuestionOutcome.Pause)
+        {
+            yield return StartCoroutine(FadeSegmentsToPlaceholder(0, totalFilled));
+        }
+        else // Timeout: only the correct (green) segments remain — unfilled already restored above
+        {
+            if (correctCount > 0)
+                yield return StartCoroutine(FadeSegmentsToPlaceholder(0, correctCount));
+        }
+    }
+
+    // Centre of the coil circle the body wrapped onto, sampled from the reflection spline
+    private Vector3 GetCoilCenter()
+    {
+        if (reflectionSpline != null)
+        {
+            Vector3 sum = Vector3.zero;
+            const int samples = 16;
+            for (int i = 0; i < samples; i++)
+                sum += (Vector3)reflectionSpline.EvaluatePosition(i / (float)samples);
+            return sum / samples;
+        }
+
+        // Fallback: average of the current segment positions
+        int n = snakeTail.GetSegmentCount();
+        if (n == 0) return snakeTail.transform.position;
+        Vector3 acc = Vector3.zero;
+        for (int i = 0; i < n; i++) acc += snakeTail.GetSegment(i).transform.position;
+        return acc / n;
+    }
+
+    private IEnumerator FadeSegmentsToPlaceholder(int fromIndex, int count)
+    {
+        if (count <= 0) yield break;
+
+        float targetAlpha = snakeTail.GetSegment(fromIndex).PlaceholderAlpha;
+        for (int i = fromIndex; i < fromIndex + count; i++)
+            snakeTail.GetSegment(i).PrepareEmpty();
+
+        float elapsed = 0f;
+        while (elapsed < failureFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Lerp(1f, targetAlpha, elapsed / failureFadeDuration);
+            for (int i = fromIndex; i < fromIndex + count; i++)
+                snakeTail.GetSegment(i).SetBGAlpha(alpha);
+            yield return null;
+        }
+        for (int i = fromIndex; i < fromIndex + count; i++)
+            snakeTail.GetSegment(i).SetBGAlpha(targetAlpha);
     }
 
     private void WinConditionReached()
     {
-        // isTimerRunning = false;
-        // if (screenStatusText != null) 
-        // {
-        //     //הגדרת סטרינג עבור סקרין טו שואו
-        //     string screenToShow = "ניצחתם! \n" +
-        //                           "לחצו R או על הכפתור כדי להתחיל מחדש \n" +
-        //                           "ציון סופי: " + "      "+ " נקודות \n" +
-        //                           "זמן כולל: " + Mathf.Floor(totalGameTime) + " שניות | כמות טעויות: " +
-        //                           totalGameMistakes; 
-        //     // מדליקים את תיבת הציון ומכניסים אליה את המספר
-        //     if (finalScoreText != null)
-        //     {
-        //         finalScoreText.gameObject.SetActive(true);
-        //         float roundedScore = Mathf.Round(score);
-        //         finalScoreText.text = roundedScore.ToString(); 
-        //     }
-        //     ScreenStatus(screenToShow,Color.cyan);
-        //     KillCommonGameObjects();
-        // }
-        // gameWon = true;
-        // restartBtn.SetActive(gameWon); //Not done in update as it would be expensive
-        // uiDuringMainGame.SetActive(false);
-        
-        //TODO: Remove above code (it's redundant)
+        gameWon = true;
         globalSceneManager.ShowFinalScreen(Convert.ToInt16(score),Convert.ToInt16(totalGameTime));
-        
     }
 
     public void ChangeView(bool shouldBeStaticView)

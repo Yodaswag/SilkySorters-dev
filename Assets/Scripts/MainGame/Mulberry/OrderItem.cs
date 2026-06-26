@@ -2,8 +2,10 @@ using TMPro;
 using UnityEngine;
 using System.Collections;
 using static DataModels;
+using UnityEngine.EventSystems;
 
-public class OrderItem : MonoBehaviour
+
+public class OrderItem : MonoBehaviour , IPointerClickHandler
 {
     public AnswerModel answer;
     public SpriteRenderer answerImage;
@@ -31,6 +33,8 @@ public class OrderItem : MonoBehaviour
     private Coroutine countdownCoroutine;
     private Coroutine resetSpriteCoroutine;
     private bool playerInProximity;
+    private bool isRevealed = false;
+
 
     void Start()
     {
@@ -55,14 +59,14 @@ public class OrderItem : MonoBehaviour
             if (answerModel.imageContent != null)
             {
                 imageScript.SetImage_KeepRatio(answerModel.imageContent);
-                answerImage.enabled = true;
+                answerImage.enabled = isRevealed;
                 answerText.enabled = false;
             }
             else if (answerModel.textContent != null)
             {
                 RTLFixer.SetTextInTMP(answerText, answerModel.textContent);
                 answerText.sortingOrder = (answerModel.orderIndex - 1) * 2 + 6;
-                answerText.enabled = true;
+                answerText.enabled = isRevealed;
 
                 answerImage.enabled = false;
                 imageScript.HideImage();
@@ -242,6 +246,12 @@ public class OrderItem : MonoBehaviour
 
     private void ApplyNormalSprite()
     {
+        if (!isRevealed)
+        {
+            itemBG.sprite = spritesheet[0];
+            return;
+        }
+
         if ((touched || countdownCoroutine != null) && !animator.GetBool("Static"))
         {
             itemBG.sprite = spritesheet[3];
@@ -252,8 +262,33 @@ public class OrderItem : MonoBehaviour
         }
     }
 
+    public void RevealMulberry()
+    {
+        isRevealed = true;
+        ApplyNormalSprite();
+
+        if (answer != null)
+        {
+            if (answer.imageContent != null)
+            {
+                answerImage.enabled = true;
+            }
+            else if (answer.textContent != null)
+            {
+                answerText.enabled = true;
+            }
+        }
+    }
+
     private void OnDestroy()
     {
         StopCountdown();
+    }
+    
+    //for popup
+    public void OnPointerClick(PointerEventData e)
+    {
+        if (!isRevealed || answer == null || answer.imageContent == null || !animator.GetBool("Static")) return;
+        gameManager.ShowImagePopup(answer.imageContent);
     }
 }

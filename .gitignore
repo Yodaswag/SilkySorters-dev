@@ -278,3 +278,7 @@ ignore.conf
 
 /ZipsFromColleague
 
+# Dev-only: bug-repro screen recordings — never ship
+[Aa]ssets/[Gg]DD/[Dd]evVideos/
+[Aa]ssets/[Gg]DD/[Dd]evVideos.meta
+

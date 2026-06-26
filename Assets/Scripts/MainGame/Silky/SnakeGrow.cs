@@ -87,8 +87,8 @@ public class SnakeGrow : MonoBehaviour
                 }
                 else
                 {
-                    gameManager.UsePotion();
                     objectTouchedScript.ShowFeedback(false,gameManager.feedbackDelay);
+                    gameManager.UsePotion(objectTouchedScript.answer);
                 }
             }
         }

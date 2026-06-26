@@ -26,8 +26,8 @@ Transform:
   m_GameObject: {fileID: 405222186721947673}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.5, y: 1, z: 1}
+  m_LocalPosition: {x: -0.105, y: 0.014, z: 0}
+  m_LocalScale: {x: 6.072243, y: 7.6479416, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8070058646455133867}
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9137d1a036f738048bfe482a597e02b0, type: 3}
   m_Color: {r: 0.8584906, g: 0.8584906, b: 0.8584906, a: 0.41960785}
   m_FlipX: 0
   m_FlipY: 0
@@ -158,8 +158,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 5.5, y: 0.75}
+  m_AnchoredPosition: {x: -0.0647, y: 0.105}
+  m_SizeDelta: {x: 5.0154, y: 0.96}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &5527856397661828776
 MeshRenderer:
@@ -186,7 +186,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  - {fileID: -123680607503692965, guid: e8ffeed585182594ca963b28634b52f4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -232,8 +232,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e8ffeed585182594ca963b28634b52f4, type: 2}
+  m_sharedMaterial: {fileID: -123680607503692965, guid: e8ffeed585182594ca963b28634b52f4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
