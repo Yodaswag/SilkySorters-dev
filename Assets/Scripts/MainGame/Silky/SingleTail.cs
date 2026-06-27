@@ -101,7 +101,9 @@ public class SingleTail : MonoBehaviour
 
         // Flight time follows from the distance and the requested constant speed.
         float distance       = Vector3.Distance(startPos, targetPos);
-        float flightDuration = speed > 0f ? distance / speed : 0f;
+        float flightDuration = 0f;
+        if (speed > 0f)
+            flightDuration = distance / speed;
 
         // Bow offset direction: flight direction rotated by bulgeAngle.
         Vector3 dir = (targetPos - startPos).normalized;

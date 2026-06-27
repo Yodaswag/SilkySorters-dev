@@ -67,7 +67,9 @@ public class SnakeMove : MonoBehaviour
 
     private Vector2 GetRootPosition()
     {
-        return rb != null ? rb.position : (Vector2)transform.position;
+        if (rb != null)
+            return rb.position;
+        return (Vector2)transform.position;
     }
 
     private void MoveRoot(Vector2 nextPosition)
@@ -97,7 +99,9 @@ public class SnakeMove : MonoBehaviour
         {
             case GameManager.ReflectionPhases.None:
                 // Capture input state every frame to prevent dropped inputs
-                targetInput = gameManager.controlsEnabled ? inputActions.Player.Move.ReadValue<Vector2>() : Vector2.zero;
+                targetInput = Vector2.zero;
+                if (gameManager.controlsEnabled)
+                    targetInput = inputActions.Player.Move.ReadValue<Vector2>();
                 
                 // movement key dismisses the image popup
                 if (targetInput.sqrMagnitude > 0.001f)

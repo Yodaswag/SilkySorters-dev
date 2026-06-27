@@ -11,7 +11,15 @@ public class SpaceCountdownPrompt : MonoBehaviour
     private Transform player;
     private bool isShowing;
 
-    public int FrameCount => countdownSprites == null ? 0 : countdownSprites.Length;
+    public int FrameCount
+    {
+        get
+        {
+            if (countdownSprites == null)
+                return 0;
+            return countdownSprites.Length;
+        }
+    }
 
     private void Awake()
     {
@@ -58,7 +66,14 @@ public class SpaceCountdownPrompt : MonoBehaviour
         if (target == null || player == null)
             return;
 
-        bool showBelow = target.position.y < player.position.y; //If player comes from above, show from below - avoid overlap of player and space prompt
-        transform.position = target.position + (showBelow ? offsetBelow : offsetAbove);
+        //If player comes from above, show from below - avoid overlap of player and space prompt
+        bool showBelow = false;
+        if (target.position.y < player.position.y)
+            showBelow = true;
+
+        Vector3 offset = offsetAbove;
+        if (showBelow)
+            offset = offsetBelow;
+        transform.position = target.position + offset;
     }
 }

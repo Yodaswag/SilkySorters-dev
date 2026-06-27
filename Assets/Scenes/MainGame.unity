@@ -1037,8 +1037,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -528.0495, y: -473.5}
-  m_SizeDelta: {x: 223.9, y: 43}
+  m_AnchoredPosition: {x: -557.17, y: -473.5}
+  m_SizeDelta: {x: 165.67, y: 43}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &188100801
 MonoBehaviour:
@@ -1630,10 +1630,10 @@ RectTransform:
   - {fileID: 1637808369}
   m_Father: {fileID: 498833368}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0.57000005, y: 0.4842498}
+  m_AnchorMax: {x: 0.66, y: 0.5}
+  m_AnchoredPosition: {x: 4.5475006, y: 2}
+  m_SizeDelta: {x: 9.095, y: 96}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &257583906
 GameObject:
@@ -2285,7 +2285,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  CustomBlends: {fileID: 0}
+  CustomBlends: {fileID: 11400000, guid: ca6ea9f76fb670d4d805293181d22d16, type: 2}
 --- !u!114 &519420035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3707,6 +3707,10 @@ MonoBehaviour:
   currentReflectionPhase: 0
   reflectionSpline: {fileID: 5882195}
   screenStatusText: {fileID: 1566502646}
+  continueButtonLabel: {fileID: 1282037325}
+  continueButtonImage: {fileID: 1857325915}
+  butterflyImage: {fileID: -1927077886663936451, guid: 579afa7490dd39c47a5f58d6bbd8fea5, type: 3}
+  leftArrowImage: {fileID: -7106955004852322342, guid: b0046e6c5c27c6644a2499592451c3e3, type: 3}
   finalScoreText: {fileID: 2107393449}
   restartBtn: {fileID: 467403262}
   questionText: {fileID: 1714582057}
@@ -4648,7 +4652,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u05D4\u05DE\u05E9\u05DA \u05DC\u05D9\u05D5\u05DD \u05D4\u05D1\u05D0 \u27F5"
+  m_text: "\u05DC\u05D9\u05D5\u05DD \u05D4\u05D1\u05D0"
   m_isRightToLeft: 1
   m_fontAsset: {fileID: 11400000, guid: e8ffeed585182594ca963b28634b52f4, type: 2}
   m_sharedMaterial: {fileID: -123680607503692965, guid: e8ffeed585182594ca963b28634b52f4, type: 2}
@@ -4682,7 +4686,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -4714,7 +4718,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 61.663376, y: 0, z: 18.685883, w: 0}
+  m_margin: {x: 46.039673, y: 0, z: 35.872017, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -5383,7 +5387,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 17.6, y: -2}
+  m_AnchoredPosition: {x: 16, y: -2}
   m_SizeDelta: {x: 13, y: 203}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1637808370
@@ -5890,7 +5894,7 @@ GameObject:
   - component: {fileID: 1857325916}
   - component: {fileID: 1857325915}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: ButtonImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5912,7 +5916,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -69.79, y: -0.69}
+  m_AnchoredPosition: {x: -46.1, y: -0.0000071526}
   m_SizeDelta: {x: 17.22, y: 17.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1857325915
@@ -5935,7 +5939,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 4356950025107862489, guid: 72859518695c6bd4cb5d6f699cc57f3d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

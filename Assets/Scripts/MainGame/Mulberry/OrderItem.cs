@@ -5,7 +5,7 @@ using static DataModels;
 using UnityEngine.EventSystems;
 
 
-public class OrderItem : MonoBehaviour , IPointerClickHandler
+public class OrderItem : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public AnswerModel answer;
     public SpriteRenderer answerImage;
@@ -23,6 +23,8 @@ public class OrderItem : MonoBehaviour , IPointerClickHandler
 
     [SerializeField] private Sprite[] spritesheet;
     [SerializeField] private SpriteRenderer itemBG;
+    
+    [SerializeField] private SpriteRenderer magnifierIcon; 
 
     [Header("Countdown")]
     [SerializeField] private SpaceCountdownPrompt countdownPrompt;
@@ -59,7 +61,8 @@ public class OrderItem : MonoBehaviour , IPointerClickHandler
             if (answerModel.imageContent != null)
             {
                 imageScript.SetImage_KeepRatio(answerModel.imageContent);
-                answerImage.enabled = isRevealed;
+                answerImage.enabled = isRevealed; //hidden mulberries
+                magnifierIcon.enabled = true;
                 answerText.enabled = false;
             }
             else if (answerModel.textContent != null)
@@ -69,6 +72,7 @@ public class OrderItem : MonoBehaviour , IPointerClickHandler
                 answerText.enabled = isRevealed;
 
                 answerImage.enabled = false;
+                magnifierIcon.enabled = false;
                 imageScript.HideImage();
 
                 textMesh.bounds = new Bounds(Vector3.zero, textBounds);
@@ -291,4 +295,17 @@ public class OrderItem : MonoBehaviour , IPointerClickHandler
         if (!isRevealed || answer == null || answer.imageContent == null || !animator.GetBool("Static")) return;
         gameManager.ShowImagePopup(answer.imageContent);
     }
+    
+    public void OnPointerEnter(PointerEventData e)
+    {
+       magnifierIcon.color = Color.white;
+       magnifierIcon.transform.localScale = 0.5f*Vector3.one;
+    }
+
+    public void OnPointerExit(PointerEventData e)
+    {
+        magnifierIcon.color = Color.grey;
+        magnifierIcon.transform.localScale = 0.25f*Vector3.one;
+    }
+    
 }

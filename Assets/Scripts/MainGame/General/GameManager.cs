@@ -62,6 +62,10 @@ public class GameManager : MonoBehaviour
     
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI screenStatusText; //
+    [SerializeField] private TMP_Text continueButtonLabel;
+    [SerializeField] private Image continueButtonImage;
+    [SerializeField] private Sprite butterflyImage;
+    [SerializeField] private Sprite leftArrowImage;
     [SerializeField] private TextMeshProUGUI finalScoreText; // תיבה נפרדת רק לציון הסופי
     [SerializeField] private GameObject restartBtn; //Only appears after game won
     [SerializeField] TextMeshProUGUI questionText; 
@@ -382,7 +386,9 @@ public class GameManager : MonoBehaviour
             OrderItem orderItemScript = newAnswerPrefab.GetComponent<OrderItem>();
             orderItemScript.SetAnswer(answerModel);
 
-            Transform playerTransform = silkyInstances.Count > 0 ? silkyInstances[0].transform : null;
+            Transform playerTransform = null;
+            if (silkyInstances.Count > 0)
+                playerTransform = silkyInstances[0].transform;
             orderItemScript.Initialize(this, playerTransform);
 
             orderItems.Add(orderItemScript);
@@ -481,10 +487,17 @@ public class GameManager : MonoBehaviour
 
     public void RevealScreenStatus() //Called from SnakeMove when reflection reaches WaitingForNextQuestion
     {
+        RTLFixer.SetTextInTMP(continueButtonLabel, "ליום הבא");
+        continueButtonImage.sprite = leftArrowImage;
         switch (lastOutcome)
         {
             case QuestionOutcome.Success:
                 ScreenStatus("כל הכבוד! הצלחת את השאלה במלואה! \n לחצו רווח כדי להמשיך לשאלה הבאה", Color.cyan);
+                if (questionNumber >= game.questionList.Count)
+                {
+                    RTLFixer.SetTextInTMP(continueButtonLabel, "לסיום המסע");
+                    continueButtonImage.sprite = butterflyImage;
+                }
                 break;
             case QuestionOutcome.WrongAnswer:
                 ScreenStatus("אכלתם תות לא נכון \n לחצו על רווח כדי להמשיך ולנסות שוב", Color.red);
