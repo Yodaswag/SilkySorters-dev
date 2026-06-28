@@ -9,7 +9,7 @@ public class SnakeMove : MonoBehaviour
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float animationMoveSpeed = 10f;
     [SerializeField] private float boostMultiplier = 2f;
-    [SerializeField] private float smoothTime = 0.1f;
+    [SerializeField] private float smoothing = 0.2f; // 0..1 per physics step; higher = snappier, lower = floatier
 
     [Header("References")]
     [SerializeField] private Transform headTransform;
@@ -19,7 +19,6 @@ public class SnakeMove : MonoBehaviour
 
     private Vector2 targetInput;
     private Vector2 currentInputVector;
-    private Vector2 smoothInputVelocity;
     
     private float currentSplineTime = 0f;
     private float animationTime = 0f;
@@ -115,7 +114,7 @@ public class SnakeMove : MonoBehaviour
                 comingFromRight = (transform.position.x - targetPos.x) > 0;
                 if (Vector3.Distance(transform.position, targetPos) < 0.05f)
                 {
-                    gameManager.currentReflectionPhase = GameManager.ReflectionPhases.FollowingSpline;
+                    gameManager.SetReflectionPhase(GameManager.ReflectionPhases.FollowingSpline);
                     currentSplineTime = 0f;
                 }
                 
@@ -126,7 +125,7 @@ public class SnakeMove : MonoBehaviour
                     headTransform.rotation = Quaternion.Euler(0f, 0f, lookAngle - 90f);
                 }
 
-                transform.position = Vector3.MoveTowards(transform.position, targetPos, animationMoveSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, targetPos, animationMoveSpeed * gameManager.SkipFactor * Time.deltaTime);
                 gameManager.ChangeView(false); //Change to dynamic
                 break;
 
@@ -138,10 +137,10 @@ public class SnakeMove : MonoBehaviour
             
             case GameManager.ReflectionPhases.Darkening: //stub - Darkening will likely happen continously during MovingTowardsAnchor and FollowingSpline
                 animationTime = 0f;
-                gameManager.currentReflectionPhase = GameManager.ReflectionPhases.RemovingAnswersFromBody;
+                gameManager.SetReflectionPhase(GameManager.ReflectionPhases.RevealingResults);
                 break;
             
-            case GameManager.ReflectionPhases.RemovingAnswersFromBody:
+            case GameManager.ReflectionPhases.RevealingResults:
                 if (!isDraining)
                 {
                     isDraining = true;
@@ -163,16 +162,9 @@ public class SnakeMove : MonoBehaviour
             return;
         }
         
-        // Smooth and apply movement in FixedUpdate to sync with the physics engine 
-        // Passing Time.fixedDeltaTime explicitly prevents SmoothDamp from defaulting to Time.deltaTime
-        currentInputVector = Vector2.SmoothDamp(
-            currentInputVector, 
-            targetInput, 
-            ref smoothInputVelocity, 
-            smoothTime, 
-            Mathf.Infinity, 
-            Time.fixedDeltaTime
-        );
+        // Smooth and apply movement in FixedUpdate to sync with the physics engine.
+        // Ease currentInputVector a fraction of the way toward targetInput each physics step.
+        currentInputVector = Vector2.Lerp(currentInputVector, targetInput, smoothing);
 
         if (gameManager.currentReflectionPhase == GameManager.ReflectionPhases.None && gameManager.controlsEnabled)
             HandleMovement(); 
@@ -207,10 +199,9 @@ public class SnakeMove : MonoBehaviour
     
     private IEnumerator RunBodyDrain()
     {
-        yield return StartCoroutine(gameManager.DrainBodyIntoProgress());
+        yield return StartCoroutine(gameManager.RevealReflection());
         isDraining = false;
-        gameManager.currentReflectionPhase = GameManager.ReflectionPhases.WaitingForNextQuestion;
-        gameManager.RevealScreenStatus();
+        // RevealReflection sets the next phase + reflection button (MistakeReviewPause or WaitingForNextQuestion)
     }
 
     private void FollowSplinePath(bool isReversed)
@@ -218,12 +209,12 @@ public class SnakeMove : MonoBehaviour
         if (gameManager.reflectionSpline == null) return;
 
         float splineLength = gameManager.reflectionSpline.CalculateLength();
-        currentSplineTime += (animationMoveSpeed / splineLength) * Time.deltaTime;
+        currentSplineTime += (animationMoveSpeed * gameManager.SkipFactor / splineLength) * Time.deltaTime;
 
         if (currentSplineTime >= 1f)
         {
             currentSplineTime = 1f;
-            gameManager.currentReflectionPhase = GameManager.ReflectionPhases.Darkening;
+            gameManager.SetReflectionPhase(GameManager.ReflectionPhases.Darkening);
         }
 
         // Convert bool to 0 (false) or 1 (true)

@@ -1,13 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.Splines;
 using UnityEngine.UI;
 using static DataModels; //Instead of writing DataModels.GameModel/QuestionsModel/AnswerModel, just added a single using static class line at the top of each file that needs it.
@@ -51,7 +49,8 @@ public class GameManager : MonoBehaviour
         MovingToStartAnchor,
         FollowingSpline,
         Darkening,
-        RemovingAnswersFromBody,
+        RevealingResults,    // reveal pass: marks each body segment correct/wrong, then drains to progress (success/pause) or holds (failure)
+        MistakeReviewPause,  // failure only: scored body stays visible so the learner studies the mistake; MoonButton "אנסה שוב מחר"
         WaitingForNextQuestion
     }
     public ReflectionPhases currentReflectionPhase = ReflectionPhases.None;
@@ -61,11 +60,17 @@ public class GameManager : MonoBehaviour
     public SplineContainer reflectionSpline;
     
     [Header("UI")]
-    [SerializeField] private TextMeshProUGUI screenStatusText; //
-    [SerializeField] private TMP_Text continueButtonLabel;
-    [SerializeField] private Image continueButtonImage;
+    [SerializeField] private GameObject moonButton;
+    [SerializeField] private TMP_Text moonButtonLabel;
+    [SerializeField] private Image moonButtonImage;
     [SerializeField] private Sprite butterflyImage;
     [SerializeField] private Sprite leftArrowImage;
+    [SerializeField] private GameObject skipButton;   // smaller, overlaps moonButton; never active at the same time as moonButton
+    [SerializeField] private float skipSpeedMultiplier = 12f; // reflection-animation speed-up while skip is requested
+    private bool isReflectionBusy;            // true while the MistakeReviewPause -> WaitingForNextQuestion fade runs
+    public bool skipRequested;
+    public float SkipFactor => skipRequested ? skipSpeedMultiplier : 1f;
+    
     [SerializeField] private TextMeshProUGUI finalScoreText; // תיבה נפרדת רק לציון הסופי
     [SerializeField] private GameObject restartBtn; //Only appears after game won
     [SerializeField] TextMeshProUGUI questionText; 
@@ -172,7 +177,8 @@ public class GameManager : MonoBehaviour
         gameWon = false;
         Time.timeScale = 1f;
         restartBtn.SetActive(false);
-        screenStatusText.gameObject.SetActive(false);
+        moonButton.SetActive(false);
+        skipButton.SetActive(false);
         
         //Initialize mulberry positioner list
         foreach (Transform child in PositionerGroup_Mulberries.transform) 
@@ -193,12 +199,7 @@ public class GameManager : MonoBehaviour
     {
         if (isTimerRunning) // בדיקה אם הטיימר רץ והזמן לא נגמר והמשחק לא הסתיים
         {
-            //כדי שהטיימר לא ירוץ במסך מעבר בין שאלה שבו השחקן לוחץ על רווח כדי להמשיך
-            if (screenStatusText == null || !screenStatusText.gameObject.activeSelf)
-            {
-                currentGameTime -= Time.deltaTime; //הטיימר רץ והזמן יורד
-   
-            }
+            currentGameTime -= Time.deltaTime; // הזמן יורד רק במהלך המשחק — isTimerRunning כבוי בכל שלבי הרפלקציה
             if (currentGameTime <= 0f)
             {
                 currentGameTime = 0f;
@@ -208,18 +209,22 @@ public class GameManager : MonoBehaviour
             }
             UpdateTimerUI();
         }
-        // ריסטארט רק אם המשחק נגמר (כדי שלא יעשו ריסטארט בטעות באמצע משחק) או אם נגמר הזמן.
-        if (screenStatusText != null && screenStatusText.gameObject.activeSelf)
+        // Space/Interact routes by reflection phase: skip the animation, or advance the MoonButton.
+        if (inputActions.Player.Interact.WasPressedThisFrame())
         {
-            if (Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame && (gameWon))
+            switch (currentReflectionPhase)
             {
-                RestartGame();
+                case ReflectionPhases.MovingToStartAnchor:
+                case ReflectionPhases.FollowingSpline:
+                case ReflectionPhases.Darkening:
+                case ReflectionPhases.RevealingResults:
+                    OnSkipPressed();
+                    break;
+                case ReflectionPhases.MistakeReviewPause:
+                case ReflectionPhases.WaitingForNextQuestion:
+                    OnMoonButtonPressed();
+                    break;
             }
-            else if (inputActions.Player.Interact.WasPressedThisFrame())
-            {
-                ContinueToNextQuestion();
-            }
-
         }
     }
 
@@ -227,7 +232,6 @@ public class GameManager : MonoBehaviour
     {
         if (gameWon) return;
         if (currentReflectionPhase != ReflectionPhases.WaitingForNextQuestion) return;
-        if (screenStatusText == null || !screenStatusText.gameObject.activeSelf) return;
 
         if (questionNumber >= game.questionList.Count) // last question done
         {
@@ -237,6 +241,35 @@ public class GameManager : MonoBehaviour
         
         NextQuestion();
         Time.timeScale = 1f;
+    }
+
+    // Single entry point for both Space/Interact and the MoonButton onClick.
+    public void OnMoonButtonPressed()
+    {
+        if (isReflectionBusy) return;
+        if (currentReflectionPhase == ReflectionPhases.MistakeReviewPause)
+            StartCoroutine(RemoveThenWait());                 // clear the reviewed body, then offer "ליום הבא"
+        else if (currentReflectionPhase == ReflectionPhases.WaitingForNextQuestion)
+            ContinueToNextQuestion();
+    }
+
+    // Single entry point for both Space/Interact and the SkipButton onClick.
+    public void OnSkipPressed()
+    {
+        skipRequested = true;
+    }
+
+    // Single choke point for reflection-phase changes: keeps exactly one reflection button visible (or neither).
+    public void SetReflectionPhase(ReflectionPhases phase)
+    {
+        currentReflectionPhase = phase;
+
+        bool animating = phase == ReflectionPhases.MovingToStartAnchor || phase == ReflectionPhases.FollowingSpline
+                      || phase == ReflectionPhases.Darkening || phase == ReflectionPhases.RevealingResults;
+        bool waiting = phase == ReflectionPhases.MistakeReviewPause || phase == ReflectionPhases.WaitingForNextQuestion;
+
+        skipButton.SetActive(animating);   // SetActive(true) on an already-active object is a no-op, so the fade-in plays once
+        moonButton.SetActive(waiting);
     }
     
     public void RestartGame()
@@ -329,7 +362,8 @@ public class GameManager : MonoBehaviour
            }
        }
 
-       currentReflectionPhase = ReflectionPhases.None;
+       skipRequested = false;
+       SetReflectionPhase(ReflectionPhases.None);
     }
 
     // Used when starting a new question. Currently, the code logic is that we destroy the previous silkworm and create a new with the correct amount of placeholders rather than emptying it.
@@ -475,41 +509,53 @@ public class GameManager : MonoBehaviour
         nightOverlay.color = c;
     }
     
-    private void ScreenStatus(string screenToShow, Color screenColor) //פונקציה שתפקידה לעדכן את הסטטוס של המסך בסיוּם שאלה (בין שמדובר באכילת תות שגוי, בהצלחה או כאשר נגמר הזמן)
+    // Called by SnakeMove once the body has coiled and darkened. Runs the reveal pass, then either holds on
+    // the mistake (failure) or clears the body and offers the next day (success/pause).
+    public IEnumerator RevealReflection()
     {
-        if (screenStatusText != null)
+        yield return StartCoroutine(RevealSegments());
+        if (lastOutcome == QuestionOutcome.WrongAnswer || lastOutcome == QuestionOutcome.Timeout)
         {
-            screenStatusText.gameObject.SetActive(true);
-            screenStatusText.text = screenToShow;
-            // screenStatusText.color = screenColor;
+            EnterMistakeReviewPause();
+        }
+        else // Success, Pause
+        {
+            yield return StartCoroutine(RemoveContent());
+            EnterWaitingForNextDay();
         }
     }
 
-    public void RevealScreenStatus() //Called from SnakeMove when reflection reaches WaitingForNextQuestion
+    // Failure stage 2: fired by Space/Interact or the MoonButton while reviewing the mistake.
+    private IEnumerator RemoveThenWait()
     {
-        RTLFixer.SetTextInTMP(continueButtonLabel, "ליום הבא");
-        continueButtonImage.sprite = leftArrowImage;
-        switch (lastOutcome)
-        {
-            case QuestionOutcome.Success:
-                ScreenStatus("כל הכבוד! הצלחת את השאלה במלואה! \n לחצו רווח כדי להמשיך לשאלה הבאה", Color.cyan);
-                if (questionNumber >= game.questionList.Count)
-                {
-                    RTLFixer.SetTextInTMP(continueButtonLabel, "לסיום המסע");
-                    continueButtonImage.sprite = butterflyImage;
-                }
-                break;
-            case QuestionOutcome.WrongAnswer:
-                ScreenStatus("אכלתם תות לא נכון \n לחצו על רווח כדי להמשיך ולנסות שוב", Color.red);
-                break;
-            case QuestionOutcome.Timeout:
-                ScreenStatus("נגמר לכם הזמן! \n לחצו על רווח כדי להמשיך ולנסות שוב", Color.red);
-                break;
-            case QuestionOutcome.Pause:
-                ScreenStatus("|| \n עצרתם לקחת אוויר? לחצו רווח כדי להמשיך", Color.cyan);
-                break;
-        }
+        isReflectionBusy = true;
+        yield return StartCoroutine(RemoveContent());
+        EnterWaitingForNextDay();
+        isReflectionBusy = false;
     }
+
+    private void EnterMistakeReviewPause() // failure only: keep the scored body on screen for review
+    {
+        skipRequested = false;
+        RTLFixer.SetTextInTMP(moonButtonLabel, "אנסה שוב מחר");
+        moonButtonImage.gameObject.SetActive(false); // this stage has no image
+        SetReflectionPhase(ReflectionPhases.MistakeReviewPause);
+    }
+
+    private void EnterWaitingForNextDay()
+    {
+        skipRequested = false;
+        moonButtonImage.gameObject.SetActive(true);
+        moonButtonImage.sprite = leftArrowImage;
+        RTLFixer.SetTextInTMP(moonButtonLabel, "ליום הבא");
+        if (questionNumber >= game.questionList.Count) // last question, reached only on success
+        {
+            moonButtonImage.sprite = butterflyImage;
+            RTLFixer.SetTextInTMP(moonButtonLabel, "לסיום המסע");
+        }
+        SetReflectionPhase(ReflectionPhases.WaitingForNextQuestion);
+    }
+
     
     //Note: EndQuestion is intentionally separated from ScreenStatus for separation of concerns between the functions (helps with the parameters being called) and for future modularity
     private void EndQuestion()
@@ -518,7 +564,7 @@ public class GameManager : MonoBehaviour
         totalGameTime += game.timePerQuestion+awardedTimeThisQuestion-currentGameTime; //חקן היה על השאלה מחברים את הזמן המוקצה לכל שאלה עם הזמן שהתקבל בשאלה ומחסירים את הזמן שנותר כדי לקבל את סה"כ הזמן שהש
 
         DestroyAllAnswers(); //Should happen before the option is given to press space to continue
-        currentReflectionPhase = ReflectionPhases.MovingToStartAnchor;
+        SetReflectionPhase(ReflectionPhases.MovingToStartAnchor);
     }
     
     //פונקציה שמטפלת בסיום שאלה בהצלחה
@@ -614,7 +660,6 @@ public class GameManager : MonoBehaviour
         dynamicVcamComposer.TargetOffset = Vector3.zero;    //Recenter the dynamic cam on the new worm, invisibly
         KillCommonGameObjects();
         CreateQuestion();
-        screenStatusText.gameObject.SetActive(false);
         SetNightfall(0f);
         SetQuestionIntroPose();
         yield return FadeWorld(1f, 0f, startTransitionFadeDuration); //Back to day, static framing, big centered question
@@ -690,29 +735,28 @@ public class GameManager : MonoBehaviour
         worldFadeOverlay.color = c;
     }
 
-    public IEnumerator DrainBodyIntoProgress()
+    // Reveal pass: mark correct segments green, flag the wrong/missed ones red. Shared by every outcome.
+    private IEnumerator RevealSegments()
     {
         int correctCount = snakeTail.GetAnswersProvided().Count;
+        int totalSegments = snakeTail.GetSegmentCount();
         bool hasWrongAnswer = lastOutcome == QuestionOutcome.WrongAnswer;
-        bool isTimeout     = lastOutcome == QuestionOutcome.Timeout;
-        int totalSegments  = snakeTail.GetSegmentCount();
-        int totalFilled    = correctCount + (hasWrongAnswer ? 1 : 0);
+        bool isTimeout = lastOutcome == QuestionOutcome.Timeout;
 
         if (totalSegments == 0) yield break;
-        if (totalFilled == 0 && !isTimeout) yield break;
 
         // ── PASS 1: Green highlight sweep (head → tail) ──────────────────────
         for (int i = 0; i < correctCount; i++)
         {
             snakeTail.GetSegment(i).ShowCorrect();
-            yield return new WaitForSeconds(highlightStepDelay);
+            yield return Wait(highlightStepDelay);
         }
 
         // Wrong answer: flash the wrong segment red and hold
         if (hasWrongAnswer)
         {
             snakeTail.GetSegment(correctCount).ShowError();
-            yield return new WaitForSeconds(redFlashDuration);
+            yield return Wait(redFlashDuration);
         }
 
         // Timeout: flash ALL unfilled segments red simultaneously, hold, then restore one by one (tail → head)
@@ -721,37 +765,56 @@ public class GameManager : MonoBehaviour
             for (int i = correctCount; i < totalSegments; i++)
                 snakeTail.GetSegment(i).ShowError();
 
-            yield return new WaitForSeconds(redFlashDuration);
+            yield return Wait(redFlashDuration);
 
             for (int i = totalSegments - 1; i >= correctCount; i--)
             {
                 snakeTail.GetSegment(i).ShowEmpty();
-                yield return new WaitForSeconds(timeoutRestoreStepDelay);
+                yield return Wait(timeoutRestoreStepDelay);
             }
         }
 
-        yield return new WaitForSeconds(prePass2Delay);
+        yield return Wait(prePass2Delay);
+    }
+
+    // Removal pass: success drains the body into the progress bar; failure/pause fade the body to placeholders.
+    private IEnumerator RemoveContent()
+    {
+        int correctCount = snakeTail.GetAnswersProvided().Count;
+        int totalSegments = snakeTail.GetSegmentCount();
+        int totalFilled = correctCount;
+        if (lastOutcome == QuestionOutcome.WrongAnswer)
+            totalFilled += 1;
+
+        if (totalSegments == 0) yield break;
 
         // ── PASS 2: Outcome-specific removal ─────────────────────────────────
         if (lastOutcome == QuestionOutcome.Success)
         {
             float targetFill = questionNumber * 0.999f / game.questionList.Count;
-            float startFill  = linearProgressFill != null ? linearProgressFill.fillAmount : 0f;
-            float progressPerSegment = correctCount > 0 ? (targetFill - startFill) / correctCount : 0f;
+            float startFill = 0f;
+            if (linearProgressFill != null)
+                startFill = linearProgressFill.fillAmount;
+
+            float progressPerSegment = 0f;
+            if (correctCount > 0)
+                progressPerSegment = (targetFill - startFill) / correctCount;
 
             Vector3 coilCenter = GetCoilCenter();
-            Vector3 anchorPos  = progressBarWorldAnchor != null ? progressBarWorldAnchor.position : coilCenter + Vector3.down * 3f;
+            Vector3 anchorPos = coilCenter + Vector3.down * 3f;
+            if (progressBarWorldAnchor != null)
+                anchorPos = progressBarWorldAnchor.position;
 
             for (int i = correctCount - 1; i >= 0; i--)
             {
                 yield return StartCoroutine(snakeTail.GetSegment(i)
-                    .LaunchToProgressBar(anchorPos, arcSpeed, arcBulge, arcBulgeAngle));
+                    .LaunchToProgressBar(anchorPos, arcSpeed * SkipFactor, arcBulge, arcBulgeAngle));
 
                 if (linearProgressFill != null)
                     linearProgressFill.fillAmount += progressPerSegment;
 
                 if (i > 0)
-                    yield return new WaitForSeconds(drainStepDelay);
+                    yield return Wait(drainStepDelay);
             }
         }
         else if (lastOutcome == QuestionOutcome.WrongAnswer || lastOutcome == QuestionOutcome.Pause)
@@ -763,6 +826,13 @@ public class GameManager : MonoBehaviour
             if (correctCount > 0)
                 yield return StartCoroutine(FadeSegmentsToPlaceholder(0, correctCount));
         }
+    }
+
+    // WaitForSeconds scaled by the skip speed-up: when skip is requested the reveal/drain still plays
+    // (and the progress bar still climbs) but races to the end.
+    private IEnumerator Wait(float seconds)
+    {
+        yield return new WaitForSeconds(seconds / SkipFactor);
     }
 
     // Centre of the coil circle the body wrapped onto, sampled from the reflection spline

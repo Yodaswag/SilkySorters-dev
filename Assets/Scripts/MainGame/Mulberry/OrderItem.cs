@@ -58,25 +58,21 @@ public class OrderItem : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
     {
         if (answerModel.IsValid())
         {
-            if (answerModel.imageContent != null)
+            if (answerModel.imageContent != null) 
             {
                 imageScript.SetImage_KeepRatio(answerModel.imageContent);
-                answerImage.enabled = isRevealed; //hidden mulberries
-                magnifierIcon.enabled = true;
-                answerText.enabled = false;
             }
             else if (answerModel.textContent != null)
             {
                 RTLFixer.SetTextInTMP(answerText, answerModel.textContent);
                 answerText.sortingOrder = (answerModel.orderIndex - 1) * 2 + 6;
-                answerText.enabled = isRevealed;
-
-                answerImage.enabled = false;
-                magnifierIcon.enabled = false;
-                imageScript.HideImage();
-
                 textMesh.bounds = new Bounds(Vector3.zero, textBounds);
             }
+
+            //initial state of mulberry is hidden //TODO: Verify
+            answerText.enabled = false;
+            answerImage.enabled = false;
+            magnifierIcon.enabled = false;
         }
         else
         {
@@ -276,6 +272,7 @@ public class OrderItem : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
             if (answer.imageContent != null)
             {
                 answerImage.enabled = true;
+                magnifierIcon.enabled = true;
             }
             else if (answer.textContent != null)
             {
@@ -298,12 +295,14 @@ public class OrderItem : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
     
     public void OnPointerEnter(PointerEventData e)
     {
-       magnifierIcon.color = Color.white;
-       magnifierIcon.transform.localScale = 0.5f*Vector3.one;
+        if (!isRevealed || answer == null || answer.imageContent == null || !animator.GetBool("Static")) return;
+        magnifierIcon.color = Color.white;
+        magnifierIcon.transform.localScale = 0.5f*Vector3.one;
     }
 
     public void OnPointerExit(PointerEventData e)
     {
+        if (!isRevealed || answer == null || answer.imageContent == null || !animator.GetBool("Static")) return;
         magnifierIcon.color = Color.grey;
         magnifierIcon.transform.localScale = 0.25f*Vector3.one;
     }

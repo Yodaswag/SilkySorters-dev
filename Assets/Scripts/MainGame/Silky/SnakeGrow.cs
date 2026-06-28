@@ -75,7 +75,13 @@ public class SnakeGrow : MonoBehaviour
                         gameManager.AddTime();
                         if (gameManager.game.hasPotions)
                         {
-                            int potionsToRecieve = gameManager.game.awardPotionInds.Count(x => x == objectTouchedScript.answer.orderIndex);
+                            int targetIndex = objectTouchedScript.answer.orderIndex;
+                            int potionsToRecieve = 0;
+                            foreach (int ind in gameManager.game.awardPotionInds)
+                            {
+                                if (ind == targetIndex)
+                                    potionsToRecieve++;
+                            }
                             if (potionsToRecieve > 0)
                             {
                                 gameManager.AddPotion(potionsToRecieve);
