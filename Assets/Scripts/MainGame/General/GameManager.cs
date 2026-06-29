@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GlobalSceneManager globalSceneManager;
     
     [Header ("Player and Camera")]
-    public bool isStaticView = true;
+    [System.NonSerialized] public bool isStaticView = false;
     [SerializeField] CinemachineCamera dynamicVcam; //Since the player instance gets destroyed and reinstantiated every question - the camera must be attached to follow it.
     public CinemachinePositionComposer dynamicVcamComposer;
     [SerializeField] CinemachineCamera staticVcam;
@@ -169,6 +169,7 @@ public class GameManager : MonoBehaviour
         EnsureInitialized();
         if (GlobalSceneManager.Game != null)
             game = GlobalSceneManager.Game;
+        isStaticView = false;
     }
     
     void Start()
@@ -239,7 +240,7 @@ public class GameManager : MonoBehaviour
             return;
         }
         
-        NextQuestion();
+        StartCoroutine(StartQuestionTransition());
         Time.timeScale = 1f;
     }
 
@@ -305,8 +306,13 @@ public class GameManager : MonoBehaviour
         
         topic.text = game.gameName;
 
-        CreateQuestion();
-        StartCoroutine(PresentFirstQuestion());
+        if (worldFadeOverlay != null)
+        {
+            Color c = worldFadeOverlay.color;
+            c.a = 1f;
+            worldFadeOverlay.color = c;
+        }
+        StartCoroutine(StartQuestionTransition());
     }
     // פונקציה ליצירת שאלות
     //אם אנחנו רוצים לשנות את הלוגיקה כך שתכלול שאלות אקראיות - יש לחסום את המתודה מלקבל פרמטרים ואז לייצר מספר אקראי בתוכה. נצטרך גם ליישם את RemoveQuestion בשביל השאלות שהשחקן הצליח בהן
@@ -332,24 +338,11 @@ public class GameManager : MonoBehaviour
            CreateAnswer(answer,dupMulberries);  
        }
        
-       //Initialize Potions
-       numPotions = 0;
+       //Initialize Potions — single rule: hasPotions ⇒ start each question with 2, else 0
        if (game.hasPotions)
        {
-           if (game.awardPotionInds != null && game.awardPotionInds.Count > 0)
-           {
-               foreach (int potionInd in game.awardPotionInds)
-               {
-                   if (potionInd == 0)
-                   {
-                       numPotions++; // If the game model has potions that are awarded at 0, add them when creating the questions
-                   }
-               }
-           }
-           
+           numPotions = 2;
            potionText.text = numPotions.ToString();
-           
-           // Initialize potion color - red indicates 0 potions/sudden death
            if (numPotions == 0)
            {
                potionText.color = Color.red;
@@ -360,6 +353,10 @@ public class GameManager : MonoBehaviour
                potionText.color = Color.black;
                potionImage.sprite = potionNormal;
            }
+       }
+       else
+       {
+           numPotions = 0;
        }
 
        skipRequested = false;
@@ -424,6 +421,7 @@ public class GameManager : MonoBehaviour
             if (silkyInstances.Count > 0)
                 playerTransform = silkyInstances[0].transform;
             orderItemScript.Initialize(this, playerTransform);
+            orderItemScript.MulberryChangeView(isStaticView);
 
             orderItems.Add(orderItemScript);
             dupMulberries.RemoveAt(randPos);
@@ -454,15 +452,6 @@ public class GameManager : MonoBehaviour
         {
             QuestionFailed(wrongAnswer);
         }
-    }
-    
-    public void AddPotion(int potionsToReceive)
-    {
-        numPotions += potionsToReceive;
-        potionText.text = numPotions.ToString();
-        potionText.color = Color.black;
-        potionImage.sprite = potionNormal;
-        silkyInstances[0].GetComponent<SnakeGrow>().ShowFloatingWorldText("+Potion", Color.black);
     }
     
     public void AddTime()
@@ -645,15 +634,10 @@ public class GameManager : MonoBehaviour
             timerText.color = Color.black;
         }
     }
-    private void NextQuestion()
-    {
-        StartCoroutine(StartQuestionTransition());
-    }
-
     private IEnumerator StartQuestionTransition()
     {
         controlsEnabled = false;
-        yield return FadeWorld(0f, 1f, startTransitionFadeDuration); //Take the world to full night
+        yield return FadeWorld(1f, startTransitionFadeDuration); //Take the world to full night
 
         // --- under full dark: camera cut + content swap are hidden ---
         ChangeView(true);                                   //Switch to static framing (cut hidden by the dark)
@@ -662,13 +646,15 @@ public class GameManager : MonoBehaviour
         CreateQuestion();
         SetNightfall(0f);
         SetQuestionIntroPose();
-        yield return FadeWorld(1f, 0f, startTransitionFadeDuration); //Back to day, static framing, big centered question
+        yield return FadeWorld(0f, startTransitionFadeDuration); //Back to day, static framing, big centered question
         yield return AnimateQuestionToHome();
 
         foreach (OrderItem orderItem in orderItems)
         {
             if (orderItem != null)
+            {
                 orderItem.RevealMulberry();
+            }
         }
 
         controlsEnabled = true;
@@ -698,38 +684,27 @@ public class GameManager : MonoBehaviour
         questionGroup.localScale = questionHomeScale;
     }
 
-    private IEnumerator PresentFirstQuestion() //First question gets the same reveal, starting from black
+    private IEnumerator FadeWorld(float to, float baseDuration)
     {
-        controlsEnabled = false;
-        if (worldFadeOverlay != null)
+        if (worldFadeOverlay == null)
         {
-            Color c = worldFadeOverlay.color; c.a = 1f; worldFadeOverlay.color = c;
+            yield break;
         }
-        SetQuestionIntroPose();
-        yield return FadeWorld(1f, 0f, startTransitionFadeDuration);
-        yield return AnimateQuestionToHome();
-
-        foreach (OrderItem orderItem in orderItems)
-        {
-            if (orderItem != null)
-                orderItem.RevealMulberry();
-        }
-
-        controlsEnabled = true;
-        isTimerRunning = true; //Start the clock only once the question has settled at the top
-    }
-
-    private IEnumerator FadeWorld(float from, float to, float duration)
-    {
-        if (worldFadeOverlay == null) yield break;
         Color c = worldFadeOverlay.color;
-        float t = 0f;
-        while (t < duration)
+        float from = c.a;
+        float distance = Mathf.Abs(to - from);
+        float duration = distance * baseDuration;
+
+        if (duration > 0f)
         {
-            t += Time.deltaTime;
-            c.a = Mathf.Lerp(from, to, t / duration);
-            worldFadeOverlay.color = c;
-            yield return null;
+            float t = 0f;
+            while (t < duration)
+            {
+                t += Time.deltaTime;
+                c.a = Mathf.Lerp(from, to, t / duration);
+                worldFadeOverlay.color = c;
+                yield return null;
+            }
         }
         c.a = to;
         worldFadeOverlay.color = c;

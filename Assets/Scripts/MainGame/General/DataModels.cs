@@ -39,6 +39,5 @@ public class DataModels
         public float timePerQuestion;
         public List<QuestionModel> questionList;
         public bool hasPotions;
-        public List<int> awardPotionInds; //Advanced Flexibility
     }
 }

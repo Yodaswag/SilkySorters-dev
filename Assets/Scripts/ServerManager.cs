@@ -162,7 +162,6 @@ public class ServerManager : MonoBehaviour
         gameModel.timePerQuestion = serverGame.time;
         gameModel.hasPotions = serverGame.hasPotion;
         gameModel.questionList = new List<DataModels.QuestionModel>();
-        gameModel.awardPotionInds = new List<int>(); 
 
         for (int i = 0; i < serverGame.questions.Count; i++)
         {

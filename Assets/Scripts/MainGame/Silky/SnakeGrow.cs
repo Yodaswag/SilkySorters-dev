@@ -73,20 +73,6 @@ public class SnakeGrow : MonoBehaviour
                     if (answersProvided != gameManager.currentQuestion.orderedAnswers.Count) //If it isn't the last item
                     {
                         gameManager.AddTime();
-                        if (gameManager.game.hasPotions)
-                        {
-                            int targetIndex = objectTouchedScript.answer.orderIndex;
-                            int potionsToRecieve = 0;
-                            foreach (int ind in gameManager.game.awardPotionInds)
-                            {
-                                if (ind == targetIndex)
-                                    potionsToRecieve++;
-                            }
-                            if (potionsToRecieve > 0)
-                            {
-                                gameManager.AddPotion(potionsToRecieve);
-                            }
-                        }
                     }
 
                     StartCoroutine(HandleSuccessRoutine(objectTouched, answersProvided));

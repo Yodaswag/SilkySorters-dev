@@ -1938,7 +1938,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 12
+  orthographic size: 5.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2858,7 +2858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
   Priority:
     Enabled: 1
-    m_Value: 3
+    m_Value: 1
   OutputChannel: 1
   StandbyUpdate: 0
   m_StreamingVersion: 20241001
@@ -3381,7 +3381,6 @@ MonoBehaviour:
         isImage: 1
       attempts: 0
     hasPotions: 1
-    awardPotionInds: 00000000020000000300000005000000
   numPotions: 0
   currentReflectionPhase: 0
   reflectionSpline: {fileID: 5882195}
