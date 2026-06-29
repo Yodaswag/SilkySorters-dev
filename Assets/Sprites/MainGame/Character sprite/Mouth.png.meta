@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: bf941fc6cab369a489fb9bdc0e4d38f3
+guid: 64687c902629f4648b518c2710336ff2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3972139060946424555
-    second: CuteEye_0
+      213: -8918809871057124676
+    second: HappyMouth_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,8 +49,8 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.65}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CuteEye_0
+      name: HappyMouth_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 75
-        height: 75
+        width: 138
+        height: 50
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: be25a2e3e6fdf1730800000000000000
-      internalID: 3972139060946424555
+      spriteID: cb284681da50a3480800000000000000
+      internalID: -8918809871057124676
       vertices: []
       indices: 
       edges: []
@@ -139,7 +139,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      CuteEye_0: 3972139060946424555
+      HappyMouth_0: -8918809871057124676
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

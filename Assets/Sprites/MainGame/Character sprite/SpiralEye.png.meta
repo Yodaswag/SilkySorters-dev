@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: bf941fc6cab369a489fb9bdc0e4d38f3
+guid: ebc645b2ebdf93d46a31a9e3da1d9ef5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3972139060946424555
-    second: CuteEye_0
+      213: 7679129132507220842
+    second: SpiralEye_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CuteEye_0
+      name: SpiralEye_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 75
-        height: 75
+        width: 72
+        height: 80
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: be25a2e3e6fdf1730800000000000000
-      internalID: 3972139060946424555
+      spriteID: a6b427f924fb19a60800000000000000
+      internalID: 7679129132507220842
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      CuteEye_0: 3972139060946424555
+      SpiralEye_0: 7679129132507220842
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

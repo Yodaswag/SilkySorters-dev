@@ -30,7 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 0.4726, y: 0.4726, z: 0.4726}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5493805262154767767}
   - {fileID: 6815851628039522122}
@@ -86,12 +86,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1330547216095182012, guid: 2251c6f0aafef24419f6445d7aa9b599, type: 3}
+  m_Sprite: {fileID: 2847770081288289900, guid: c90572a82269374408818087d427427c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2.01, y: 1.49}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -112,8 +112,8 @@ MonoBehaviour:
   imageScript: {fileID: 565762260345349367}
   tailBG: {fileID: 4177610929366771167}
   textComp: {fileID: 436871854256884358}
-  spriteCorrect: {fileID: -523829351121485692, guid: 2251c6f0aafef24419f6445d7aa9b599, type: 3}
-  spriteError: {fileID: -8233424869275530646, guid: 2251c6f0aafef24419f6445d7aa9b599, type: 3}
+  spriteCorrect: {fileID: 395741711445707476, guid: c90572a82269374408818087d427427c, type: 3}
+  spriteError: {fileID: -2373922750526114322, guid: c90572a82269374408818087d427427c, type: 3}
   placeholderAlpha: 0.35
   errorFlashAlpha: 0.3
   errorFlashTint: {r: 1, g: 0, b: 0, a: 1}

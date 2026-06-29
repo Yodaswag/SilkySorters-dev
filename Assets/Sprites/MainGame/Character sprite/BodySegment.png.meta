@@ -1,19 +1,22 @@
 fileFormatVersion: 2
-guid: 2251c6f0aafef24419f6445d7aa9b599
+guid: c90572a82269374408818087d427427c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1330547216095182012
-    second: BodySpriteSheet_0
+      213: 2847770081288289900
+    second: BodySegment_0
   - first:
-      213: -8233424869275530646
-    second: BodySpriteSheet_1
+      213: 395741711445707476
+    second: BodySegment_1
   - first:
-      213: -2419508467477115937
-    second: BodySpriteSheet_2
+      213: -2373922750526114322
+    second: BodySegment_2
   - first:
-      213: -523829351121485692
-    second: BodySpriteSheet_3
+      213: 1095068243401425542
+    second: BodySegment_3
+  - first:
+      213: 4013097472651722479
+    second: BodySegment_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -106,33 +109,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
     buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: iOS
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -148,89 +125,111 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BodySpriteSheet_0
+      name: BodySegment_0
       rect:
         serializedVersion: 2
-        x: 18
-        y: 529
-        width: 195
-        height: 150
+        x: 10
+        y: 720
+        width: 201
+        height: 149
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cbcfc3cb4ad077210800000000000000
-      internalID: 1330547216095182012
+      spriteID: c6e7c210dcf458720800000000000000
+      internalID: 2847770081288289900
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BodySpriteSheet_1
+      name: BodySegment_1
       rect:
         serializedVersion: 2
-        x: 18
-        y: 357
-        width: 195
-        height: 150
+        x: 0
+        y: 529
+        width: 221
+        height: 173
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 81fd7cb7d32734245b3c827c2ef69b38
-      internalID: -8233424869275530646
+      spriteID: 4dac6856df4fd7500800000000000000
+      internalID: 395741711445707476
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BodySpriteSheet_2
+      name: BodySegment_2
       rect:
         serializedVersion: 2
-        x: 16
-        y: 185
-        width: 198
-        height: 148
+        x: 0
+        y: 349
+        width: 221
+        height: 173
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: fb84fb60dd17ecc479fb5e7827bb4022
-      internalID: -2419508467477115937
+      spriteID: ee53ca206d12e0fd0800000000000000
+      internalID: -2373922750526114322
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BodySpriteSheet_3
+      name: BodySegment_3
       rect:
         serializedVersion: 2
-        x: 17
-        y: 12
-        width: 197
-        height: 147
+        x: 0
+        y: 169
+        width: 221
+        height: 173
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 24f555f361abfae499130e8cc4e7a4d6
-      internalID: -523829351121485692
+      spriteID: 682c0c4f3c6723f00800000000000000
+      internalID: 1095068243401425542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BodySegment_4
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 0
+        width: 202
+        height: 151
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fee7c6a93e261b730800000000000000
+      internalID: 4013097472651722479
       vertices: []
       indices: 
       edges: []
@@ -239,7 +238,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 0e2bf4fd627352f4cb0b744bd3053998
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -247,14 +246,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      BodySpriteSheet_0: 1330547216095182012
-      BodySpriteSheet_1: -8233424869275530646
-      BodySpriteSheet_2: -2419508467477115937
-      BodySpriteSheet_3: -523829351121485692
+      BodySegment_0: 2847770081288289900
+      BodySegment_1: 395741711445707476
+      BodySegment_2: -2373922750526114322
+      BodySegment_3: 1095068243401425542
+      BodySegment_4: 4013097472651722479
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
