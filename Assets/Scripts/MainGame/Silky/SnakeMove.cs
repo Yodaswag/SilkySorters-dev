@@ -10,7 +10,9 @@ public class SnakeMove : MonoBehaviour
     [SerializeField] private float animationMoveSpeed = 10f;
     [SerializeField] private float boostMultiplier = 2f;
     [SerializeField] private float smoothing = 0.2f; // 0..1 per physics step; higher = snappier, lower = floatier
-
+    [SerializeField] private float dynamicVcamReflectionOffset = 3f; //move the camera 3 points up so that the full coiled worm fits
+    [SerializeField] private float dynamicVcamReflectionZoom = 6.5f;
+    
     [Header("References")]
     [SerializeField] private Transform headTransform;
     [SerializeField] private Rigidbody2D rb;
@@ -205,9 +207,13 @@ public class SnakeMove : MonoBehaviour
         if (gameManager.dynamicVcamComposer != null)
         {
             Vector3 startOffset = Vector3.zero;
-            Vector3 endOffset = new Vector3(3f, 0f, 0f);
-    
+            Vector3 endOffset = new Vector3(dynamicVcamReflectionOffset, 0f, 0f);
+            
+            // use lerp to prevent jarring, abrupt camera motions
             gameManager.dynamicVcamComposer.TargetOffset = Vector3.Lerp(startOffset, endOffset, currentSplineTime);
+
+            gameManager.dynamicVcam.Lens.OrthographicSize = Mathf.Lerp(gameManager.defaultDynamicVcamZoom, dynamicVcamReflectionZoom, currentSplineTime);
+
         }
     }
 }

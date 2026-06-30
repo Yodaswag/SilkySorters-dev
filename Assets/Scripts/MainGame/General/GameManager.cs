@@ -16,7 +16,8 @@ public class GameManager : MonoBehaviour
     
     [Header ("Player and Camera")]
     [System.NonSerialized] public bool isStaticView = false;
-    [SerializeField] CinemachineCamera dynamicVcam; //Since the player instance gets destroyed and reinstantiated every question - the camera must be attached to follow it.
+    public CinemachineCamera dynamicVcam; //Since the player instance gets destroyed and reinstantiated every question - the camera must be attached to follow it.
+    public float defaultDynamicVcamZoom = 5.5f;
     public CinemachinePositionComposer dynamicVcamComposer;
     [SerializeField] CinemachineCamera staticVcam;
     [SerializeField] private CinemachineCamera introPauseVcam; // fixed framing for the start/pause screen — no Follow/LookAt, so no jarring retarget
@@ -120,8 +121,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform positioner_StartScreenBody1;
     [SerializeField] private Transform positioner_StartScreenBody2;
     [SerializeField] private GameObject bodyPartPrefab;                 // SingleTailPrefab, parked decoratively (no SnakeTail wiring)
+    [SerializeField] private GameObject pauseCircle; // A centered indicator that visibly displays the pause state
     private GameObject staticScreenWorm;                                // decorative head (+ its body children) for the start/pause screen; destroyed when a question starts
-
+    
+    
     [Header("Reflection Nightfall")]
     [SerializeField] private SpriteRenderer nightOverlay;
     [SerializeField] private float nightMaxAlpha = 0.6f;
@@ -305,7 +308,7 @@ public class GameManager : MonoBehaviour
             c.a = 1f;
             worldFadeOverlay.color = c;
         }
-        ShowStaticReflectionScreen(sunImage, "לתחילת המסע");
+        ShowStaticReflectionScreen(true);
         ShowButterfly("ישנת טוב? בבוקר נתחיל את המסע שלך לפרפר", false);
         StartCoroutine(FadeWorld(0f, 0.5f)); // intro-only fade-in from black
     }
@@ -515,6 +518,18 @@ public class GameManager : MonoBehaviour
     // the mistake (failure) or clears the body and offers the next day (success/pause).
     public IEnumerator RevealReflection()
     {
+        // Coil is settled here (currentSplineTime == 1) — teleport the edge labels from the content worm
+        // onto the coiled main worm, before any reveal (checkmarks) runs.
+        int lastSegment = snakeTail.GetSegmentCount() - 1;
+        // Labels were sized for the static content view (its ortho); reflection runs on the dynamic vcam at a
+        // different ortho, so rescale by the ratio to keep their original on-screen size. (Labels are recreated
+        // every question, so this never compounds.)
+        float labelSizeRatio = dynamicVcam.Lens.OrthographicSize / staticVcam.Lens.OrthographicSize;
+        labelTextObjects[0].transform.localScale *= labelSizeRatio;
+        labelTextObjects[1].transform.localScale *= labelSizeRatio;
+        labelTextObjects[0].transform.position = snakeTail.GetSegment(0).transform.position + Vector3.up * labelYOffset * labelSizeRatio;            // above first
+        labelTextObjects[1].transform.position = snakeTail.GetSegment(lastSegment).transform.position + Vector3.down * labelYOffset * labelSizeRatio; // below last
+
         yield return StartCoroutine(RevealSegments());
         silkyInstances[0].GetComponent<SnakeGrow>().MakeWormSleep();
         if (lastOutcome == QuestionOutcome.WrongAnswer || lastOutcome == QuestionOutcome.Timeout)
@@ -576,7 +591,7 @@ public class GameManager : MonoBehaviour
     // Used by both the intro (GetGame) and Pause. Clears the scene, drops a sleepy Silky head at its
     // positioner plus two parked body circles, sets reflection-level darkness, and shows the given button.
 
-    private void ShowStaticReflectionScreen(Sprite buttonIcon, string buttonText)
+    private void ShowStaticReflectionScreen(bool isIntro) //If not Intro, it's pause
     {
         controlsEnabled = false;
         isTimerRunning = false;
@@ -602,8 +617,18 @@ public class GameManager : MonoBehaviour
 
         // Button (sun for intro / arrow for pause) + phase that routes Space and click to ContinueToNextQuestion.
         moonButtonImage.gameObject.SetActive(true);
-        moonButtonImage.sprite = buttonIcon;
-        RTLFixer.SetTextInTMP(moonButtonLabel, buttonText);
+        if (isIntro)
+        {
+            moonButtonImage.sprite = sunImage;
+            RTLFixer.SetTextInTMP(moonButtonLabel, "לתחילת המסע");
+        }
+        else
+        {
+            moonButtonImage.sprite = leftArrowImage;
+            RTLFixer.SetTextInTMP(moonButtonLabel, "להמשך משחק");
+            pauseCircle.SetActive(true);
+        }
+
         SetReflectionPhase(ReflectionPhases.WaitingForNextQuestion);
     }
 
@@ -668,7 +693,7 @@ public class GameManager : MonoBehaviour
         }
         lastOutcome = QuestionOutcome.Pause;
         currentQuestion.attempts--;          // abandoned question — refund the attempt so score is unaffected
-        ShowStaticReflectionScreen(leftArrowImage, "להמשך משחק");
+        ShowStaticReflectionScreen(false);
         ShowButterfly("יצאת להפסקה? התותים מחכים לך!", false);
         // Pause does NOT bank time and does NOT reveal/drain — the screen is rebuilt instantly as the static wait state.
     }
@@ -725,12 +750,14 @@ public class GameManager : MonoBehaviour
     {
         controlsEnabled = false;
         HideButterfly();
+        pauseCircle.SetActive(false);
         yield return FadeWorld(1f, startTransitionFadeDuration); //Take the world to full night
 
         // --- under full dark: camera cut + content swap are hidden ---
         introPauseVcam.Priority = 0;                        //Drop the start/pause framing so gameplay cams resume (hidden by the dark)
         ChangeView(true);                                   //Switch to static framing (cut hidden by the dark)
         dynamicVcamComposer.TargetOffset = Vector3.zero;    //Recenter the dynamic cam on the new worm, invisibly
+        dynamicVcam.Lens.OrthographicSize = defaultDynamicVcamZoom; //Reset zoom
         KillCommonGameObjects();
         if (staticScreenWorm != null)    // remove the start/pause decorative worm (+ its body children) under the dark
         {

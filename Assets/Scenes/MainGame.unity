@@ -483,7 +483,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &22751664
 RectTransform:
   m_ObjectHideFlags: 0
@@ -944,7 +944,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &188100800
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3195,8 +3195,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 1
-  m_fontAsset: {fileID: 11400000, guid: e8ffeed585182594ca963b28634b52f4, type: 2}
-  m_sharedMaterial: {fileID: -123680607503692965, guid: e8ffeed585182594ca963b28634b52f4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c713f5460b081294bac76eab9e8a832e, type: 2}
+  m_sharedMaterial: {fileID: 5308071637993987587, guid: c713f5460b081294bac76eab9e8a832e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3495,6 +3495,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   globalSceneManager: {fileID: 1000043455}
   dynamicVcam: {fileID: 206042762}
+  defaultDynamicVcamZoom: 5.5
   dynamicVcamComposer: {fileID: 206042765}
   staticVcam: {fileID: 811247271}
   introPauseVcam: {fileID: 1020839633}
@@ -3525,7 +3526,7 @@ MonoBehaviour:
         isImage: 1
       - textContent: "\u05D8\u05DC\u05D2\u05E8\u05E3"
         imageContent: {fileID: 0}
-        orderIndex: 0
+        orderIndex: 1
         isImage: 0
       - textContent: "\u05D8\u05DC\u05E4\u05D5\u05DF"
         imageContent: {fileID: 0}
@@ -3704,6 +3705,7 @@ MonoBehaviour:
   positioner_StartScreenBody1: {fileID: 1128080622}
   positioner_StartScreenBody2: {fileID: 1161213152}
   bodyPartPrefab: {fileID: 1560774391510365248, guid: 3d728deab1b16264da9b781133b4087a, type: 3}
+  pauseCircle: {fileID: 1789890385}
   nightOverlay: {fileID: 866216593}
   nightMaxAlpha: 0.8
   highlightStepDelay: 0.2
@@ -6067,7 +6069,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1782318997
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6182,6 +6184,78 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1782318996}
+  m_CullTransparentMesh: 1
+--- !u!1 &1789890385
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1789890386}
+  - component: {fileID: 1789890388}
+  - component: {fileID: 1789890387}
+  m_Layer: 5
+  m_Name: PauseCircle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1789890386
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1789890385}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1890443348}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 175}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1789890387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1789890385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: b985a8d37589ca640b454f1b0418526d, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &1789890388
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1789890385}
   m_CullTransparentMesh: 1
 --- !u!1 &1807747514
 GameObject:
@@ -6402,6 +6476,7 @@ RectTransform:
   - {fileID: 1944550041}
   - {fileID: 2107393448}
   - {fileID: 22751664}
+  - {fileID: 1789890386}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
