@@ -76,7 +76,7 @@ public class SnakeGrow : MonoBehaviour
 
         if (inputActions.Player.Interact.WasPressedThisFrame())
         {
-            if (gameManager.controlsEnabled && objectTouchedScript != null && objectTouchedScript.isConsumable)
+            if (objectTouchedScript != null && gameManager.controlsEnabled && objectTouchedScript.isConsumable)
             {
                 int answersProvided = snakeTail.GetAnswersProvided().Count; 
                 

@@ -906,7 +906,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &188100800
 RectTransform:
   m_ObjectHideFlags: 0
@@ -923,11 +923,11 @@ RectTransform:
   - {fileID: 1857325914}
   m_Father: {fileID: 1890443348}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -544.9506, y: -338.5}
-  m_SizeDelta: {x: 190.11, y: 43}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 25, y: 25}
+  m_SizeDelta: {x: 200, y: 40}
+  m_Pivot: {x: 0, y: 0}
 --- !u!114 &188100801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1993,7 +1993,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.74, z: -10}
+  m_LocalPosition: {x: -1.38, y: 4.54, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3057,7 +3057,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -27, y: -0.0000071526}
+  m_AnchoredPosition: {x: -27, y: -0.0000076293945}
   m_SizeDelta: {x: 17.22, y: 17.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &972803235
@@ -3228,6 +3228,7 @@ Transform:
   - {fileID: 1134287626}
   - {fileID: 1988532836}
   - {fileID: 273101037}
+  - {fileID: 1706940103}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1000043454
@@ -3246,6 +3247,7 @@ MonoBehaviour:
   dynamicVcam: {fileID: 206042762}
   dynamicVcamComposer: {fileID: 206042765}
   staticVcam: {fileID: 811247271}
+  introPauseVcam: {fileID: 1020839633}
   silkyPlayerPrefab: {fileID: 4020628798064279509, guid: 27afb70de8659544c86eb94968330c49, type: 3}
   positioner_PlayerSpawn: {fileID: 1533153607}
   snakeTail: {fileID: 0}
@@ -3269,31 +3271,31 @@ MonoBehaviour:
       orderedAnswers:
       - textContent: 
         imageContent: {fileID: -1902982327901493675, guid: abbaba1e427b088498f4fb80e67f7338, type: 3}
-        orderIndex: 1
+        orderIndex: 0
         isImage: 1
       - textContent: "\u05D8\u05DC\u05D2\u05E8\u05E3"
         imageContent: {fileID: 0}
-        orderIndex: 2
+        orderIndex: 0
         isImage: 0
       - textContent: "\u05D8\u05DC\u05E4\u05D5\u05DF"
         imageContent: {fileID: 0}
-        orderIndex: 3
+        orderIndex: 2
         isImage: 0
       - textContent: Mail
         imageContent: {fileID: 0}
-        orderIndex: 4
+        orderIndex: 3
         isImage: 0
       - textContent: Smartphone
         imageContent: {fileID: 0}
-        orderIndex: 5
+        orderIndex: 4
         isImage: 0
       - textContent: WhatsApp
         imageContent: {fileID: 0}
-        orderIndex: 6
+        orderIndex: 5
         isImage: 0
       - textContent: ZOOM
         imageContent: {fileID: 0}
-        orderIndex: 7
+        orderIndex: 6
         isImage: 0
       attempts: 0
     - questionContent: "\u05D4\u05D9\u05E1\u05D8\u05D5\u05E8\u05D9\u05D4 \u05DC\u05DB\u05D9\u05EA\u05D4
@@ -3304,40 +3306,40 @@ MonoBehaviour:
       - textContent: "\u05D4\u05E8\u05E6\u05DC \u05DE\u05E7\u05D9\u05DD \u05D0\u05EA
           \u05D4\u05EA\u05E0\u05D5\u05E2\u05D4 \u05D4\u05E6\u05D9\u05D5\u05E0\u05D9\u05EA"
         imageContent: {fileID: 0}
-        orderIndex: 1
+        orderIndex: 0
         isImage: 0
       - textContent: "\u05E4\u05E8\u05E1\u05D5\u05DD \u05D4\u05E6\u05D4\u05E8\u05EA
           \u05D1\u05DC\u05E4\u05D5\u05E8 \u05D4\u05D4\u05D9\u05E1\u05D8\u05D5\u05E8\u05D9\u05EA"
         imageContent: {fileID: 0}
-        orderIndex: 2
+        orderIndex: 1
         isImage: 0
       - textContent: "\u05EA\u05E7\u05D5\u05E4\u05EA \u05D4\u05DE\u05E0\u05D3\u05D8
           \u05D4\u05D1\u05E8\u05D9\u05D8\u05D9 \u05D1\u05D0\u05E8\u05E5 \u05D9\u05E9\u05E8\u05D0\u05DC"
         imageContent: {fileID: 0}
-        orderIndex: 3
+        orderIndex: 2
         isImage: 0
       - textContent: 
         imageContent: {fileID: -1025365946052663531, guid: 9964de07ec9efd443b4f867d8c887b0f, type: 3}
-        orderIndex: 4
+        orderIndex: 3
         isImage: 1
       - textContent: "\u05D4\u05E1\u05DB\u05DD \u05D4\u05E9\u05DC\u05D5\u05DD \u05D1\u05D9\u05DF
           \u05D9\u05E9\u05E8\u05D0\u05DC \u05DC\u05DE\u05E6\u05E8\u05D9\u05DD"
         imageContent: {fileID: 0}
-        orderIndex: 5
+        orderIndex: 4
         isImage: 0
       - textContent: "\u05E4\u05E8\u05E1 \u05E0\u05D5\u05D1\u05DC \u05E8\u05D0\u05E9\u05D5\u05DF
           \u05DC\u05D9\u05E9\u05E8\u05D0\u05DC\u05D9 \u05D1\u05DB\u05D9\u05DE\u05D9\u05D4"
         imageContent: {fileID: 0}
-        orderIndex: 6
+        orderIndex: 5
         isImage: 0
       - textContent: 
         imageContent: {fileID: 7691294901476699688, guid: 76c2658fc521fb649bd30bea5a6478a4, type: 3}
-        orderIndex: 7
+        orderIndex: 6
         isImage: 1
       - textContent: "#\u05D7\u05D2\u05D9\u05D2\u05D5\u05EA \u05E9\u05E0\u05EA \u05D4-100
           \u05DC\u05DE\u05D3\u05D9\u05E0\u05EA \u05D9\u05E9\u05E8\u05D0\u05DC!"
         imageContent: {fileID: 0}
-        orderIndex: 8
+        orderIndex: 7
         isImage: 0
       attempts: 0
     - questionContent: "\u05D0\u05DB\u05DC\u05D5 \u05D0\u05EA \u05D4\u05EA\u05D5\u05EA\u05D9\u05DD
@@ -3348,23 +3350,23 @@ MonoBehaviour:
       orderedAnswers:
       - textContent: 1
         imageContent: {fileID: 0}
-        orderIndex: 1
+        orderIndex: 0
         isImage: 0
       - textContent: 22
         imageContent: {fileID: 0}
-        orderIndex: 2
+        orderIndex: 1
         isImage: 0
       - textContent: 37
         imageContent: {fileID: 0}
-        orderIndex: 3
+        orderIndex: 2
         isImage: 0
       - textContent: 129
         imageContent: {fileID: 0}
-        orderIndex: 4
+        orderIndex: 3
         isImage: 0
       - textContent: 131
         imageContent: {fileID: 0}
-        orderIndex: 5
+        orderIndex: 4
         isImage: 0
       attempts: 0
     - questionContent: "\u05D0\u05D5\u05EA\u05D9\u05D5\u05EA \u05DC\u05E4\u05D9 \u05D4\u05E1\u05D3\u05E8"
@@ -3373,19 +3375,19 @@ MonoBehaviour:
       orderedAnswers:
       - textContent: "\u05D0"
         imageContent: {fileID: 0}
-        orderIndex: 1
+        orderIndex: 0
         isImage: 0
       - textContent: "\u05D1"
         imageContent: {fileID: 0}
-        orderIndex: 2
+        orderIndex: 1
         isImage: 0
       - textContent: "\u05D2"
         imageContent: {fileID: 0}
-        orderIndex: 3
+        orderIndex: 2
         isImage: 0
       - textContent: "\u05D3"
         imageContent: {fileID: 0}
-        orderIndex: 4
+        orderIndex: 3
         isImage: 0
       attempts: 0
     - questionContent: "\u05E2\u05D1\u05E8\u05D9\u05EA \u05DC\u05DB\u05D9\u05EA\u05D4
@@ -3395,19 +3397,19 @@ MonoBehaviour:
       orderedAnswers:
       - textContent: "\u05D4"
         imageContent: {fileID: 0}
-        orderIndex: 1
+        orderIndex: 0
         isImage: 0
       - textContent: 
         imageContent: {fileID: 2344264231129395918, guid: dca26a93df2ca7d44af2c8316f017af1, type: 3}
-        orderIndex: 2
+        orderIndex: 1
         isImage: 1
       - textContent: "\u05D0\u05DB\u05DC"
         imageContent: {fileID: 0}
-        orderIndex: 3
+        orderIndex: 2
         isImage: 0
       - textContent: 
         imageContent: {fileID: -7832214784768987486, guid: 4f14ad04c5a23bb439549a86e2f1dd94, type: 3}
-        orderIndex: 4
+        orderIndex: 3
         isImage: 1
       attempts: 0
     hasPotions: 1
@@ -3441,11 +3443,12 @@ MonoBehaviour:
   controlsEnabled: 0
   feedbackDelay: 0.5
   timerText: {fileID: 71478413}
-  positioner_StartScreenWormSpawn: {fileID: 273101037}
   pauseButton: {fileID: 1180746422}
   sunImage: {fileID: 4869968349773499131, guid: 2dedf64526e57c64e94b65d9fd3515b3, type: 3}
-  startGlideStartT: 0.75
-  startGlideEndT: 1
+  positioner_StartScreenHead: {fileID: 1557272231}
+  positioner_StartScreenBody1: {fileID: 1128080622}
+  positioner_StartScreenBody2: {fileID: 1161213152}
+  bodyPartPrefab: {fileID: 1560774391510365248, guid: 3d728deab1b16264da9b781133b4087a, type: 3}
   nightOverlay: {fileID: 866216593}
   nightMaxAlpha: 0.8
   highlightStepDelay: 0.2
@@ -3480,6 +3483,81 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GlobalSceneManager
   scoreText: {fileID: 0}
   timeText: {fileID: 0}
+--- !u!1 &1020839632
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1020839636}
+  - component: {fileID: 1020839633}
+  m_Layer: 0
+  m_Name: Intro&PauseVcam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1020839633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020839632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+  Priority:
+    Enabled: 1
+    m_Value: 10
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 0}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 34
+    OrthographicSize: 5.5
+    NearClipPlane: 0.3
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
+--- !u!4 &1020839636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020839632}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.38, y: 4.54, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1041293236
 GameObject:
   m_ObjectHideFlags: 0
@@ -3927,6 +4005,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1116896152}
   m_CullTransparentMesh: 1
+--- !u!1 &1128080621
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1128080622}
+  m_Layer: 0
+  m_Name: Positioner_StartScreenBody1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1128080622
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128080621}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.5, y: 4.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1706940103}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1134287625
 GameObject:
   m_ObjectHideFlags: 0
@@ -3965,6 +4074,37 @@ Transform:
   - {fileID: 1665038563}
   - {fileID: 228549595}
   m_Father: {fileID: 1000043453}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1161213151
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1161213152}
+  m_Layer: 0
+  m_Name: Positioner_StartScreenBody2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1161213152
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161213151}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.4, y: 3.2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1706940103}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1180746422
 GameObject:
@@ -5027,6 +5167,37 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1557272230
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1557272231}
+  m_Layer: 0
+  m_Name: Positioner_StartScreenHead
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1557272231
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1557272230}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -0.75, y: 5.2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1706940103}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!1 &1637808368
 GameObject:
   m_ObjectHideFlags: 0
@@ -5303,6 +5474,40 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1699619933}
   m_CullTransparentMesh: 1
+--- !u!1 &1706940102
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1706940103}
+  m_Layer: 0
+  m_Name: StartScreenPositioners
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1706940103
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706940102}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1557272231}
+  - {fileID: 1128080622}
+  - {fileID: 1161213152}
+  m_Father: {fileID: 1000043453}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1714582055
 GameObject:
   m_ObjectHideFlags: 0
@@ -5552,11 +5757,11 @@ RectTransform:
   - {fileID: 972803234}
   m_Father: {fileID: 1890443348}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -588.7, y: -338.5}
-  m_SizeDelta: {x: 102.6, y: 43}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 25, y: 25}
+  m_SizeDelta: {x: 100, y: 40}
+  m_Pivot: {x: 0, y: 0}
 --- !u!114 &1782318998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5724,7 +5929,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -60.8, y: -0.0000071526}
+  m_AnchoredPosition: {x: -70.7, y: -0.0000076293945}
   m_SizeDelta: {x: 17.22, y: 17.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1857325915
@@ -6307,7 +6512,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1988532836}
   m_Layer: 0
-  m_Name: ProgressBarWorldAnchor
+  m_Name: Positioner_ProgressBarWorldAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6916,6 +7121,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 206042763}
+  - {fileID: 1020839636}
   - {fileID: 811247272}
   - {fileID: 619394802}
   - {fileID: 203948511}

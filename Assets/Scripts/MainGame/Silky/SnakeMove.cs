@@ -245,40 +245,4 @@ public class SnakeMove : MonoBehaviour
             gameManager.dynamicVcamComposer.TargetOffset = Vector3.Lerp(startOffset, endOffset, currentSplineTime);
         }
     }
-
-    // Start-screen entrance: glide the worm along a partial arc of the spline (startT -> endT), then
-    // return. Same direct transform.position drive the reflection coil uses; no nightfall/darken/camera.
-    // Glide range comes from GameManager (its Start Screen Intro header); speed reuses animationMoveSpeed.
-    public IEnumerator PlayStartGlide(SplineContainer spline, float startT, float endT)
-    {
-        float splineLength = spline.CalculateLength();
-        float progress = 0f;
-
-        float directionSign = 1f;
-        if (endT < startT)
-        {
-            directionSign = -1f;
-        }
-
-        while (progress < 1f)
-        {
-            progress += (animationMoveSpeed / splineLength) * Time.deltaTime;
-            if (progress > 1f)
-            {
-                progress = 1f;
-            }
-
-            float t = Mathf.Lerp(startT, endT, progress);
-            transform.position = spline.EvaluatePosition(t);
-
-            Vector3 tangent = spline.EvaluateTangent(t) * directionSign;
-            if (tangent != Vector3.zero)
-            {
-                float angle = Mathf.Atan2(tangent.y, tangent.x) * Mathf.Rad2Deg;
-                headTransform.rotation = Quaternion.Euler(0f, 0f, angle - 90f);
-            }
-
-            yield return null;
-        }
-    }
 }

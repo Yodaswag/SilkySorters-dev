@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using UnityEngine.InputSystem;
 using UnityEngine.Networking;
 
 public class ServerManager : MonoBehaviour
@@ -18,6 +19,20 @@ public class ServerManager : MonoBehaviour
     void Start()
     {
         if (errorText != null) errorText.text = "";
+    }
+    
+    void Update()
+    {
+        if (Keyboard.current == null)
+        {
+            return;
+        }
+
+        bool enterPressed = Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame;
+        if (enterPressed && startButton.activeSelf)
+        {
+            CheckCode();
+        }
     }
 
     // הפונקציה עודכנה כדי להשתמש ב-RTLFixer עבור הודעות השגיאה בעברית
@@ -237,10 +252,6 @@ public class ServerManager : MonoBehaviour
         }
 
         return answerModel;
-    }
-
-    void Update()
-    {
     }
 }
 

@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] CinemachineCamera dynamicVcam; //Since the player instance gets destroyed and reinstantiated every question - the camera must be attached to follow it.
     public CinemachinePositionComposer dynamicVcamComposer;
     [SerializeField] CinemachineCamera staticVcam;
+    [SerializeField] private CinemachineCamera introPauseVcam; // fixed framing for the start/pause screen — no Follow/LookAt, so no jarring retarget
     [SerializeField] GameObject silkyPlayerPrefab;
     public Transform positioner_PlayerSpawn;
     [SerializeField] private SnakeTail snakeTail;
@@ -105,14 +106,14 @@ public class GameManager : MonoBehaviour
     private bool isTimerRunning; //משתנה בוליאני שנועד לבדוק אם הטיימר רץ
     private float score; // משתנה גלובלי שיכיל את הציון למשחק
     
-    [Header("Start Screen Intro")]
-    [SerializeField] private Transform positioner_StartScreenWormSpawn; // intro worm spawn point
+    [Header("Start / Pause Screen")]
     [SerializeField] private GameObject pauseButton;                    // hidden during intro + reflection; shown only in active play
     [SerializeField] private Sprite sunImage;                          // "לתחילת המסע" button icon (sunIcon.png)
-    [Tooltip("Spline t where the intro worm spawns. Tune so this point sits on the spawn positioner.")]
-    [SerializeField] private float startGlideStartT = 0.68f;
-    [Tooltip("Spline t where the intro worm comes to rest.")]
-    [SerializeField] private float startGlideEndT = 0.85f;
+    [SerializeField] private Transform positioner_StartScreenHead;
+    [SerializeField] private Transform positioner_StartScreenBody1;
+    [SerializeField] private Transform positioner_StartScreenBody2;
+    [SerializeField] private GameObject bodyPartPrefab;                 // SingleTailPrefab, parked decoratively (no SnakeTail wiring)
+    private GameObject staticScreenWorm;                                // decorative head (+ its body children) for the start/pause screen; destroyed when a question starts
 
     [Header("Reflection Nightfall")]
     [SerializeField] private SpriteRenderer nightOverlay;
@@ -322,7 +323,8 @@ public class GameManager : MonoBehaviour
             c.a = 1f;
             worldFadeOverlay.color = c;
         }
-        StartCoroutine(ShowIntroScreen());
+        ShowStaticReflectionScreen(sunImage, "לתחילת המסע");
+        StartCoroutine(FadeWorld(0f, 0.5f)); // intro-only fade-in from black
     }
     // פונקציה ליצירת שאלות
     //אם אנחנו רוצים לשנות את הלוגיקה כך שתכלול שאלות אקראיות - יש לחסום את המתודה מלקבל פרמטרים ואז לייצר מספר אקראי בתוכה. נצטרך גם ליישם את RemoveQuestion בשביל השאלות שהשחקן הצליח בהן
@@ -511,12 +513,6 @@ public class GameManager : MonoBehaviour
     // the mistake (failure) or clears the body and offers the next day (success/pause).
     public IEnumerator RevealReflection()
     {
-        if (lastOutcome == QuestionOutcome.Pause) // body already emptied in PauseRoutine — no reveal/drain
-        {
-            silkyInstances[0].GetComponent<SnakeGrow>().MakeWormSleep();
-            EnterWaitingForNextDay();
-            yield break;
-        }
         yield return StartCoroutine(RevealSegments());
         silkyInstances[0].GetComponent<SnakeGrow>().MakeWormSleep();
         if (lastOutcome == QuestionOutcome.WrongAnswer || lastOutcome == QuestionOutcome.Timeout)
@@ -552,14 +548,7 @@ public class GameManager : MonoBehaviour
         skipRequested = false;
         moonButtonImage.gameObject.SetActive(true);
         moonButtonImage.sprite = leftArrowImage;
-        if (lastOutcome == QuestionOutcome.Pause) //טקסט שונה למצב עצירת משחק, אותו אייקון של חץ שמאלה
-        {
-            RTLFixer.SetTextInTMP(moonButtonLabel, "להמשך משחק");
-        }
-        else
-        {
-            RTLFixer.SetTextInTMP(moonButtonLabel, "ליום הבא");
-        }
+        RTLFixer.SetTextInTMP(moonButtonLabel, "ליום הבא");
         if (questionNumber >= game.questionList.Count) // last question, reached only on success
         {
             moonButtonImage.sprite = butterflyImage;
@@ -568,62 +557,45 @@ public class GameManager : MonoBehaviour
         SetReflectionPhase(ReflectionPhases.WaitingForNextQuestion);
     }
 
-    // ===== Start-screen intro: a still WaitingForNextQuestion-style screen with a short entrance glide =====
-    // Grouped for the future SequenceManager extraction; depends only on public GameManager members.
+    // ===== Static start / pause screen: built instantly, no coroutine, no spline, no AddTail =====
+    // Used by both the intro (GetGame) and Pause. Clears the scene, drops a sleepy Silky head at its
+    // positioner plus two parked body circles, sets reflection-level darkness, and shows the given button.
 
-    private IEnumerator ShowIntroScreen()
+    private void ShowStaticReflectionScreen(Sprite buttonIcon, string buttonText)
     {
         controlsEnabled = false;
         isTimerRunning = false;
-        uiDuringMainGame.SetActive(false); 
-        ChangeView(false);                   
-        SetNightfall(0.5f);
-        
-        yield return FadeWorld(0f, 0.5f);
-        SnakeMove introMover = SpawnIntroWorm();
-        // reveal the sleepy worm
-        yield return StartCoroutine(introMover.PlayStartGlide(reflectionSpline, startGlideStartT, startGlideEndT));
+        uiDuringMainGame.SetActive(false);
+        DestroyAllAnswers();
+        KillCommonGameObjects();          // remove any worm + labels
+        ChangeView(false);                // dynamic cam
+        SetNightfall(1f);                 // reflection-level darkness (nightMaxAlpha)
 
-        EnterStartWait();                    // sun button; phase -> WaitingForNextQuestion
-    }
+        // Head (sleepy Silky) at the head positioner
+        GameObject head = Instantiate(silkyPlayerPrefab, positioner_StartScreenHead.position, positioner_StartScreenHead.rotation);
+        staticScreenWorm = head;          // tracked separately from the player silkyInstances; destroyed when a question starts
+        SnakeGrow grow = head.GetComponent<SnakeGrow>();
+        grow.MakeWormSleep();
 
-    // The decorative intro worm: head + exactly 2 empty body parts at the start-screen positioner.
-    // Returns its SnakeMove so the caller can drive the glide. Destroyed when Q1 starts (KillCommonGameObjects).
-    private SnakeMove SpawnIntroWorm()
-    {
-        KillCommonGameObjects();
+        introPauseVcam.Priority = 10;     // fixed-framing vcam wins (dynamic=2, static<=3); Cinemachine blends instead of snapping Follow/LookAt
 
-        GameObject worm = Instantiate(silkyPlayerPrefab, positioner_StartScreenWormSpawn.position, positioner_StartScreenWormSpawn.rotation);
-        silkyInstances.Add(worm);
+        // Two decorative body circles, parked at their positioners. Parented to the head (like AddTail)
+        // so they inherit the head's scale; no SnakeTail.Init, so SingleTail.LateUpdate (manager == null)
+        // leaves them where placed. Destroyed with the head on the next KillCommonGameObjects.
+        SpawnStaticBodyPart(positioner_StartScreenBody1.position, head.transform);
+        SpawnStaticBodyPart(positioner_StartScreenBody2.position, head.transform);
 
-        SnakeTail introTail = worm.GetComponent<SnakeTail>();
-        introTail.gameManager = this;
-        SnakeMove mover = worm.GetComponent<SnakeMove>();
-        mover.gameManager = this;
-        SnakeGrow grow = worm.GetComponent<SnakeGrow>();
-        grow.gameManager = this;
-
-        dynamicVcam.Follow = worm.transform;
-        dynamicVcam.LookAt = worm.transform;
-
-        introTail.AddTail();   // 2 empty placeholder segments (decorative; no answers)
-        introTail.AddTail();
-        introTail.SetNextPlaceholder();
-
-        grow.MakeWormSleep();  // sleepy eyes for the glide-in, reused from the reflection sleep state
-
-        return mover;
-    }
-
-    // Start-screen wait state: sun button "לתחילת המסע". Pressing it (or Space) routes through
-    // ContinueToNextQuestion, which at questionNumber 0 starts question 1.
-    private void EnterStartWait()
-    {
-        skipRequested = false;
+        // Button (sun for intro / arrow for pause) + phase that routes Space and click to ContinueToNextQuestion.
         moonButtonImage.gameObject.SetActive(true);
-        moonButtonImage.sprite = sunImage;
-        RTLFixer.SetTextInTMP(moonButtonLabel, "לתחילת המסע");
+        moonButtonImage.sprite = buttonIcon;
+        RTLFixer.SetTextInTMP(moonButtonLabel, buttonText);
         SetReflectionPhase(ReflectionPhases.WaitingForNextQuestion);
+    }
+
+    private void SpawnStaticBodyPart(Vector3 position, Transform headParent)
+    {
+        GameObject part = Instantiate(bodyPartPrefab, position, Quaternion.identity, headParent);
+        part.GetComponent<SingleTail>().ShowEmpty();  // faded placeholder look (alpha 0.35)
     }
 
     
@@ -681,20 +653,8 @@ public class GameManager : MonoBehaviour
         }
         lastOutcome = QuestionOutcome.Pause;
         currentQuestion.attempts--;          // abandoned question — refund the attempt so score is unaffected
-        isTimerRunning = false;
-        controlsEnabled = false;
-        uiDuringMainGame.SetActive(false);   // hide question / timer / indicators while paused
-        DestroyAllAnswers();
-        StartCoroutine(PauseRoutine());
-        // Pause does NOT bank time and does NOT reveal/drain — the body just empties, then coils to the wait state.
-    }
-
-    // Empty the whole body to placeholders immediately (before the coil), then run the reflection coil into the wait state.
-    private IEnumerator PauseRoutine()
-    {
-        snakeTail.ApplyReflectionSpacing();
-        yield return StartCoroutine(FadeSegmentsToPlaceholder(0, snakeTail.GetSegmentCount()));
-        SetReflectionPhase(ReflectionPhases.MovingToStartAnchor);
+        ShowStaticReflectionScreen(leftArrowImage, "להמשך משחק");
+        // Pause does NOT bank time and does NOT reveal/drain — the screen is rebuilt instantly as the static wait state.
     }
 
     private void KillCommonGameObjects()
@@ -751,9 +711,15 @@ public class GameManager : MonoBehaviour
         yield return FadeWorld(1f, startTransitionFadeDuration); //Take the world to full night
 
         // --- under full dark: camera cut + content swap are hidden ---
+        introPauseVcam.Priority = 0;                        //Drop the start/pause framing so gameplay cams resume (hidden by the dark)
         ChangeView(true);                                   //Switch to static framing (cut hidden by the dark)
         dynamicVcamComposer.TargetOffset = Vector3.zero;    //Recenter the dynamic cam on the new worm, invisibly
         KillCommonGameObjects();
+        if (staticScreenWorm != null)    // remove the start/pause decorative worm (+ its body children) under the dark
+        {
+            Destroy(staticScreenWorm);
+            staticScreenWorm = null;
+        }
         CreateQuestion();
         uiDuringMainGame.SetActive(true);   // restore game UI hidden during the intro
         SetNightfall(0f);

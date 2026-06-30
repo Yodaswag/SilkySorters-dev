@@ -86,6 +86,11 @@ public class OrderItem : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 
     public void SetObjectTouched(bool touchedBool, bool keepCountdownInProximity = true)
     {
+        if (touchedBool && gameManager != null && (!gameManager.controlsEnabled || animator.GetBool("Static")))
+        {
+            return;
+        }
+        
         touched = touchedBool;
 
         if (touched && animator.GetBool("Static") == false)

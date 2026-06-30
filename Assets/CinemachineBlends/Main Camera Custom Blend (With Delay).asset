@@ -71,3 +71,32 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
+  - From: '**ANY CAMERA**'
+    To: Intro&PauseVcam
+    Blend:
+      Style: 0
+      Time: 0.5
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0.5585747
+          value: 0.0047302246
+          inSlope: -0.16313514
+          outSlope: -0.16313514
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.29245448
+        - serializedVersion: 3
+          time: 1.0020776
+          value: 0.9898801
+          inSlope: 2.7210257
+          outSlope: 2.7210257
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.089622356
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
