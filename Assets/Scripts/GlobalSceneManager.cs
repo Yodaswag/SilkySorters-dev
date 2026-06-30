@@ -13,9 +13,7 @@ public class GlobalSceneManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI timeText;
 
     private static InputSystem_Actions sharedActions;
-    // Single shared input instance for the whole game — one source of truth for all scripts.
-    // ponytail: lazily created, never disposed. Safe while domain reload is ON (statics reset
-    // each Play). If you ever disable domain reload, reset sharedActions in a [RuntimeInitializeOnLoadMethod].
+
     private static void EnsureActions()
     {
         if (sharedActions == null)

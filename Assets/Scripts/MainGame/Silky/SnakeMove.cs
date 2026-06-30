@@ -19,7 +19,6 @@ public class SnakeMove : MonoBehaviour
     private Vector2 currentInputVector;
     
     private float currentSplineTime = 0f;
-    private bool comingFromRight = false;
     private bool isDraining = false;
     
     public GameManager gameManager;
@@ -89,7 +88,6 @@ public class SnakeMove : MonoBehaviour
                 Vector3 targetPos = gameManager.reflectionSpline.transform.position;
                 Vector3 direction = (targetPos - transform.position).normalized;
 
-                comingFromRight = (transform.position.x - targetPos.x) > 0;
                 if (Vector3.Distance(transform.position, targetPos) < 0.05f)
                 {
                     gameManager.SetReflectionPhase(GameManager.ReflectionPhases.FollowingSpline);
@@ -108,8 +106,7 @@ public class SnakeMove : MonoBehaviour
                 break;
 
             case GameManager.ReflectionPhases.FollowingSpline: //Coiling animation השתבללות
-                comingFromRight = false;
-                FollowSplinePath(comingFromRight); //If coming from right, play the spline animation in reverse (counter-clockwise). If not, play it normally (clockwise).
+                FollowSplinePath();
                 gameManager.SetNightfall(currentSplineTime); //Background dims in lockstep with the coil
                 // SetGlow(currentSplineTime);                  //Moonlight glow rises with the coil
                 break;
@@ -182,7 +179,7 @@ public class SnakeMove : MonoBehaviour
         // RevealReflection sets the next phase + reflection button (MistakeReviewPause or WaitingForNextQuestion)
     }
 
-    private void FollowSplinePath(bool isReversed)
+    private void FollowSplinePath()
     {
         if (gameManager.reflectionSpline == null) return;
 
@@ -195,22 +192,10 @@ public class SnakeMove : MonoBehaviour
             gameManager.SetReflectionPhase(GameManager.ReflectionPhases.Darkening);
         }
 
-        // Convert bool to 0 (false) or 1 (true)
-        int reverseInt = System.Convert.ToInt32(isReversed);
+        transform.position = gameManager.reflectionSpline.EvaluatePosition(currentSplineTime);
 
-        // evalTime: 
-        // If 0 -> Mathf.Abs(0 - t) = t 
-        // If 1 -> Mathf.Abs(1 - t) = 1 - t
-        float evalTime = Mathf.Abs(reverseInt - currentSplineTime); //Note: The animation is a circle. The point is equal to the first point, allowing the last knot to be subtituted with the first knot.
-        
-        transform.position = gameManager.reflectionSpline.EvaluatePosition(evalTime);
+        Vector3 tangent = gameManager.reflectionSpline.EvaluateTangent(currentSplineTime);
 
-        // tangentMultiplier: 
-        // If 0 -> 1 - (2 * 0) = 1 (normal direction)
-        // If 1 -> 1 - (2 * 1) = -1 (inverted direction)
-        int tangentMultiplier = 1 - (2 * reverseInt);
-        Vector3 tangent = gameManager.reflectionSpline.EvaluateTangent(evalTime) * tangentMultiplier;
-        
         if (tangent != Vector3.zero)
         {
             float angle = Mathf.Atan2(tangent.y, tangent.x) * Mathf.Rad2Deg;

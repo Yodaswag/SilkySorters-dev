@@ -17,6 +17,12 @@ public class SingleTail : MonoBehaviour
     [SerializeField] private float placeholderAlpha = 0.35f;
     public float PlaceholderAlpha => placeholderAlpha;
 
+    [Header("Reflection Badge")]
+    [SerializeField] private SpriteRenderer badge;  // pre-placed child, disabled until reflection
+    [SerializeField] private Sprite badgeCorrect;   // Correct_GreenV
+    [SerializeField] private Sprite badgeError;     // Error_RedX
+    [SerializeField] private float badgeInset = 0.4f; // world units from segment toward coil center
+
     [Header("Error Flash")]
     [SerializeField] private float errorFlashAlpha = 0.3f;     // explicit opacity held during the red flash
     [SerializeField] private Color errorFlashTint = Color.red; // hue overlaid on the body during the red flash
@@ -33,12 +39,27 @@ public class SingleTail : MonoBehaviour
         if (launchTrail != null) { launchTrail.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear); } // idle until a flight
     }
 
-    public void ShowCorrect()
+    // Places the badge inside the coil (toward coilCenter) and shows it.
+    private void ShowBadge(Sprite sprite, Vector3 coilCenter)
     {
-        if (spriteCorrect != null) { tailBG.sprite = spriteCorrect; tailBG.color = Color.white; }
+        badge.sprite = sprite;
+        Vector3 inward = (coilCenter - transform.position).normalized;
+        badge.transform.localPosition = inward * badgeInset; // segment is unrotated, so local dir == world dir
+        badge.enabled = true;
     }
 
-    public void ShowError()
+    public void HideBadge()
+    {
+        badge.enabled = false;
+    }
+
+    public void ShowCorrect(Vector3 coilCenter)
+    {
+        if (spriteCorrect != null) { tailBG.sprite = spriteCorrect; tailBG.color = Color.white; }
+        ShowBadge(badgeCorrect, coilCenter);
+    }
+
+    public void ShowError(Vector3 coilCenter)
     {
         if (spriteError != null)
         {
@@ -47,13 +68,15 @@ public class SingleTail : MonoBehaviour
             c.a = errorFlashAlpha;     // ...at the explicit flash opacity (0.3) instead of full white
             tailBG.color = c;
         }
+        ShowBadge(badgeError, coilCenter);
     }
 
     // Wrong answer: plain error sprite, no red flash tint, held for review.
-    public void ShowErrorSolid()
+    public void ShowErrorSolid(Vector3 coilCenter)
     {
         tailBG.sprite = spriteError;
         tailBG.color = Color.white;
+        ShowBadge(badgeError, coilCenter);
     }
 
     public void ShowFilled()
@@ -80,6 +103,7 @@ public class SingleTail : MonoBehaviour
     public void PrepareEmpty()
     {
         HideContent();
+        HideBadge();
         tailBG.sprite = spriteEmpty;
     }
 

@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
     public enum QuestionOutcome { Success, WrongAnswer, Timeout, Pause }
     private QuestionOutcome lastOutcome;
     public SplineContainer reflectionSpline;
-    
+
     [Header("UI")]
     [SerializeField] private GameObject moonButton;
     [SerializeField] private TMP_Text moonButtonLabel;
@@ -815,17 +815,19 @@ public class GameManager : MonoBehaviour
 
         if (totalSegments == 0) yield break;
 
+        Vector3 coilCenter = positioner_PlayerSpawn.position;
+
         // ── PASS 1: Green highlight sweep (head → tail) ──────────────────────
         for (int i = 0; i < correctCount; i++)
         {
-            snakeTail.GetSegment(i).ShowCorrect();
+            snakeTail.GetSegment(i).ShowCorrect(coilCenter);
             yield return Wait(highlightStepDelay);
         }
 
         // Wrong answer: flash the wrong segment red and hold
         if (hasWrongAnswer)
         {
-            snakeTail.GetSegment(correctCount).ShowErrorSolid();
+            snakeTail.GetSegment(correctCount).ShowErrorSolid(coilCenter);
             yield return Wait(redFlashDuration);
         }
 
@@ -833,7 +835,7 @@ public class GameManager : MonoBehaviour
         if (isTimeout)
         {
             for (int i = correctCount; i < totalSegments; i++)
-                snakeTail.GetSegment(i).ShowError();
+                snakeTail.GetSegment(i).ShowError(coilCenter);
 
             yield return Wait(redFlashDuration);
 
