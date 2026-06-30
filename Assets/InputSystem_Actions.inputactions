@@ -630,6 +630,28 @@
                 },
                 {
                     "name": "",
+                    "id": "4c9cfb95-3966-4057-86d3-c1e02aeeb9a4",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "217c7899-cc80-4d05-9d2d-e5eb9d2c6617",
+                    "path": "<Keyboard>/numpadEnter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "82627dcc-3b13-4ba9-841d-e4b746d6553e",
                     "path": "*/{Cancel}",
                     "interactions": "",

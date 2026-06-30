@@ -23,15 +23,12 @@ public class ServerManager : MonoBehaviour
     
     void Update()
     {
-        if (Keyboard.current == null)
+        if (SceneManager.GetActiveScene().name == "StartGame")
         {
-            return;
-        }
-
-        bool enterPressed = Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame;
-        if (enterPressed && startButton.activeSelf)
-        {
-            CheckCode();
+            if (GlobalSceneManager.UI.Submit.WasPressedThisFrame() && startButton.activeSelf)
+            {
+                CheckCode();
+            }
         }
     }
 

@@ -15,8 +15,6 @@ public class SnakeMove : MonoBehaviour
     [SerializeField] private Transform headTransform;
     [SerializeField] private Rigidbody2D rb;
     
-    private InputSystem_Actions inputActions;
-
     private Vector2 targetInput;
     private Vector2 currentInputVector;
     
@@ -28,11 +26,6 @@ public class SnakeMove : MonoBehaviour
 
     private void EnsureInitialized()
     {
-        if (inputActions == null)
-        {
-            inputActions = new InputSystem_Actions();
-        }
-
         if (headTransform == null)
         {
             headTransform = transform;
@@ -47,20 +40,6 @@ public class SnakeMove : MonoBehaviour
     private void Awake()
     {
         EnsureInitialized();
-    }
-
-    private void OnEnable()
-    {
-        EnsureInitialized();
-        inputActions.Player.Enable();
-    }
-    
-    private void OnDisable()
-    {
-        if (inputActions != null)
-        {
-            inputActions.Player.Disable();
-        }
     }
 
     private Vector2 GetRootPosition()
@@ -99,7 +78,7 @@ public class SnakeMove : MonoBehaviour
                 // Capture input state every frame to prevent dropped inputs
                 targetInput = Vector2.zero;
                 if (gameManager.controlsEnabled)
-                    targetInput = inputActions.Player.Move.ReadValue<Vector2>();
+                    targetInput = GlobalSceneManager.Player.Move.ReadValue<Vector2>();
                 
                 // movement key dismisses the image popup
                 if (targetInput.sqrMagnitude > 0.001f)
@@ -129,6 +108,7 @@ public class SnakeMove : MonoBehaviour
                 break;
 
             case GameManager.ReflectionPhases.FollowingSpline: //Coiling animation השתבללות
+                comingFromRight = false;
                 FollowSplinePath(comingFromRight); //If coming from right, play the spline animation in reverse (counter-clockwise). If not, play it normally (clockwise).
                 gameManager.SetNightfall(currentSplineTime); //Background dims in lockstep with the coil
                 // SetGlow(currentSplineTime);                  //Moonlight glow rises with the coil
@@ -172,7 +152,7 @@ public class SnakeMove : MonoBehaviour
     {
         float currentSpeed = moveSpeed;
 
-        if (inputActions.Player.Boost.IsInProgress())
+        if (GlobalSceneManager.Player.Boost.IsInProgress())
         {
             currentSpeed *= boostMultiplier;
         }

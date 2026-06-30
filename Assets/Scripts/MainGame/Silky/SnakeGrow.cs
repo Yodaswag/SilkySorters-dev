@@ -32,35 +32,6 @@ public class SnakeGrow : MonoBehaviour
     private GameObject objectTouched;
     private OrderItem objectTouchedScript;
 
-    private InputSystem_Actions inputActions;
-
-    private void EnsureInitialized()
-    {
-        if (inputActions == null)
-        {
-            inputActions = new InputSystem_Actions();
-        }
-    }
-
-    private void OnEnable()
-    {
-        EnsureInitialized();
-        inputActions.Player.Enable();
-    }
-
-    private void OnDisable()
-    {
-        if (inputActions != null)
-        {
-            inputActions.Player.Disable();
-        }
-    }
-    
-    private void Awake()
-    {
-        EnsureInitialized();
-    }
-    
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -74,7 +45,7 @@ public class SnakeGrow : MonoBehaviour
             rightEye.transform.Rotate(0f, 0f, eyeSpinSpeed * Time.deltaTime);
         }
 
-        if (inputActions.Player.Interact.WasPressedThisFrame())
+        if (GlobalSceneManager.Player.Interact.WasPressedThisFrame())
         {
             if (objectTouchedScript != null && gameManager.controlsEnabled && objectTouchedScript.isConsumable)
             {

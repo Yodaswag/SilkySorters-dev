@@ -282,9 +282,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: OnSkipPressed
+      - m_Target: {fileID: 1450025936}
+        m_TargetAssemblyTypeName: GlobalSceneManager, Assembly-CSharp
+        m_MethodName: StartMainGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -85,7 +85,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Sprite potionYellow;
     [SerializeField] private Sprite potionRed;
     [SerializeField] private GameObject potionParentObject;
-    
+
+    [Header("Butterfly (מישמש)")]
+    [SerializeField] private GameObject butterflyGroup;
+    [SerializeField] private TMP_Text butterflyBubbleText;
+    [SerializeField] private Image butterflyMoodImage;
+    [SerializeField] private Sprite butterflyHappy;
+    [SerializeField] private Sprite butterflySurprised;
+
     [Header("UI - Labels")]
     [SerializeField] private GameObject labelPrefab;
     private List<Vector3> labelPositions = new List<Vector3>();
@@ -150,33 +157,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject imagePopupGroup;   // the canvas popup parent
     [SerializeField] Image popupImage;
     
-    private InputSystem_Actions inputActions;
-
-    private void EnsureInitialized()
-    {
-        if (inputActions == null)
-        {
-            inputActions = new InputSystem_Actions();
-        }
-    }
-
-    private void OnEnable()
-    {
-        EnsureInitialized();
-        inputActions.Player.Enable();
-    }
-
-    private void OnDisable()
-    {
-        if (inputActions != null)
-        {
-            inputActions.Player.Disable();
-        }
-    }
-    
     private void Awake()
     {
-        EnsureInitialized();
         if (GlobalSceneManager.Game != null)
             game = GlobalSceneManager.Game;
         isStaticView = false;
@@ -221,7 +203,7 @@ public class GameManager : MonoBehaviour
             UpdateTimerUI();
         }
         // Space/Interact routes by reflection phase: skip the animation, or advance the MoonButton.
-        if (inputActions.Player.Interact.WasPressedThisFrame())
+        if (GlobalSceneManager.Player.Interact.WasPressedThisFrame())
         {
             switch (currentReflectionPhase)
             {
@@ -324,6 +306,7 @@ public class GameManager : MonoBehaviour
             worldFadeOverlay.color = c;
         }
         ShowStaticReflectionScreen(sunImage, "לתחילת המסע");
+        ShowButterfly("ישנת טוב? בבוקר נתחיל את המסע שלך לפרפר", false);
         StartCoroutine(FadeWorld(0f, 0.5f)); // intro-only fade-in from black
     }
     // פונקציה ליצירת שאלות
@@ -498,6 +481,25 @@ public class GameManager : MonoBehaviour
         if (imagePopupGroup.activeSelf)
             imagePopupGroup.SetActive(false);
     }
+
+    private void ShowButterfly(string message, bool surprised)
+    {
+        if (surprised)
+        {
+            butterflyMoodImage.sprite = butterflySurprised;
+        }
+        else
+        {
+            butterflyMoodImage.sprite = butterflyHappy;
+        }
+        RTLFixer.SetTextInTMP(butterflyBubbleText, message);
+        butterflyGroup.SetActive(true);
+    }
+
+    private void HideButterfly()
+    {
+        butterflyGroup.SetActive(false);
+    }
     
     
     //For Darkening
@@ -540,6 +542,14 @@ public class GameManager : MonoBehaviour
         skipRequested = false;
         RTLFixer.SetTextInTMP(moonButtonLabel, "אנסה שוב מחר");
         moonButtonImage.gameObject.SetActive(false); // this stage has no image
+        if (lastOutcome == QuestionOutcome.Timeout)
+        {
+            ShowButterfly("אוי נראה שהשמש שקעה לפני שאכלת את כל התותים!", true);
+        }
+        else
+        {
+            ShowButterfly("אוי, אכלת תות שהבטן עדיין לא הייתה מוכנה לעכל!", true);
+        }
         SetReflectionPhase(ReflectionPhases.MistakeReviewPause);
     }
 
@@ -553,6 +563,11 @@ public class GameManager : MonoBehaviour
         {
             moonButtonImage.sprite = butterflyImage;
             RTLFixer.SetTextInTMP(moonButtonLabel, "לסיום המסע");
+            ShowButterfly("אכלת מספיק וגדלת, הגיע הזמן לפרוש כנפיים", false);
+        }
+        else
+        {
+            ShowButterfly("לילה טוב, ניפגש שוב מחר", false);
         }
         SetReflectionPhase(ReflectionPhases.WaitingForNextQuestion);
     }
@@ -654,6 +669,7 @@ public class GameManager : MonoBehaviour
         lastOutcome = QuestionOutcome.Pause;
         currentQuestion.attempts--;          // abandoned question — refund the attempt so score is unaffected
         ShowStaticReflectionScreen(leftArrowImage, "להמשך משחק");
+        ShowButterfly("יצאת להפסקה? התותים מחכים לך!", false);
         // Pause does NOT bank time and does NOT reveal/drain — the screen is rebuilt instantly as the static wait state.
     }
 
@@ -708,6 +724,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator StartQuestionTransition()
     {
         controlsEnabled = false;
+        HideButterfly();
         yield return FadeWorld(1f, startTransitionFadeDuration); //Take the world to full night
 
         // --- under full dark: camera cut + content swap are hidden ---
