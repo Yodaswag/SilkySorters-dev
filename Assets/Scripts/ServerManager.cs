@@ -45,15 +45,12 @@ public class ServerManager : MonoBehaviour
         startButton.SetActive(false);
         if (errorText != null) errorText.text = ""; // איפוס שגיאות קודמות
 
-        Debug.Log("Request started");
         DataModels.GameModel newGame = await GetGameFromServer(code);
-        Debug.Log("Request done");
 
         if (newGame != null)
         {
-            Debug.Log($"Found game at code {code}");
             GlobalSceneManager.Game = newGame;
-            SceneManager.LoadScene("MainGame"); 
+            SceneManager.LoadScene("StartAnimation"); 
         }
 
         startButton.SetActive(true);

@@ -105,6 +105,15 @@ public class GameManager : MonoBehaviour
     private bool isTimerRunning; //משתנה בוליאני שנועד לבדוק אם הטיימר רץ
     private float score; // משתנה גלובלי שיכיל את הציון למשחק
     
+    [Header("Start Screen Intro")]
+    [SerializeField] private Transform positioner_StartScreenWormSpawn; // intro worm spawn point
+    [SerializeField] private GameObject pauseButton;                    // hidden during intro + reflection; shown only in active play
+    [SerializeField] private Sprite sunImage;                          // "לתחילת המסע" button icon (sunIcon.png)
+    [Tooltip("Spline t where the intro worm spawns. Tune so this point sits on the spawn positioner.")]
+    [SerializeField] private float startGlideStartT = 0.68f;
+    [Tooltip("Spline t where the intro worm comes to rest.")]
+    [SerializeField] private float startGlideEndT = 0.85f;
+
     [Header("Reflection Nightfall")]
     [SerializeField] private SpriteRenderer nightOverlay;
     [SerializeField] private float nightMaxAlpha = 0.6f;
@@ -271,6 +280,7 @@ public class GameManager : MonoBehaviour
 
         skipButton.SetActive(animating);   // SetActive(true) on an already-active object is a no-op, so the fade-in plays once
         moonButton.SetActive(waiting);
+        pauseButton.SetActive(phase == ReflectionPhases.None);
     }
     
     public void RestartGame()
@@ -312,7 +322,7 @@ public class GameManager : MonoBehaviour
             c.a = 1f;
             worldFadeOverlay.color = c;
         }
-        StartCoroutine(StartQuestionTransition());
+        StartCoroutine(ShowIntroScreen());
     }
     // פונקציה ליצירת שאלות
     //אם אנחנו רוצים לשנות את הלוגיקה כך שתכלול שאלות אקראיות - יש לחסום את המתודה מלקבל פרמטרים ואז לייצר מספר אקראי בתוכה. נצטרך גם ליישם את RemoveQuestion בשביל השאלות שהשחקן הצליח בהן
@@ -445,8 +455,7 @@ public class GameManager : MonoBehaviour
                 potionImage.sprite = potionRed;
             }
             silkyInstances[0].GetComponent<SnakeGrow>().ShowFloatingWorldText("-Potion", Color.red);
-            // TODO: Add swirly eyes animation
-            // TODO: Add brief game pause where the player can't move and the character sprites transparency goes up and down
+            silkyInstances[0].GetComponent<SnakeGrow>().StartMistakeFlash(); // freeze controls, alpha-flash beat, spiral holds, then MakeWormHappy
         }
         else
         {
@@ -502,12 +511,19 @@ public class GameManager : MonoBehaviour
     // the mistake (failure) or clears the body and offers the next day (success/pause).
     public IEnumerator RevealReflection()
     {
+        if (lastOutcome == QuestionOutcome.Pause) // body already emptied in PauseRoutine — no reveal/drain
+        {
+            silkyInstances[0].GetComponent<SnakeGrow>().MakeWormSleep();
+            EnterWaitingForNextDay();
+            yield break;
+        }
         yield return StartCoroutine(RevealSegments());
+        silkyInstances[0].GetComponent<SnakeGrow>().MakeWormSleep();
         if (lastOutcome == QuestionOutcome.WrongAnswer || lastOutcome == QuestionOutcome.Timeout)
         {
             EnterMistakeReviewPause();
         }
-        else // Success, Pause
+        else // Success
         {
             yield return StartCoroutine(RemoveContent());
             EnterWaitingForNextDay();
@@ -536,7 +552,14 @@ public class GameManager : MonoBehaviour
         skipRequested = false;
         moonButtonImage.gameObject.SetActive(true);
         moonButtonImage.sprite = leftArrowImage;
-        RTLFixer.SetTextInTMP(moonButtonLabel, "ליום הבא");
+        if (lastOutcome == QuestionOutcome.Pause) //טקסט שונה למצב עצירת משחק, אותו אייקון של חץ שמאלה
+        {
+            RTLFixer.SetTextInTMP(moonButtonLabel, "להמשך משחק");
+        }
+        else
+        {
+            RTLFixer.SetTextInTMP(moonButtonLabel, "ליום הבא");
+        }
         if (questionNumber >= game.questionList.Count) // last question, reached only on success
         {
             moonButtonImage.sprite = butterflyImage;
@@ -545,14 +568,84 @@ public class GameManager : MonoBehaviour
         SetReflectionPhase(ReflectionPhases.WaitingForNextQuestion);
     }
 
+    // ===== Start-screen intro: a still WaitingForNextQuestion-style screen with a short entrance glide =====
+    // Grouped for the future SequenceManager extraction; depends only on public GameManager members.
+
+    private IEnumerator ShowIntroScreen()
+    {
+        controlsEnabled = false;
+        isTimerRunning = false;
+        uiDuringMainGame.SetActive(false); 
+        ChangeView(false);                   
+        SetNightfall(0.5f);
+        
+        yield return FadeWorld(0f, 0.5f);
+        SnakeMove introMover = SpawnIntroWorm();
+        // reveal the sleepy worm
+        yield return StartCoroutine(introMover.PlayStartGlide(reflectionSpline, startGlideStartT, startGlideEndT));
+
+        EnterStartWait();                    // sun button; phase -> WaitingForNextQuestion
+    }
+
+    // The decorative intro worm: head + exactly 2 empty body parts at the start-screen positioner.
+    // Returns its SnakeMove so the caller can drive the glide. Destroyed when Q1 starts (KillCommonGameObjects).
+    private SnakeMove SpawnIntroWorm()
+    {
+        KillCommonGameObjects();
+
+        GameObject worm = Instantiate(silkyPlayerPrefab, positioner_StartScreenWormSpawn.position, positioner_StartScreenWormSpawn.rotation);
+        silkyInstances.Add(worm);
+
+        SnakeTail introTail = worm.GetComponent<SnakeTail>();
+        introTail.gameManager = this;
+        SnakeMove mover = worm.GetComponent<SnakeMove>();
+        mover.gameManager = this;
+        SnakeGrow grow = worm.GetComponent<SnakeGrow>();
+        grow.gameManager = this;
+
+        dynamicVcam.Follow = worm.transform;
+        dynamicVcam.LookAt = worm.transform;
+
+        introTail.AddTail();   // 2 empty placeholder segments (decorative; no answers)
+        introTail.AddTail();
+        introTail.SetNextPlaceholder();
+
+        grow.MakeWormSleep();  // sleepy eyes for the glide-in, reused from the reflection sleep state
+
+        return mover;
+    }
+
+    // Start-screen wait state: sun button "לתחילת המסע". Pressing it (or Space) routes through
+    // ContinueToNextQuestion, which at questionNumber 0 starts question 1.
+    private void EnterStartWait()
+    {
+        skipRequested = false;
+        moonButtonImage.gameObject.SetActive(true);
+        moonButtonImage.sprite = sunImage;
+        RTLFixer.SetTextInTMP(moonButtonLabel, "לתחילת המסע");
+        SetReflectionPhase(ReflectionPhases.WaitingForNextQuestion);
+    }
+
     
     //Note: EndQuestion is intentionally separated from ScreenStatus for separation of concerns between the functions (helps with the parameters being called) and for future modularity
     private void EndQuestion()
     {
         isTimerRunning = false;
-        totalGameTime += game.timePerQuestion+awardedTimeThisQuestion-currentGameTime; //חקן היה על השאלה מחברים את הזמן המוקצה לכל שאלה עם הזמן שהתקבל בשאלה ומחסירים את הזמן שנותר כדי לקבל את סה"כ הזמן שהש
+        if (lastOutcome != QuestionOutcome.Pause)
+        {
+            totalGameTime += game.timePerQuestion+awardedTimeThisQuestion-currentGameTime; //חקן היה על השאלה מחברים את הזמן המוקצה לכל שאלה עם הזמן שהתקבל בשאלה ומחסירים את הזמן שנותר כדי לקבל את סה"כ הזמן שהש
+        }
 
         DestroyAllAnswers(); //Should happen before the option is given to press space to continue
+
+        snakeTail.ApplyReflectionSpacing();
+
+        int filledCount = snakeTail.GetAnswersProvided().Count;
+        if (lastOutcome == QuestionOutcome.WrongAnswer)
+            filledCount++; // wrong segment is filled too, not counted in answersProvided
+        for (int i = 0; i < filledCount; i++)
+            snakeTail.GetSegment(i).ShowPreReflection();
+
         SetReflectionPhase(ReflectionPhases.MovingToStartAnchor);
     }
     
@@ -582,9 +675,26 @@ public class GameManager : MonoBehaviour
 
     public void Pause()
     {
+        if (currentReflectionPhase != ReflectionPhases.None || !controlsEnabled)
+        {
+            return;
+        }
         lastOutcome = QuestionOutcome.Pause;
-        EndQuestion();
-        // Time.timeScale = 0f; // Consider adding a continuous coiling (השתבללות) animation (move along circle spline) that gives a "loading" gif vibe
+        currentQuestion.attempts--;          // abandoned question — refund the attempt so score is unaffected
+        isTimerRunning = false;
+        controlsEnabled = false;
+        uiDuringMainGame.SetActive(false);   // hide question / timer / indicators while paused
+        DestroyAllAnswers();
+        StartCoroutine(PauseRoutine());
+        // Pause does NOT bank time and does NOT reveal/drain — the body just empties, then coils to the wait state.
+    }
+
+    // Empty the whole body to placeholders immediately (before the coil), then run the reflection coil into the wait state.
+    private IEnumerator PauseRoutine()
+    {
+        snakeTail.ApplyReflectionSpacing();
+        yield return StartCoroutine(FadeSegmentsToPlaceholder(0, snakeTail.GetSegmentCount()));
+        SetReflectionPhase(ReflectionPhases.MovingToStartAnchor);
     }
 
     private void KillCommonGameObjects()
@@ -607,6 +717,7 @@ public class GameManager : MonoBehaviour
     private void TimeIsUp() //פונקציה שמטפלת במצב שבו נגמר הזמן
     {
         lastOutcome = QuestionOutcome.Timeout;
+        silkyInstances[0].GetComponent<SnakeGrow>().MakeWormSad();
         EndQuestion();
     }
     private void UpdateProgressBar() //פונקציה שאחראית על עדכון מד-ההתקדמות
@@ -644,6 +755,7 @@ public class GameManager : MonoBehaviour
         dynamicVcamComposer.TargetOffset = Vector3.zero;    //Recenter the dynamic cam on the new worm, invisibly
         KillCommonGameObjects();
         CreateQuestion();
+        uiDuringMainGame.SetActive(true);   // restore game UI hidden during the intro
         SetNightfall(0f);
         SetQuestionIntroPose();
         yield return FadeWorld(0f, startTransitionFadeDuration); //Back to day, static framing, big centered question
@@ -730,7 +842,7 @@ public class GameManager : MonoBehaviour
         // Wrong answer: flash the wrong segment red and hold
         if (hasWrongAnswer)
         {
-            snakeTail.GetSegment(correctCount).ShowError();
+            snakeTail.GetSegment(correctCount).ShowErrorSolid();
             yield return Wait(redFlashDuration);
         }
 
@@ -752,7 +864,7 @@ public class GameManager : MonoBehaviour
         yield return Wait(prePass2Delay);
     }
 
-    // Removal pass: success drains the body into the progress bar; failure/pause fade the body to placeholders.
+    // Removal pass: success drains the body into the progress bar; wrong-answer fades the body to placeholders.
     private IEnumerator RemoveContent()
     {
         int correctCount = snakeTail.GetAnswersProvided().Count;
@@ -792,7 +904,7 @@ public class GameManager : MonoBehaviour
                     yield return Wait(drainStepDelay);
             }
         }
-        else if (lastOutcome == QuestionOutcome.WrongAnswer || lastOutcome == QuestionOutcome.Pause)
+        else if (lastOutcome == QuestionOutcome.WrongAnswer)
         {
             yield return StartCoroutine(FadeSegmentsToPlaceholder(0, totalFilled));
         }
@@ -834,7 +946,7 @@ public class GameManager : MonoBehaviour
     {
         if (count <= 0) yield break;
 
-        float targetAlpha = snakeTail.GetSegment(fromIndex).PlaceholderAlpha;
+        float targetAlpha = snakeTail.GetSegment(fromIndex).PlaceholderAlpha; //get the prefab defined placeholder alpha of the first index
         for (int i = fromIndex; i < fromIndex + count; i++)
             snakeTail.GetSegment(i).PrepareEmpty();
 

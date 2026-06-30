@@ -86,8 +86,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 2847770081288289900, guid: c90572a82269374408818087d427427c, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 4013097472651722479, guid: c90572a82269374408818087d427427c, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.34901962}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -112,10 +112,13 @@ MonoBehaviour:
   imageScript: {fileID: 565762260345349367}
   tailBG: {fileID: 4177610929366771167}
   textComp: {fileID: 436871854256884358}
+  spriteEmpty: {fileID: 4013097472651722479, guid: c90572a82269374408818087d427427c, type: 3}
+  spriteFilled: {fileID: 2847770081288289900, guid: c90572a82269374408818087d427427c, type: 3}
+  spritePreReflection: {fileID: 1095068243401425542, guid: c90572a82269374408818087d427427c, type: 3}
   spriteCorrect: {fileID: 395741711445707476, guid: c90572a82269374408818087d427427c, type: 3}
   spriteError: {fileID: -2373922750526114322, guid: c90572a82269374408818087d427427c, type: 3}
   placeholderAlpha: 0.35
-  errorFlashAlpha: 0.3
+  errorFlashAlpha: 0.35
   errorFlashTint: {r: 1, g: 0, b: 0, a: 1}
   launchTrail: {fileID: 5257178443104291491}
 --- !u!114 &565762260345349367
@@ -4995,8 +4998,8 @@ Transform:
   m_GameObject: {fileID: 4419137320846150973}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0033, y: -0.0211, z: 0}
-  m_LocalScale: {x: 1.5501157, y: 1.0215402, z: 0.20948872}
+  m_LocalPosition: {x: -0.0033, y: -0.0088, z: 0}
+  m_LocalScale: {x: 1.5501157, y: 1.0461593, z: 0.20948872}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1205424254245570988}
@@ -5212,7 +5215,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
+  m_overflowMode: 1
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0

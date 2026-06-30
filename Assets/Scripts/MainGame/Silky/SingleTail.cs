@@ -9,8 +9,11 @@ public class SingleTail : MonoBehaviour
     public SpriteRenderer tailBG;
     public TextMeshPro textComp;
 
-    [SerializeField] private Sprite spriteCorrect; // BodySpriteSheet_3 (green)
-    [SerializeField] private Sprite spriteError;   // BodySpriteSheet_1 (red)
+    [SerializeField] private Sprite spriteEmpty;         // no content, faded
+    [SerializeField] private Sprite spriteFilled;        // content shown during play
+    [SerializeField] private Sprite spritePreReflection; // grey outline before reflection pass 1
+    [SerializeField] private Sprite spriteCorrect; // green
+    [SerializeField] private Sprite spriteError;   // red
     [SerializeField] private float placeholderAlpha = 0.35f;
     public float PlaceholderAlpha => placeholderAlpha;
 
@@ -22,13 +25,11 @@ public class SingleTail : MonoBehaviour
     [Tooltip("Pre-placed ParticleSystem child, played only during the success flight. Set its Stop Action = Disable.")]
     [SerializeField] private ParticleSystem launchTrail;
 
-    private Sprite spritePlaceholder;
     private SnakeTail manager;
     private int myIndex;
 
     private void Awake()
     {
-        if (tailBG != null) spritePlaceholder = tailBG.sprite;
         if (launchTrail != null) { launchTrail.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear); } // idle until a flight
     }
 
@@ -48,6 +49,25 @@ public class SingleTail : MonoBehaviour
         }
     }
 
+    // Wrong answer: plain error sprite, no red flash tint, held for review.
+    public void ShowErrorSolid()
+    {
+        tailBG.sprite = spriteError;
+        tailBG.color = Color.white;
+    }
+
+    public void ShowFilled()
+    {
+        tailBG.sprite = spriteFilled;
+        tailBG.color = Color.white;
+    }
+
+    public void ShowPreReflection()
+    {
+        tailBG.sprite = spritePreReflection;
+        tailBG.color = Color.white;
+    }
+
     public void HideContent()
     {
         if (textComp != null) textComp.gameObject.SetActive(false);
@@ -60,7 +80,7 @@ public class SingleTail : MonoBehaviour
     public void PrepareEmpty()
     {
         HideContent();
-        if (spritePlaceholder != null) tailBG.sprite = spritePlaceholder;
+        tailBG.sprite = spriteEmpty;
     }
 
     // Full reset to the unfilled placeholder state

@@ -14,6 +14,21 @@ public class SnakeGrow : MonoBehaviour
     [SerializeField] private AudioClip eatSound;
     private AudioSource audioSource;
 
+    [Header("Face")]
+    [SerializeField] private SpriteRenderer leftEye;
+    [SerializeField] private SpriteRenderer rightEye;
+    [SerializeField] private Transform mouth;        // z=180 happy (smile), z=0 sad (frown)
+    [SerializeField] private Sprite cuteEye;
+    [SerializeField] private Sprite sleepyEye;
+    [SerializeField] private Sprite spiralEye;
+    [SerializeField] private float eyeSpinSpeed = 360f;   // deg/sec while spiral eyes spin
+    private bool eyesSpinning;
+
+    [Header("Mistake Flash")]
+    [SerializeField] private float flashDuration = 0.6f;   // total beat length; controls stay frozen this long
+    [SerializeField] private int flashPulses = 3;          // fade-out/in cycles across the beat
+    [SerializeField] private float flashMinAlpha = 0.25f;  // dimmest point of each pulse (scales each renderer's own alpha)
+
     private GameObject objectTouched;
     private OrderItem objectTouchedScript;
 
@@ -53,11 +68,17 @@ public class SnakeGrow : MonoBehaviour
 
     void Update()
     {
-        if (inputActions.Player.Interact.WasPressedThisFrame()) 
+        if (eyesSpinning)
         {
-            if (objectTouchedScript != null  && objectTouchedScript.isConsumable)
+            leftEye.transform.Rotate(0f, 0f, eyeSpinSpeed * Time.deltaTime);
+            rightEye.transform.Rotate(0f, 0f, eyeSpinSpeed * Time.deltaTime);
+        }
+
+        if (inputActions.Player.Interact.WasPressedThisFrame())
+        {
+            if (gameManager.controlsEnabled && objectTouchedScript != null && objectTouchedScript.isConsumable)
             {
-                int answersProvided = snakeTail.GetAnswersProvided().Count + 1; 
+                int answersProvided = snakeTail.GetAnswersProvided().Count; 
                 
                 if (answersProvided == objectTouchedScript.orderIndex) 
                 {
@@ -70,7 +91,7 @@ public class SnakeGrow : MonoBehaviour
                     snakeTail.AddAnswer(objectTouchedScript.answer);
                     contentViewSnakeTail.AddAnswer(objectTouchedScript.answer);
                     
-                    if (answersProvided != gameManager.currentQuestion.orderedAnswers.Count) //If it isn't the last item
+                    if (answersProvided != gameManager.currentQuestion.orderedAnswers.Count-1) //If it isn't the last item
                     {
                         gameManager.AddTime();
                     }
@@ -80,6 +101,7 @@ public class SnakeGrow : MonoBehaviour
                 else
                 {
                     objectTouchedScript.ShowFeedback(false,gameManager.feedbackDelay);
+                    MakeWormSad();
                     gameManager.UsePotion(objectTouchedScript.answer);
                 }
             }
@@ -92,7 +114,7 @@ public class SnakeGrow : MonoBehaviour
 
         if (eatEffect != null) eatEffect.Play();
 
-        if (answersProvided == gameManager.currentQuestion.orderedAnswers.Count)
+        if (answersProvided == gameManager.currentQuestion.orderedAnswers.Count-1)
         {
             gameManager.QuestionSuccess();
         }
@@ -129,6 +151,83 @@ public class SnakeGrow : MonoBehaviour
             objectTouchedScript = null;
             objectTouched = null;
         }
+    }
+
+    private void SetBothEyes(Sprite eyeSprite)
+    {
+        leftEye.sprite = eyeSprite;
+        rightEye.sprite = eyeSprite;
+    }
+
+    private void ResetEyeRotation() // back to default orientation z=180
+    {
+        leftEye.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+        rightEye.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+    }
+
+    public void MakeWormSad() // wrong answer / timeout: spiral eyes spin + frown
+    {
+        SetBothEyes(spiralEye);
+        eyesSpinning = true;
+        mouth.localRotation = Quaternion.Euler(0f, 0f, 0f);
+    }
+
+    public void MakeWormSleep() // after first reflection pass: sleepy eyes only (mouth untouched)
+    {
+        eyesSpinning = false;
+        ResetEyeRotation();
+        SetBothEyes(sleepyEye);
+    }
+
+    public void MakeWormHappy() // potion case, control returns: cute eyes + smile
+    {
+        eyesSpinning = false;
+        ResetEyeRotation();
+        SetBothEyes(cuteEye);
+        mouth.localRotation = Quaternion.Euler(0f, 0f, 180f);
+    }
+
+    // Potion-cushioned mistake: freeze controls, pulse the whole worm's opacity while the spiral keeps
+    // spinning (spin runs in Update via eyesSpinning), then return control and reset the face to happy.
+    public void StartMistakeFlash()
+    {
+        StartCoroutine(MistakeFlashRoutine());
+    }
+
+    private IEnumerator MistakeFlashRoutine()
+    {
+        gameManager.controlsEnabled = false; // freezes movement (SnakeMove) and eating (gated in Update)
+
+        SpriteRenderer[] wormRenderers = GetComponentsInChildren<SpriteRenderer>();
+        Color[] originalColors = new Color[wormRenderers.Length];
+        for (int i = 0; i < wormRenderers.Length; i++)
+        {
+            originalColors[i] = wormRenderers[i].color;
+        }
+
+        float elapsed = 0f;
+        while (elapsed < flashDuration)
+        {
+            elapsed += Time.deltaTime;
+            float cycles = (elapsed / flashDuration) * flashPulses;
+            float wave = Mathf.Cos(cycles * 2f * Mathf.PI) * 0.5f + 0.5f; // 1 at each cycle's ends, 0 at the dip
+            float pulse = Mathf.Lerp(flashMinAlpha, 1f, wave);
+            for (int i = 0; i < wormRenderers.Length; i++)
+            {
+                Color c = originalColors[i];
+                c.a = originalColors[i].a * pulse; // scale each renderer's own alpha so placeholders stay proportional
+                wormRenderers[i].color = c;
+            }
+            yield return null;
+        }
+
+        for (int i = 0; i < wormRenderers.Length; i++)
+        {
+            wormRenderers[i].color = originalColors[i]; // restore exact originals (filled=1, placeholders=0.35/0.65)
+        }
+
+        gameManager.controlsEnabled = true; // control returns
+        MakeWormHappy();                    // spiral stops, cute eyes, smile
     }
 
     public void ShowFloatingWorldText(string message, Color color)

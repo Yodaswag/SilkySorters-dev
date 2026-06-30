@@ -12,6 +12,8 @@ public class SnakeTail : MonoBehaviour
     [SerializeField] public float rectHeight;
     [Tooltip("If true, segments rotate to face direction. If false, they stay upright (like in your screenshots).")]
     [SerializeField] public bool rotateSegments;
+    [Tooltip("Segment gap is multiplied by this when the worm enters reflection.")]
+    [SerializeField] float reflectionSpacingMultiplier = 1.15f;
 
     [Header("State")]
     private List<SingleTail> snakeTail = new List<SingleTail>();
@@ -74,6 +76,12 @@ public class SnakeTail : MonoBehaviour
         return Mathf.Lerp(rectHeight, rectWidth, Mathf.Abs(dir.x));
     }
 
+    public void ApplyReflectionSpacing()
+    {
+        rectWidth *= reflectionSpacingMultiplier;
+        rectHeight *= reflectionSpacingMultiplier;
+    }
+
     public void AddTail()
     {
         // Spawn each body part directly below the previous one for the starting positions of the tails.
@@ -104,7 +112,7 @@ public class SnakeTail : MonoBehaviour
     {
         if (answersProvided.Count >= snakeTail.Count) return;
 
-        SingleTail tailScript = snakeTail[answer.orderIndex-1]; //orderIndex fully maps to the desired positions and that's why we can use it
+        SingleTail tailScript = snakeTail[answer.orderIndex]; //orderIndex fully maps to the desired positions and that's why we can use it
         answersProvided.Add(answer);
         
         if (answer.IsValid())
@@ -124,7 +132,7 @@ public class SnakeTail : MonoBehaviour
                 if(tailScript.imageComp) tailScript.imageComp.gameObject.SetActive(false);
             }
         }
-        tailScript.tailBG.color = new Color(1f,1f,1f,1f); //Set to "not placeholder" or full body part
+        tailScript.ShowFilled();
         // if (answer.orderIndex <= gameManager.currentQuestion.orderedAnswers.Count-1) // This helps avoid the end label being set as a placeholder
         //     SetNextPlaceholder();
         SetNextPlaceholder();
@@ -164,7 +172,7 @@ public class SnakeTail : MonoBehaviour
             }
         }
 
-        tailScript.tailBG.color = new Color(1f, 1f, 1f, 1f);
+        tailScript.ShowFilled();
     }
 
     public List<AnswerModel> GetAnswersProvided() => answersProvided;
